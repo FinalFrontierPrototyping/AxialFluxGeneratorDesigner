@@ -9,6 +9,8 @@ namespace AxialFluxGeneratorDesigner
     /// </summary>
     public class Afpm
     {
+
+
         //TODO test
         //Generator variables
         /// <summary>
@@ -60,11 +62,238 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         public double RotorThickness { get; set; }
 
+
+        #region Stator properties
+
+        /// <summary>
+        /// The phase count is set to 3.
+        /// </summary>
+        public int PhaseCount { get; } = 3;
+
+        /// <summary>
+        ///     The coil count is the total amount of coils for the generator.
+        ///     So 5 coils/phase and 3 phases results in a coil count of 5 * 3 = 15
+        /// </summary>
+        public int CoilCount { get; set; }
+
+        /// <summary>
+        ///     The coils per phase are the amount of coils in each phase.
+        /// </summary>
+        public int CoilsPerPhase { get; set; } = 5;
+
+        /// <summary>
+        ///     The phase current is the maximal current that flows through the coil.
+        /// </summary>
+        public double PhaseCurrent { get; set; }
+
+        #endregion
+
+        #region Stator coil properties
+
+        /// <summary>
+        /// </summary>
+        public double CoilCrossSectionalArea { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilLegWidth { get; set; } = 10;
+
+        /// <summary>
+        /// </summary>
+        public double CoilWindingCoefficient { get; set; } = 0.95;
+
+        /// <summary>
+        /// </summary>
+        public double CoilHeatCoefficient { get; set; } = 0.30;
+
+        /// <summary>
+        /// </summary>
+        public double CoilFillFactor { get; set; } = 0.55;
+
+        /// <summary>
+        /// </summary>
+        public double CoilInductance { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilResistance { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilWireLength { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int CoilTurns { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilWireDiameter { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilThickness { get; set; }
+
+        #endregion
+
+        #region Rotor properties
+
+        /// <summary>
+        /// </summary>
+        public double MagnetCoerciveFieldStrength { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int MagnetCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double MagnetDistance { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double MagnetFluxDensity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double MagnetLength { get; set; } = 30;
+
+        /// <summary>
+        /// </summary>
+        public double MagnetPoleArcPitch { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double MagnetPoleFlux { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public List<Tuple<string, double, double>> MagnetProperties = new List<Tuple<string, double, double>>
+        {
+            new Tuple<string, double, double>("N30", 1.1, 808.0),
+            new Tuple<string, double, double>("N33", 1.155, 848.0),
+            new Tuple<string, double, double>("N35", 1.19, 887.5),
+            new Tuple<string, double, double>("N38", 1.24, 887.5),
+            new Tuple<string, double, double>("N40", 1.275, 927.5),
+            new Tuple<string, double, double>("N42", 1.305, 927.5),
+            new Tuple<string, double, double>("N45", 1.345, 927.5),
+            new Tuple<string, double, double>("N48", 1.395, 927.5),
+            new Tuple<string, double, double>("N50", 1.430, 927.5),
+            new Tuple<string, double, double>("N52", 1.445, 927.5)
+        };
+
+        /// <summary>
+        /// </summary>
+        public double MagnetRemanentFluxDensity { get; set; }
+
+        //Rotor variables
+        /// <summary>
+        /// </summary>
+        public double MagnetThickness { get; set; } = 10;
+
+        /// <summary>
+        /// </summary>
+        public double MagnetWidth { get; set; } = 46;
+
+        /// <summary>
+        /// </summary>
+        public double MaxCurrentDensity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double MaxPhaseCurrent { get; set; }
+
+        #endregion
+
+        #region Front end Turbine properties
+
+        /// <summary>
+        /// </summary>
+        public double TurbineMaximumPowerCoefficient { get; set; } = 0.35;
+
+        /// <summary>
+        /// </summary>
+        public double TurbineRotorRadius { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int TurbineRpmMax { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int TurbineRpmMin { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double TurbineSpeedTipRatioMax { get; set; } = 7;
+
+        /// <summary>
+        /// </summary>
+        public double TurbineSpeedTipRatioMin { get; set; } = 8.75;
+
+        /// <summary>
+        /// </summary>
+        public double TurbineWindspeedMax { get; set; } = 10;
+
+        /// <summary>
+        /// </summary>
+        public double TurbineWindspeedMin { get; set; } = 3;
+
+        /// <summary>
+        /// </summary>
+        public double TurbineAirDensity { get; set; } = 1.20;
+
+        /// <summary>
+        /// </summary>
+        public double FrontEndTorque { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int OtherRpmMin { get; set; } = 300;
+
+        /// <summary>
+        /// </summary>
+        public int OtherRpmMax { get; set; } = 500;
+
+        /// <summary>
+        /// </summary>
+        public double PhaseWireVoltageDrop { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double PhaseWireLength { get; set; } = 0;
+
+        /// <summary>
+        /// </summary>
+        public double PhaseWireDiameter { get; set; } = 0;
+
+        /// <summary>
+        /// </summary>
+        public double PhaseWireResistance { get; set; } = 0;
+
+        /// <summary>
+        /// </summary>
+        public double RectifierWireVoltageDrop { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double RectifierWireLength { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double RectifierWireResistance { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double RectifierWireDiameter { get; set; }
+
+        #endregion
+
         /// <summary>
         /// This property determines the type of energy storage that is used.
         /// 0 = Battery
         /// 1 = grid
-        /// This property is nescesarry because depending on the energy storage type different calculations are done
+        /// This property is necessary because depending on the energy storage type different calculations are done
         /// </summary>
         public int GeneratorEnergyStorageConnection { get; set; }
 
@@ -72,7 +301,7 @@ namespace AxialFluxGeneratorDesigner
         /// This property determines the front end type that is used to drive the generator.
         /// 0 = Wind turbine
         /// 1 = Other
-        /// This property is nescesarry because depending on the front end type different calculations are done.
+        /// This property is necessary because depending on the front end type different calculations are done.
         /// </summary>
         public int GeneratorFrontEnd { get; set; }
 
@@ -180,8 +409,17 @@ namespace AxialFluxGeneratorDesigner
         public double CalculateWireResistance(double wireLength, double wireDiameter)
         {
             const double copperResistivity = 0.0000000168;
+            double wireResistance = 0;
             var wireRadius = wireDiameter / 2;
-            return (copperResistivity * wireLength) / (Math.PI * Math.Pow(MillimetersToMeters(wireRadius), 2));
+            wireResistance = (copperResistivity * wireLength) / (Math.PI * Math.Pow(MillimetersToMeters(wireRadius), 2));
+
+            if (Double.IsNaN(wireResistance) || Double.IsInfinity(wireResistance))
+            {
+                wireResistance = 0.0;
+            }
+
+            return wireResistance;
+
         }
 
         /// <summary>
@@ -204,6 +442,11 @@ namespace AxialFluxGeneratorDesigner
             else if (phaseType == 3)
             {
                 voltageDrop = wireCurrent * (Math.Sqrt(3) * wireResistance);
+            }
+
+            if (Double.IsNaN(voltageDrop) || Double.IsInfinity(voltageDrop))
+            {
+                voltageDrop = 0.0;
             }
 
             return voltageDrop;
@@ -272,16 +515,16 @@ namespace AxialFluxGeneratorDesigner
         ///     This method calculates the wind speed based on the phase voltage ratio (min/max).
         /// </summary>
         /// <param name="phaseVoltageMin">The minimum phase voltage (v)</param>
-        /// <param name="phaseVoltageMax">The maximum phse voltage (v)</param>
+        /// <param name="phaseVoltageMax">The maximum phase voltage (v)</param>
         /// <param name="nominalRpm">The nominal RPM of the rotor</param>
         /// <returns>Returns the minimum rpm</returns>
         public int CalculateGridRpm(double phaseVoltageMin, double phaseVoltageMax, int nominalRpm)
         {
             return (int)((phaseVoltageMin / phaseVoltageMax) * nominalRpm);
         }
-        
+
         /// <summary>
-        /// Thsi method calculates the maxumal battery voltage based on the ratio between the max and min rpd times the minimal phase voltage.
+        /// This method calculates the maximal battery voltage based on the ratio between the max and min rpd times the minimal phase voltage.
         /// </summary>
         /// <param name="rpmMin"></param>
         /// <param name="rpmMax"></param>
@@ -621,7 +864,7 @@ namespace AxialFluxGeneratorDesigner
         /// <summary>
         ///     This method calculates the tangent of a coil corner. In this way a rounded corner can be created using an arc.
         /// </summary>
-        /// <param name="radius"></param>
+        /// <param name="radius">The radius (mm)</param>
         /// <returns>The distance from the angle to the tangent of the circle (mm)</returns>
         private double CalculateCircleTangent(double radius)
         {
@@ -636,7 +879,7 @@ namespace AxialFluxGeneratorDesigner
         /// <returns>The torque (Nm)</returns>
         public double CalculateTorque(double power, int rpm)
         {
-            return power/((2*Math.PI*rpm)/60);
+            return power / ((2 * Math.PI * rpm) / 60);
         }
 
         /// <summary>
@@ -644,7 +887,7 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         public void UpdateCalculations()
         {
-            
+
             PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMin);
             TurbineRotorRadius = CalculateTurbineRotorRadius(GeneratorPower, TurbineAirDensity, TurbineMaximumPowerCoefficient, TurbineWindspeedMax);
             TurbineRpmMax = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax, TurbineSpeedTipRatioMax, TurbineRotorRadius);
@@ -663,7 +906,7 @@ namespace AxialFluxGeneratorDesigner
                 else if (GeneratorFrontEnd == 1)
                 {
                     PhaseVoltageMax = CalculateBatteryVoltage(OtherRpmMin, OtherRpmMax, PhaseVoltageMin);
-                } 
+                }
             }
             //Grid connection
             if (GeneratorEnergyStorageConnection == 1)
@@ -699,7 +942,7 @@ namespace AxialFluxGeneratorDesigner
             Debug.WriteLine("Magnet pole flux: " + MagnetPoleFlux);
 
             //Create method!
-            CoilCount = CoilsPerPhase*PhaseCount;
+            CoilCount = CoilsPerPhase * PhaseCount;
 
             MagnetCount = CalculatePolePairs(CoilCount);
             Debug.WriteLine("Magnet count: " + MagnetCount * 2);
@@ -743,201 +986,15 @@ namespace AxialFluxGeneratorDesigner
 
             CoilInductance = CalculateCoilInductance(CoilTurns, CoilWireDiameter, CoilThickness);
             Debug.WriteLine("CoilInductance: " + CoilInductance);
+
+            PhaseWireVoltageDrop = VoltageDrop(PhaseWireLength, PhaseWireDiameter, MaxPhaseCurrent, 3);
+            PhaseWireResistance = CalculateWireResistance(PhaseWireLength, PhaseWireDiameter);
+
+            //TODO: Check max phase current?
+            RectifierWireVoltageDrop = VoltageDrop(RectifierWireLength, RectifierWireDiameter, MaxPhaseCurrent, 1);
+            RectifierWireResistance = CalculateWireResistance(RectifierWireLength, RectifierWireDiameter);
         }
 
-        #region Stator properties
 
-        /// <summary>
-        /// The phase count is set to 3.
-        /// </summary>
-        public int PhaseCount { get; } = 3;
-
-        /// <summary>
-        ///     The coil count is the total amount of coils for the generator.
-        ///     So 5 coils/phase and 3 phases results in a coil count of 5 * 3 = 15
-        /// </summary>
-        /// <see cref="CalculateCoilInductance" />
-        public int CoilCount { get; set; }
-
-        /// <summary>
-        ///     The coils per phase are the amount of coils in each phase.
-        /// </summary>
-        public int CoilsPerPhase { get; set; } = 5;
-
-        /// <summary>
-        ///     The phase current is the maximal current that flows through the coil.
-        /// </summary>
-        public double PhaseCurrent { get; set; }
-
-        #endregion
-
-        #region Stator coil properties
-
-        /// <summary>
-        /// </summary>
-        public double CoilCrossSectionalArea { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilLegWidth { get; set; } = 10;
-
-        /// <summary>
-        /// </summary>
-        public double CoilWindingCoefficient { get; set; } = 0.95;
-
-        /// <summary>
-        /// </summary>
-        public double CoilHeatCoefficient { get; set; } = 0.30;
-
-        /// <summary>
-        /// </summary>
-        public double CoilFillFactor { get; set; } = 0.55;
-
-        /// <summary>
-        /// </summary>
-        public double CoilInductance { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilResistance { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilWireLength { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public int CoilTurns { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilWireDiameter { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilThickness { get; set; }
-
-        #endregion
-
-        #region Rotor properties
-
-        /// <summary>
-        /// </summary>
-        public double MagnetCoerciveFieldStrength { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public int MagnetCount { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double MagnetDistance { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double MagnetFluxDensity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double MagnetLength { get; set; } = 30;
-
-        /// <summary>
-        /// </summary>
-        public double MagnetPoleArcPitch { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double MagnetPoleFlux { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public List<Tuple<string, double, double>> MagnetProperties = new List<Tuple<string, double, double>>
-        {
-            new Tuple<string, double, double>("N30", 1.1, 808.0),
-            new Tuple<string, double, double>("N33", 1.155, 848.0),
-            new Tuple<string, double, double>("N35", 1.19, 887.5),
-            new Tuple<string, double, double>("N38", 1.24, 887.5),
-            new Tuple<string, double, double>("N40", 1.275, 927.5),
-            new Tuple<string, double, double>("N42", 1.305, 927.5),
-            new Tuple<string, double, double>("N45", 1.345, 927.5),
-            new Tuple<string, double, double>("N48", 1.395, 927.5),
-            new Tuple<string, double, double>("N50", 1.430, 927.5),
-            new Tuple<string, double, double>("N52", 1.445, 927.5)
-        };
-
-        /// <summary>
-        /// </summary>
-        public double MagnetRemanentFluxDensity { get; set; }
-
-        //Rotor variables
-        /// <summary>
-        /// </summary>
-        public double MagnetThickness { get; set; } = 10;
-
-        /// <summary>
-        /// </summary>
-        public double MagnetWidth { get; set; } = 46;
-
-        /// <summary>
-        /// </summary>
-        public double MaxCurrentDensity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double MaxPhaseCurrent { get; set; }
-
-        #endregion
-
-        #region Front end Turbine properties
-
-        /// <summary>
-        /// </summary>
-        public double TurbineMaximumPowerCoefficient { get; set; } = 0.35;
-
-        /// <summary>
-        /// </summary>
-        public double TurbineRotorRadius { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public int TurbineRpmMax { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public int TurbineRpmMin { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double TurbineSpeedTipRatioMax { get; set; } = 7;
-
-        /// <summary>
-        /// </summary>
-        public double TurbineSpeedTipRatioMin { get; set; } = 8.75;
-
-        /// <summary>
-        /// </summary>
-        public double TurbineWindspeedMax { get; set; } = 10;
-
-        /// <summary>
-        /// </summary>
-        public double TurbineWindspeedMin { get; set; } = 3;
-
-        /// <summary>
-        /// </summary>
-        public double TurbineAirDensity { get; set; } = 1.20;
-
-        /// <summary>
-        /// </summary>
-        public double FrontEndTorque { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public int OtherRpmMin { get; set; } = 300;
-
-        /// <summary>
-        /// </summary>
-        public int OtherRpmMax { get; set; } = 500;
-
-        #endregion
     }
 }

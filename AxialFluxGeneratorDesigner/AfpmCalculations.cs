@@ -21,8 +21,7 @@ namespace AxialFluxGeneratorDesigner
         /// Wind turbines extract energy by slowing down the wind. For a wind turbine to be 100% efficient it would need to stop
         /// 100% of the wind - but then the rotor would have to be a solid disk and it would not turn and no kinetic energy would be
         /// converted.On the other extreme, if you had a wind turbine with just one rotor blade, most of the wind passing through
-        /// the area swept by the turbine blade would miss the blade completely and so the kinetic energy would be kept by the
-        /// wind.
+        /// the area swept by the turbine blade would miss the blade completely and so the kinetic energy would be kept by the wind.
         /// </summary>
         public double TurbineMaximumPowerCoefficient { get; set; } = 0.35;
 
@@ -102,17 +101,17 @@ namespace AxialFluxGeneratorDesigner
         /// <summary>
         /// The length (m) of a phase wire to the diode bridge rectifier.
         /// </summary>
-        public double PhaseWireLength { get; set; } = 0;
+        public double PhaseWireLength { get; set; }
 
         /// <summary>
         /// The diameter (mm) of a phase wire to the diode bridge rectifier.
         /// </summary>
-        public double PhaseWireDiameter { get; set; } = 0;
+        public double PhaseWireDiameter { get; set; }
 
         /// <summary>
         /// The resistance (Ohm) of a phase wire to the diode bridge rectifier.
         /// </summary>
-        public double PhaseWireResistance { get; set; } = 0;
+        public double PhaseWireResistance { get; set; }
 
         /// <summary>
         /// The voltage drop (V) that is caused by the length and diameter of the wires from the diode bridge to the grid inverter/ battery. 
@@ -502,6 +501,7 @@ namespace AxialFluxGeneratorDesigner
             }
             else
             {
+                // ReSharper disable once PossibleLossOfFraction
                 return 360 / coilCount;
             }
         }
@@ -526,7 +526,7 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="phaseVoltage">The phase voltage (V)</param>
         /// <param name="voltageDrop">Drop voltage losses in various power cables (V)</param>
         /// <returns></returns>
-        public double CalculateDCVoltage(double phaseVoltage, double voltageDrop)
+        public double CalculateDcVoltage(double phaseVoltage, double voltageDrop)
         {
             return (phaseVoltage* (Math.Sqrt(3) * (Math.Sqrt(2))) - 1.4 - voltageDrop);
         }
@@ -558,9 +558,8 @@ namespace AxialFluxGeneratorDesigner
         public double CalculateWireResistance(double wireLength, double wireDiameter)
         {
             const double copperResistivity = 0.0000000168;
-            double wireResistance = 0;
             var wireRadius = wireDiameter / 2;
-            wireResistance = (copperResistivity * wireLength) / (Math.PI * Math.Pow(MillimetersToMeters(wireRadius), 2));
+            var wireResistance = (copperResistivity * wireLength) / (Math.PI * Math.Pow(MillimetersToMeters(wireRadius), 2));
 
             if (Double.IsNaN(wireResistance) || Double.IsInfinity(wireResistance))
             {
@@ -843,6 +842,7 @@ namespace AxialFluxGeneratorDesigner
             return 2 * Math.PI * radius * (angle / 360);
         }
 
+/*
         /// <summary>
         ///     This method calculated the (upper or lower) line length of a coil.
         /// </summary>
@@ -853,7 +853,9 @@ namespace AxialFluxGeneratorDesigner
         {
             return 2 * radius * Math.Sin((angle * Math.PI) / 360);
         }
+*/
 
+/*
         /// <summary>
         ///     This method calculates the tangent of a coil corner. In this way a rounded corner can be created using an arc.
         /// </summary>
@@ -863,6 +865,7 @@ namespace AxialFluxGeneratorDesigner
         {
             return (1 + Math.Sqrt(2)) * radius;
         }
+*/
         #endregion
 
         #region Rotor methods

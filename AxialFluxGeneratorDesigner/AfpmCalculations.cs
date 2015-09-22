@@ -17,7 +17,7 @@ namespace AxialFluxGeneratorDesigner
         /// The power coefficient (C<sub>p</sub>) is a measure of how efficiently the wind turbine converts the energy in the
         /// wind into electricity (usually 35 to 45 %). This value is default set to 0.35 (35%).
         /// To find the coefficient of power at a given wind speed, all you have to do is divide the electricity produced by the total energy available in the wind at that speed.
-        /// \f$C_p = \frac{\text{Electricity produced by wind turbine}}{\text{Total Energy available in the wind}}\f$
+        /// <para> </para>
         /// Wind turbines extract energy by slowing down the wind. For a wind turbine to be 100% efficient it would need to stop
         /// 100% of the wind - but then the rotor would have to be a solid disk and it would not turn and no kinetic energy would be
         /// converted.On the other extreme, if you had a wind turbine with just one rotor blade, most of the wind passing through
@@ -28,6 +28,7 @@ namespace AxialFluxGeneratorDesigner
 
         /// <summary>
         /// The turbine rotor radius (R<sub>turbine</sub>) is the radius of the wind turbine blades (m).
+        /// </summary>
         public double TurbineRotorRadius { get; set; }
 
         /// <summary>
@@ -46,20 +47,21 @@ namespace AxialFluxGeneratorDesigner
         /// The speed tip ratio for the maximal rpm (ans so maximal wind speed).
         /// The tip-speed ratio, λ, or TSR for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design. 
         /// Higher tip speeds result in higher noise levels and require stronger blades due to large centrifugal forces.
-        /// \f\text{Tip Speed} (\Lambda) = \frac{\text{Tip speed of blade (m/s)}}{\text{Total Wind speed (m/s}}\f
-        /// Where the tip speed of the blade is defined as follows:
-        /// \f\text{Tip speed of blade (m/s)} = \frac{\text{ rotor rotational speed (rad/sec.)}}{\text{Wind speed (m/s)}}\f
         /// </summary>
+        //Where the tip speed of the blade is defined as follows:
+        //\f\text{Tip Speed} (\Lambda) = \frac{\text{Tip speed of blade (m/s)}}{\text{Total Wind speed (m/s}}\f
+        //\f\text{Tip speed of blade (m/s)} = \frac{\text{ rotor rotational speed (rad/sec.)}}{\text{Wind speed (m/s)}}\f
+
         public double TurbineSpeedTipRatioMax { get; set; } = 7;
 
         /// <summary>
         /// The speed tip ratio for the minimal rpm (and so minimal wind speed).
         /// The tip-speed ratio, λ, or TSR for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design. 
         /// Higher tip speeds result in higher noise levels and require stronger blades due to large centrifugal forces.
-        /// \f\text{Tip Speed} (\Lambda) = \frac{\text{Tip speed of blade (m/s)}}{\text{Total Wind speed (m/s}}\f
-        /// Where the tip speed of the blade is defined as follows:
-        /// \f\text{Tip speed of blade (m/s)} = \frac{\text{ rotor rotational speed (rad/sec.)}}{\text{Wind speed (m/s)}}\f
         /// </summary>
+        // \f\text{Tip Speed} (\Lambda) = \frac{\text{Tip speed of blade (m/s)}}{\text{Total Wind speed (m/s}}\f
+        // Where the tip speed of the blade is defined as follows:
+        // \f\text{Tip speed of blade (m/s)} = \frac{\text{ rotor rotational speed (rad/sec.)}}{\text{Wind speed (m/s)}}\f
         public double TurbineSpeedTipRatioMin { get; set; } = 8.75;
 
         /// <summary>
@@ -185,8 +187,10 @@ namespace AxialFluxGeneratorDesigner
 
         /// <summary>
         /// This property determines the front end type that is used to drive the generator.
+        /// <para> </para>
         /// 0 = Wind turbine
         /// 1 = Other
+        /// <para> </para>
         /// This property is necessary because depending on the front end type different calculations are done.
         /// </summary>
         public int GeneratorFrontEnd { get; set; }
@@ -241,7 +245,9 @@ namespace AxialFluxGeneratorDesigner
         /// In power engineering, winding factor is what makes the rms generated voltage in a three-phase AC electrical generator become lesser. 
         /// This is because the armature winding of each phase is distributed in a number of slots. Since the emf induced in different slots are not in phase, their phasor sum is less than their numerical sum. 
         /// This reduction factor is called distribution factor Kd. Another factor that can reduce the winding factor is when the slot pitch is smaller than the pole pitch, called pitch factor Kp. 
+        /// <para> </para>
         /// The winding factor can be calculated as Kw = Kd * Kp.
+        /// <para> </para>
         /// Most of the three-phase machines have winding factor values between 0.85 and 0.95.
         /// </summary>
         public double CoilWindingCoefficient { get; set; } = 0.95;
@@ -328,6 +334,7 @@ namespace AxialFluxGeneratorDesigner
         /// <summary>
         /// The magnetic flux density of a magnet is also called "B field" or "magnetic induction". It is measured in tesla (SI unit) or gauss (10 000 gauss = 1 tesla).
         /// A permanent magnet produces a B field in its core and in its external surroundings.
+        /// <para> </para>
         /// A B field strength with a direction can be attributed to each point within and outside of the magnet.
         /// If you position a small compass needle in the B field of a magnet, it orients itself toward the field direction.
         /// The justifying force is proportional to the strength of the B field.
@@ -526,8 +533,8 @@ namespace AxialFluxGeneratorDesigner
 
         /// <summary>
         ///     This method calculates the inductance of a coil (mH).
-        ///     The distance between \f$(x_1,y_1)\f$ and \f$(x_2,y_2)\f$ is\f$\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}\f$.
         ///     http://coil32.net/multi-layer-coil.html
+        /// <para> </para>
         /// </summary>
         /// <param name="windingCount">The winding count of the coil</param>
         /// <param name="coilDiameter">The diameter of the coil (mm)</param>
@@ -594,12 +601,8 @@ namespace AxialFluxGeneratorDesigner
         }
 
         /// <summary>
-        ///     This method calculates the resistance of a coil (ohm) using the following formula
-        ///     \f$R_{Coil} = \frac{\text{Copper resistivity (\Omega.m)} \times \text{Wire length (m)}}{\Pi \times \text{radius
-        ///     (m)}^2 }\f$
+        ///     This method calculates the resistance of a coil (ohm).
         /// </summary>
-        /// <example>
-        /// </example>
         /// <param name="coilWireLength">The wire length of the coil (m)</param>
         /// <param name="wireDiameter">The diameter of the wire (mm)</param>
         /// <returns>The resistance of the coil (ohm)</returns>

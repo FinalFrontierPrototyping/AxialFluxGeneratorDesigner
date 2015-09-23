@@ -403,6 +403,13 @@ namespace AxialFluxGeneratorDesigner
         public double RotorThickness { get; set; }
 
         #endregion
+
+        #region Rectifier properties
+        /// <summary>
+        /// </summary>
+        public double RectifierDiodeVoltageDrop { get; set; } = 1.4;
+        #endregion
+
         #endregion
 
         #region Axial Flux Designer methods
@@ -512,23 +519,23 @@ namespace AxialFluxGeneratorDesigner
         ///     Vdc = 1.35 * Vrms
         /// </summary>
         /// <param name="dcVoltage">DC voltage (V)</param>
-        /// <param name="voltageDrop">Drop voltage losses in various power cables (V)</param>
+        /// <param name="diodeVoltageDrop">Drop voltage losses in various power cables (V)</param>
         /// <returns>Phase voltage (rms) (V)</returns>
-        public double CalculatePhaseVoltage(double dcVoltage, double voltageDrop)
+        public double CalculatePhaseVoltage(double dcVoltage, double diodeVoltageDrop)
         {
             //return (dc_voltage + 1.4) / (Math.Sqrt(3) * (Math.Sqrt(2) * (3 / Math.PI)));
-            return (dcVoltage + 1.4 + voltageDrop) / (Math.Sqrt(3) * (Math.Sqrt(2)));
+            return (dcVoltage + diodeVoltageDrop) / (Math.Sqrt(3) * (Math.Sqrt(2)));
         }
 
         /// <summary>
         /// This method calculates the corrected (for voltage drop due to power lines and diode rectifier) DC voltage.
         /// </summary>
         /// <param name="phaseVoltage">The phase voltage (V)</param>
-        /// <param name="voltageDrop">Drop voltage losses in various power cables (V)</param>
+        /// <param name="diodeVoltageDrop">Drop voltage losses in various power cables (V)</param>
         /// <returns></returns>
-        public double CalculateDcVoltage(double phaseVoltage, double voltageDrop)
+        public double CalculateDcVoltage(double phaseVoltage, double diodeVoltageDrop)
         {
-            return (phaseVoltage* (Math.Sqrt(3) * (Math.Sqrt(2))) - 1.4 - voltageDrop);
+            return (phaseVoltage* (Math.Sqrt(3) * (Math.Sqrt(2))) - RectifierDiodeVoltageDrop - diodeVoltageDrop);
         }
 
         /// <summary>
@@ -945,10 +952,17 @@ namespace AxialFluxGeneratorDesigner
             TurbineRpmMax = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax, TurbineSpeedTipRatioMax, TurbineRotorRadius);
             FrontEndTorque = CalculateTorque(GeneratorPower, TurbineRpmMax);
 
+            PhaseWireVoltageDrop = VoltageDrop(PhaseWireLength, PhaseWireDiameter, MaxPhaseCurrent, 3);
+            PhaseWireResistance = CalculateWireResistance(PhaseWireLength, PhaseWireDiameter);
+
+            //TODO: Check max phase current?
+            RectifierWireVoltageDrop = VoltageDrop(RectifierWireLength, RectifierWireDiameter, MaxPhaseCurrent, 1);
+            RectifierWireResistance = CalculateWireResistance(RectifierWireLength, RectifierWireDiameter);
+
             //Battery connection
             if (GeneratorEnergyStorageConnection == 0)
             {
-                PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMinBattery, PhaseWireVoltageDrop + RectifierWireVoltageDrop);
+                PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMinBattery, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
 
                 //Turbine
                 if (GeneratorFrontEnd == 0)
@@ -965,8 +979,8 @@ namespace AxialFluxGeneratorDesigner
             //Grid connection
             if (GeneratorEnergyStorageConnection == 1)
             {
-                PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMinGrid, PhaseWireVoltageDrop + RectifierWireVoltageDrop);
-                PhaseVoltageMax = CalculatePhaseVoltage(DcVoltageMaxGrid, PhaseWireVoltageDrop + RectifierWireVoltageDrop);
+                PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMinGrid, RectifierDiodeVoltageDrop+ RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
+                PhaseVoltageMax = CalculatePhaseVoltage(DcVoltageMaxGrid, RectifierDiodeVoltageDrop+ RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
 
                 //Turbine
                 if (GeneratorFrontEnd == 0)
@@ -982,50 +996,50 @@ namespace AxialFluxGeneratorDesigner
             }
 
             MaxPhaseCurrent = CalculateMaximumPhaseCurrent(GeneratorPower, 286);
-            Debug.WriteLine("Max phase current (A): " + MaxPhaseCurrent);
+            //Debug.WriteLine("Max phase current (A): " + MaxPhaseCurrent);
 
             CoilThickness = CalculateStatorThickness(MagnetThickness, MechamicalGap);
-            Debug.WriteLine("Stator thickness (mm): " + CoilThickness);
+            //Debug.WriteLine("Stator thickness (mm): " + CoilThickness);
 
             MagnetFluxDensity = CalculateMagnetFluxDensity(MagnetRemanentFluxDensity, MagnetCoerciveFieldStrength,
                 MagnetThickness, MechamicalGap);
-            Debug.WriteLine("Magnet flux density (T): " + MagnetFluxDensity);
+            //Debug.WriteLine("Magnet flux density (T): " + MagnetFluxDensity);
 
             RotorThickness = MagnetThickness;
 
             MagnetPoleFlux = CalculateMaximumPoleFlux(MagnetFluxDensity, MagnetWidth, MagnetLength);
-            Debug.WriteLine("Magnet pole flux: " + MagnetPoleFlux);
+            //Debug.WriteLine("Magnet pole flux: " + MagnetPoleFlux);
 
             //Create method!
             CoilCount = CoilsPerPhase * PhaseCount;
 
             MagnetCount = CalculatePolePairs(CoilCount);
-            Debug.WriteLine("Magnet count: " + MagnetCount * 2);
+            //Debug.WriteLine("Magnet count: " + MagnetCount * 2);
 
             CoilTurns = CalculateCoilWindings(PhaseVoltageMin, MagnetCount, TurbineRpmMin, CoilsPerPhase, MagnetPoleFlux,
                 CoilWindingCoefficient);
-            Debug.WriteLine("Coil turns: " + CoilTurns);
+            //Debug.WriteLine("Coil turns: " + CoilTurns);
 
             CoilLegWidth = CalculateCoilLegWidth(MaxPhaseCurrent, CoilTurns, CoilThickness);
-            Debug.WriteLine("Coil leg width: " + CoilLegWidth);
+            //Debug.WriteLine("Coil leg width: " + CoilLegWidth);
             //Debug.WriteLine("Generator RPM: " + GeneratorRpm);
 
             CoilCrossSectionalArea = CalculateCoilCrossSectionalArea(CoilLegWidth, CoilThickness, CoilTurns);
-            Debug.WriteLine("Coil cross sectional area: " + CoilCrossSectionalArea);
+            //Debug.WriteLine("Coil cross sectional area: " + CoilCrossSectionalArea);
 
             MaxCurrentDensity = CalculateMaximumCurrentDensity(MaxPhaseCurrent, CoilCrossSectionalArea);
 
             CoilWireDiameter = CalculateCoilWireDiameter(CoilCrossSectionalArea);
-            Debug.WriteLine("Coil wire diameter: " + CoilWireDiameter);
+            //Debug.WriteLine("Coil wire diameter: " + CoilWireDiameter);
 
             RotorInnerRadius = CalculateGeneratorInnerRadius(CoilCount, CoilLegWidth, MagnetCount, MagnetWidth);
-            Debug.WriteLine("Rotor outer radius: " + RotorInnerRadius);
+            //Debug.WriteLine("Rotor outer radius: " + RotorInnerRadius);
 
             RotorOuterRadius = CalculateCalculateGeneratorOuterRadius(RotorInnerRadius, MagnetLength);
-            Debug.WriteLine("Rotor inner radius: " + RotorOuterRadius);
+            //Debug.WriteLine("Rotor inner radius: " + RotorOuterRadius);
 
             RotorInnerOuterRadiusRatio = CalculateGeneratorInnerOuterRadiusRatio(RotorInnerRadius, RotorOuterRadius);
-            Debug.WriteLine("Rotor inner outer radius ratio: " + RotorInnerOuterRadiusRatio);
+            //Debug.WriteLine("Rotor inner outer radius ratio: " + RotorInnerOuterRadiusRatio);
 
             var coilInnerDimension = CoilInnerDimensions(CoilLegWidth, CoilCount, 10, 1, MagnetLength);
             var coilOuterDimension = CoilOuterDimensions(CoilLegWidth, CoilCount, 10, 1, MagnetLength);
@@ -1034,20 +1048,13 @@ namespace AxialFluxGeneratorDesigner
             MagnetPoleArcPitch = CalculateMagnetPoleArcPitch(MagnetWidth, MagnetDistance);
 
             CoilWireLength = CalculateCoilWireLength(CoilTurns, coilInnerDimension.Item4, coilOuterDimension.Item4);
-            Debug.WriteLine("CoilWireLength: " + CoilWireLength);
+            //Debug.WriteLine("CoilWireLength: " + CoilWireLength);
 
             CoilResistance = CalculateCoilResistance(CoilWireLength, CoilWireDiameter);
-            Debug.WriteLine("CoilResistance: " + CoilResistance);
+            //Debug.WriteLine("CoilResistance: " + CoilResistance);
 
             CoilInductance = CalculateCoilInductance(CoilTurns, CoilWireDiameter, CoilThickness);
-            Debug.WriteLine("CoilInductance: " + CoilInductance);
-
-            PhaseWireVoltageDrop = VoltageDrop(PhaseWireLength, PhaseWireDiameter, MaxPhaseCurrent, 3);
-            PhaseWireResistance = CalculateWireResistance(PhaseWireLength, PhaseWireDiameter);
-
-            //TODO: Check max phase current?
-            RectifierWireVoltageDrop = VoltageDrop(RectifierWireLength, RectifierWireDiameter, MaxPhaseCurrent, 1);
-            RectifierWireResistance = CalculateWireResistance(RectifierWireLength, RectifierWireDiameter);
+            //Debug.WriteLine("CoilInductance: " + CoilInductance);
         }
         #endregion 
         #endregion

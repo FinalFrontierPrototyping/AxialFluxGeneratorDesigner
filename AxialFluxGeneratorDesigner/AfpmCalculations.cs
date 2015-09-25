@@ -14,6 +14,23 @@ namespace AxialFluxGeneratorDesigner
         #region Front end properties
 
         /// <summary>
+        /// The turbine rpm max is the is the maximum revolutions per minute (rpm) the wind turbine (and thus the generator) shaft will rotate.
+        /// This value depends on the tip ratio and the wind speed.
+        /// </summary>
+        public int FrontEndRpmMax { get; set; }
+
+        /// <summary>
+        /// The turbine rpm min is the is the minimal revolutions per minute (rpm) the wind turbine (and thus the generator) shaft will rotate.
+        /// This value depends on the tip ratio and the wind speed.
+        /// </summary>
+        public int FrontEndRpmMin { get; set; }
+
+        /// <summary>
+        /// The torque of the front end (Nm) at the maximal power and rpm.
+        /// </summary>
+        public double FrontEndTorque { get; set; }
+
+        /// <summary>
         /// The power coefficient (C<sub>p</sub>) is a measure of how efficiently the wind turbine converts the energy in the
         /// wind into electricity (usually 35 to 45 %). This value is default set to 0.35 (35%).
         /// To find the coefficient of power at a given wind speed, all you have to do is divide the electricity produced by the total energy available in the wind at that speed.
@@ -31,20 +48,8 @@ namespace AxialFluxGeneratorDesigner
         public double TurbineRotorRadius { get; set; }
 
         /// <summary>
-        /// The turbine rpm max is the is the maximum revolutions per minute (rpm) the wind turbine (and thus the generator) shaft will rotate. 
-        /// This value depends on the tip ratio and the wind speed.
-        /// </summary>
-        public int TurbineRpmMax { get; set; }
-
-        /// <summary>
-        /// The turbine rpm min is the is the minimal revolutions per minute (rpm) the wind turbine (and thus the generator) shaft will rotate. 
-        /// This value depends on the tip ratio and the wind speed.
-        /// </summary>
-        public int TurbineRpmMin { get; set; }
-
-        /// <summary>
         /// The speed tip ratio for the maximal rpm (ans so maximal wind speed).
-        /// The tip-speed ratio, λ, or TSR for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design. 
+        /// The tip-speed ratio, λ, or TSR for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design.
         /// Higher tip speeds result in higher noise levels and require stronger blades due to large centrifugal forces.
         /// </summary>
         //Where the tip speed of the blade is defined as follows:
@@ -55,7 +60,7 @@ namespace AxialFluxGeneratorDesigner
 
         /// <summary>
         /// The speed tip ratio for the minimal rpm (and so minimal wind speed).
-        /// The tip-speed ratio, λ, or TSR for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design. 
+        /// The tip-speed ratio, λ, or TSR for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design.
         /// Higher tip speeds result in higher noise levels and require stronger blades due to large centrifugal forces.
         /// </summary>
         // \f\text{Tip Speed} (\Lambda) = \frac{\text{Tip speed of blade (m/s)}}{\text{Total Wind speed (m/s}}\f
@@ -79,22 +84,7 @@ namespace AxialFluxGeneratorDesigner
         public double TurbineAirDensity { get; set; } = 1.20;
 
         /// <summary>
-        /// The torque of the front end (Nm) at the maximal power and rpm.
-        /// </summary>
-        public double FrontEndTorque { get; set; }
-
-        /// <summary>
-        /// The minimal revolutions per minute (rpm) of the other front end (e.g. water wheel or Stirling engine).
-        /// </summary>
-        public int OtherRpmMin { get; set; } = 300;
-
-        /// <summary>
-        /// The maximal revolutions per minute (rpm) of the other front end (e.g. water wheel or Stirling engine).
-        /// </summary>
-        public int OtherRpmMax { get; set; } = 500;
-
-        /// <summary>
-        /// The voltage drop (V) that is caused by the length and diameter of the phase wires from the coil to the diode bridge. 
+        /// The voltage drop (V) that is caused by the length and diameter of the phase wires from the coil to the diode bridge.
         /// </summary>
         public double PhaseWireVoltageDrop { get; set; }
 
@@ -114,51 +104,40 @@ namespace AxialFluxGeneratorDesigner
         public double PhaseWireResistance { get; set; }
 
         /// <summary>
-        /// The voltage drop (V) that is caused by the length and diameter of the wires from the diode bridge to the grid inverter/ battery. 
+        /// The voltage drop (V) that is caused by the length and diameter of the wires from the diode bridge to the grid inverter/ battery.
         /// </summary>
         public double RectifierWireVoltageDrop { get; set; }
 
         /// <summary>
-        /// The length (m) of a wire from the diode bridge to the grid inverter/ battery. 
+        /// The length (m) of a wire from the diode bridge to the grid inverter/ battery.
         /// </summary>
         public double RectifierWireLength { get; set; }
 
         /// <summary>
-        /// The resistance (Ohm) of a wire from the diode bridge to the grid inverter/ battery. 
+        /// The resistance (Ohm) of a wire from the diode bridge to the grid inverter/ battery.
         /// </summary>
         public double RectifierWireResistance { get; set; }
 
         /// <summary>
-        /// The diameter (mm) of a wire from the diode bridge to the grid inverter/ battery. 
+        /// The diameter (mm) of a wire from the diode bridge to the grid inverter/ battery.
         /// </summary>
         public double RectifierWireDiameter { get; set; }
 
-        #endregion
+        #endregion Front end properties
 
         #region Generator properties
+
         /// <summary>
-        /// The minimal DC voltage output voltage (V) for a grid connection. 
+        /// The minimal DC voltage output voltage (V).
         /// This value is default set to 200 volt.
         /// </summary>
-        public double DcVoltageMinGrid { get; set; } = 200;
+        public double DcVoltageMin { get; set; } = 200;
 
         /// <summary>
-        /// The maximal DC voltage output voltage (V) for a grid connection. 
+        /// The maximal DC voltage output voltage (V).
         /// This value is default set to 700 volt.
         /// </summary>
-        public double DcVoltageMaxGrid { get; set; } = 700;
-
-        /// <summary>
-        /// The minimal DC voltage output voltage (V) for a battery connection. 
-        /// This value is default set to 48 volt.
-        /// </summary>
-        public double DcVoltageMinBattery { get; set; } = 48;
-
-        /// <summary>
-        /// The minimal DC voltage output voltage (V) for a battery connection. 
-        /// This value is calculated based on the max / min rpm ratio.
-        /// </summary>
-        public double DcVoltageMaxBattery { get; set; }
+        public double DcVoltageMax { get; set; } = 700;
 
         /// <summary>
         /// The maximum power (W) that the generator has to be capable to produce.
@@ -171,7 +150,7 @@ namespace AxialFluxGeneratorDesigner
         public double GeneratorEfficiency { get; set; } = 0.9;
 
         /// <summary>
-        /// The mechanical gap between the coil surface and the magnet surface. This value is default set to 3. Try to reduce this value as much as possible. 
+        /// The mechanical gap between the coil surface and the magnet surface. This value is default set to 3. Try to reduce this value as much as possible.
         /// However, keep in mind that the coils can become warm/hot and expand! This could lead to coils touching the magnets and thus damage.
         /// </summary>
         public double MechamicalGap { get; set; } = 3;
@@ -194,7 +173,7 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         public int GeneratorFrontEnd { get; set; }
 
-        #endregion
+        #endregion Generator properties
 
         #region Stator properties
 
@@ -203,14 +182,13 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         public double PhaseVoltageMax { get; set; }
 
-
         /// <summary>
         /// The minimal phase voltage that a sing phase has to produce.
         /// </summary>
         public double PhaseVoltageMin { get; set; }
 
         /// <summary>
-        /// The phase count of the generator. The phase count is set to 3 and cannot be changed. 
+        /// The phase count of the generator. The phase count is set to 3 and cannot be changed.
         /// This because the designer only works with 3-phase generators.
         /// </summary>
         public int PhaseCount { get; } = 3;
@@ -226,7 +204,7 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         public int CoilsPerPhase { get; set; } = 5;
 
-        #endregion
+        #endregion Stator properties
 
         #region Stator coil properties
 
@@ -241,9 +219,9 @@ namespace AxialFluxGeneratorDesigner
         public double CoilLegWidth { get; set; }
 
         /// <summary>
-        /// In power engineering, winding factor is what makes the rms generated voltage in a three-phase AC electrical generator become lesser. 
-        /// This is because the armature winding of each phase is distributed in a number of slots. Since the emf induced in different slots are not in phase, their phasor sum is less than their numerical sum. 
-        /// This reduction factor is called distribution factor Kd. Another factor that can reduce the winding factor is when the slot pitch is smaller than the pole pitch, called pitch factor Kp. 
+        /// In power engineering, winding factor is what makes the rms generated voltage in a three-phase AC electrical generator become lesser.
+        /// This is because the armature winding of each phase is distributed in a number of slots. Since the emf induced in different slots are not in phase, their phasor sum is less than their numerical sum.
+        /// This reduction factor is called distribution factor Kd. Another factor that can reduce the winding factor is when the slot pitch is smaller than the pole pitch, called pitch factor Kp.
         /// <para> </para>
         /// The winding factor can be calculated as Kw = Kd * Kp.
         /// <para> </para>
@@ -258,8 +236,8 @@ namespace AxialFluxGeneratorDesigner
         public double CoilHeatCoefficient { get; set; } = 0.30;
 
         /// <summary>
-        /// Is the fraction of the core window area that is filled by copper. 
-        /// This value depends mainly on how good the coil is made. 
+        /// Is the fraction of the core window area that is filled by copper.
+        /// This value depends mainly on how good the coil is made.
         /// </summary>
         public double CoilFillFactor { get; set; } = 0.55;
 
@@ -305,17 +283,17 @@ namespace AxialFluxGeneratorDesigner
         public double PhaseCurrent { get; set; }
 
         /// <summary>
-        /// The phase current is the maximal current (phase current  + 10%) that flows through the coil. 
+        /// The phase current is the maximal current (phase current  + 10%) that flows through the coil.
         /// This can be caused by e.g. a storm or other factors. To prevent failure due to overheating this should be taken into consideration.
         /// </summary>
         public double MaxPhaseCurrent { get; set; }
 
-        #endregion
+        #endregion Stator coil properties
 
         #region Rotor properties
 
         /// <summary>
-        /// Coercive field strength (Hc) (A/m) describes the force that is necessary to completely demagnetize a magnet. 
+        /// Coercive field strength (Hc) (A/m) describes the force that is necessary to completely demagnetize a magnet.
         /// Simply said: the higher this number is, the better a magnet retains its magnetism when exposed to an opposing magnetic field.
         /// </summary>
         public double MagnetCoerciveFieldStrength { get; set; }
@@ -331,7 +309,12 @@ namespace AxialFluxGeneratorDesigner
         public double MagnetDistance { get; set; }
 
         /// <summary>
-        /// The magnetic flux density of a magnet is also called "B field" or "magnetic induction". It is measured in tesla (SI unit) or gauss (10 000 gauss = 1 tesla).
+        /// The magnet grade determines the .....
+        /// </summary>
+        public string MagnetGrade { get; set; }
+
+        /// <summary>
+        /// The magnetic flux density of a magnet is also called "B field" or "magnetic induction". It is measured in Tesla (SI unit) or gauss (10 000 gauss = 1 Tesla).
         /// A permanent magnet produces a B field in its core and in its external surroundings.
         /// <para> </para>
         /// A B field strength with a direction can be attributed to each point within and outside of the magnet.
@@ -402,19 +385,22 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         public double RotorThickness { get; set; }
 
-        #endregion
+        #endregion Rotor properties
 
         #region Rectifier properties
+
         /// <summary>
         /// </summary>
         public double RectifierDiodeVoltageDrop { get; set; } = 1.4;
-        #endregion
 
-        #endregion
+        #endregion Rectifier properties
+
+        #endregion Axial Flux designer properties
 
         #region Axial Flux Designer methods
 
         #region Front end methods
+
         /// <summary>
         /// This method calculates the torque based on the power (W) and RPM
         /// </summary>
@@ -433,11 +419,12 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="airDensity"> The air density (kg/m3)</param>
         /// <param name="maximumPowerCoefficient">The generator efficiency (0.9 (90%)) is normal</param>
         /// <param name="windSpeed">The maximum wind speed (m/s)</param>
+        /// /// <param name="generatorEfficiency">TODO: Add</param>
         /// <returns>The rotor radius (m)</returns>
         public double CalculateTurbineRotorRadius(double generatorNominalPower, double airDensity,
-            double maximumPowerCoefficient, double windSpeed)
+            double maximumPowerCoefficient, double windSpeed, double generatorEfficiency)
         {
-            var aerodynamicPower = generatorNominalPower / GeneratorEfficiency;
+            var aerodynamicPower = generatorNominalPower / generatorEfficiency;
 
             return
                 Math.Sqrt((2 * aerodynamicPower) / (Math.PI * airDensity * maximumPowerCoefficient * Math.Pow(windSpeed, 3)));
@@ -491,7 +478,8 @@ namespace AxialFluxGeneratorDesigner
         {
             return (2 * Math.PI * speedRpm * turbineRotorRadius) / (60 * tipSpeedRatio);
         }
-        #endregion
+
+        #endregion Front end methods
 
         #region Stator and coil methods
 
@@ -523,6 +511,7 @@ namespace AxialFluxGeneratorDesigner
         /// <returns>Phase voltage (rms) (V)</returns>
         public double CalculatePhaseVoltage(double dcVoltage, double diodeVoltageDrop)
         {
+            Debug.WriteLine(diodeVoltageDrop);
             //return (dc_voltage + 1.4) / (Math.Sqrt(3) * (Math.Sqrt(2) * (3 / Math.PI)));
             return (dcVoltage + diodeVoltageDrop) / (Math.Sqrt(3) * (Math.Sqrt(2)));
         }
@@ -535,7 +524,7 @@ namespace AxialFluxGeneratorDesigner
         /// <returns></returns>
         public double CalculateDcVoltage(double phaseVoltage, double diodeVoltageDrop)
         {
-            return (phaseVoltage* (Math.Sqrt(3) * (Math.Sqrt(2))) - RectifierDiodeVoltageDrop - diodeVoltageDrop);
+            return (phaseVoltage * (Math.Sqrt(3) * (Math.Sqrt(2))) - RectifierDiodeVoltageDrop - diodeVoltageDrop);
         }
 
         /// <summary>
@@ -769,30 +758,30 @@ namespace AxialFluxGeneratorDesigner
         public Tuple<double, double, double, double> CoilInnerDimensions(double coilLegWidth, int coilCount,
             double coilGap, double betweenCoilGap, double magnetHeight)
         {
-            Debug.WriteLine("----------Inner Coil dimensions----------");
+            //Debug.WriteLine("----------Inner Coil dimensions----------");
 
             var coilAngle = CalculateCoilAngle(coilCount);
 
-            //Calculate the minimal circumference 
+            //Calculate the minimal circumference
             var circumferenceMin = ((coilLegWidth * 2) * coilCount) + (coilCount * coilGap);
             //Debug.WriteLine("circumference_min: " + circumferenceMin);
 
             var radiusMin = (circumferenceMin / Math.PI) / 2;
-            Debug.WriteLine("radius_min: " + radiusMin);
+            //Debug.WriteLine("radius_min: " + radiusMin);
 
             var lowerMinArc = CalculateCoilArcLength(coilAngle, radiusMin);
 
             var radiusMax = radiusMin + magnetHeight + (2 * coilLegWidth);
-            Debug.WriteLine("radius_max: " + radiusMax);
+            //Debug.WriteLine("radius_max: " + radiusMax);
 
             var upperMinArc = CalculateCoilArcLength(coilAngle, radiusMax) - (2 * coilLegWidth);
-            Debug.WriteLine("upper_min_arc: " + upperMinArc);
+            //Debug.WriteLine("upper_min_arc: " + upperMinArc);
 
             var coilHeightMin = magnetHeight;
-            Debug.WriteLine("coilHeightMin: " + coilHeightMin);
+            //Debug.WriteLine("coilHeightMin: " + coilHeightMin);
 
             var coilInnerCircumference = (coilHeightMin * 2) + lowerMinArc + upperMinArc;
-            Debug.WriteLine("coilInnerCircumference: " + coilInnerCircumference);
+            //Debug.WriteLine("coilInnerCircumference: " + coilInnerCircumference);
 
             return Tuple.Create(lowerMinArc, upperMinArc, coilHeightMin, coilInnerCircumference);
         }
@@ -809,31 +798,31 @@ namespace AxialFluxGeneratorDesigner
         public Tuple<double, double, double, double> CoilOuterDimensions(double coilLegWidth, int coilCount,
             double coilGap, double betweenCoilGap, double magnetHeight)
         {
-            Debug.WriteLine("----------Inner Coil dimensions----------");
+            //Debug.WriteLine("----------Inner Coil dimensions----------");
 
             var coilAngle = CalculateCoilAngle(coilCount);
 
-            //Calculate the minimal circumference 
+            //Calculate the minimal circumference
             var circumferenceMin = ((coilLegWidth * 2) * coilCount) + (coilCount * coilGap);
             //Debug.WriteLine("circumference_min: " + circumferenceMin);
 
             var radiusMin = (circumferenceMin / Math.PI) / 2;
-            Debug.WriteLine("radius_min: " + radiusMin);
+            //Debug.WriteLine("radius_min: " + radiusMin);
 
             var lowerMaxArc = CalculateCoilArcLength(coilAngle, radiusMin);
-            Debug.WriteLine("lower_max_arc: " + lowerMaxArc);
+            //Debug.WriteLine("lower_max_arc: " + lowerMaxArc);
 
             var radiusMax = radiusMin + magnetHeight + (2 * coilLegWidth);
-            Debug.WriteLine("radius_max: " + radiusMax);
+            //Debug.WriteLine("radius_max: " + radiusMax);
 
             var upperMaxArc = CalculateCoilArcLength(coilAngle, radiusMax);
-            Debug.WriteLine("upper_max_arc: " + upperMaxArc);
+            //Debug.WriteLine("upper_max_arc: " + upperMaxArc);
 
             var coilHeightMax = (coilLegWidth * 2) + magnetHeight;
-            Debug.WriteLine("coilHeightMax: " + coilHeightMax);
+            //Debug.WriteLine("coilHeightMax: " + coilHeightMax);
 
             var coilOuterCircumference = (coilHeightMax * 2) + lowerMaxArc + upperMaxArc;
-            Debug.WriteLine("coilOuterCircumference: " + coilOuterCircumference);
+            //Debug.WriteLine("coilOuterCircumference: " + coilOuterCircumference);
 
             return Tuple.Create(lowerMaxArc, upperMaxArc, coilHeightMax, coilOuterCircumference);
         }
@@ -849,31 +838,32 @@ namespace AxialFluxGeneratorDesigner
             return 2 * Math.PI * radius * (angle / 360);
         }
 
-/*
-        /// <summary>
-        ///     This method calculated the (upper or lower) line length of a coil.
-        /// </summary>
-        /// <param name="angle">The angle of the coil section (Deg)</param>
-        /// <param name="radius">The radius (mm)</param>
-        /// <returns>The line length (mm)</returns>
-        private double CalculateCoilLineLength(double angle, double radius)
-        {
-            return 2 * radius * Math.Sin((angle * Math.PI) / 360);
-        }
-*/
+        /*
+                /// <summary>
+                ///     This method calculated the (upper or lower) line length of a coil.
+                /// </summary>
+                /// <param name="angle">The angle of the coil section (Deg)</param>
+                /// <param name="radius">The radius (mm)</param>
+                /// <returns>The line length (mm)</returns>
+                private double CalculateCoilLineLength(double angle, double radius)
+                {
+                    return 2 * radius * Math.Sin((angle * Math.PI) / 360);
+                }
+        */
 
-/*
-        /// <summary>
-        ///     This method calculates the tangent of a coil corner. In this way a rounded corner can be created using an arc.
-        /// </summary>
-        /// <param name="radius">The radius (mm)</param>
-        /// <returns>The distance from the angle to the tangent of the circle (mm)</returns>
-        private double CalculateCircleTangent(double radius)
-        {
-            return (1 + Math.Sqrt(2)) * radius;
-        }
-*/
-        #endregion
+        /*
+                /// <summary>
+                ///     This method calculates the tangent of a coil corner. In this way a rounded corner can be created using an arc.
+                /// </summary>
+                /// <param name="radius">The radius (mm)</param>
+                /// <returns>The distance from the angle to the tangent of the circle (mm)</returns>
+                private double CalculateCircleTangent(double radius)
+                {
+                    return (1 + Math.Sqrt(2)) * radius;
+                }
+        */
+
+        #endregion Stator and coil methods
 
         #region Rotor methods
 
@@ -929,9 +919,11 @@ namespace AxialFluxGeneratorDesigner
         {
             return generatorInnerRadius / generatorOuterRadius;
         }
-        #endregion
+
+        #endregion Rotor methods
 
         #region General methods
+
         /// <summary>
         /// </summary>
         /// <param name="mm"></param>
@@ -940,18 +932,38 @@ namespace AxialFluxGeneratorDesigner
         {
             return mm / 1000;
         }
-        #endregion
+
+        #endregion General methods
 
         #region Generator methods
-        /// <summary>
-        ///     This method can be called to update all calculations.
-        /// </summary>
-        public void UpdateCalculations()
-        {
-            TurbineRotorRadius = CalculateTurbineRotorRadius(GeneratorPower, TurbineAirDensity, TurbineMaximumPowerCoefficient, TurbineWindspeedMax);
-            TurbineRpmMax = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax, TurbineSpeedTipRatioMax, TurbineRotorRadius);
-            FrontEndTorque = CalculateTorque(GeneratorPower, TurbineRpmMax);
 
+        /// <summary>
+        /// This method can be called to update all calculations. 
+        /// The principle is that the generator is driven by an external force applied to the generator shaft. This force is expressed and RPM and has a minimal and maximal value. The input RPM depends on various factors.
+        /// To accommodate the user there is the possibility to calculate the RPM values using an turbine. However, there is also the possibility to enter direct RPM values.This can be useful if another device is used (e.g. water wheel or Stirling engine).
+        /// The input devices are called the front end of the generator or generator input. Besides two input options there is also the possibility to store/return the produced energy. There is the possibility to store the produced energy in a battery or the produced energy is returned to the grid using an inverter.
+        /// In case of a battery we only know the minimal voltage we want (the battery voltage). The maximal depends on the wind. Based on those.....
+        /// - Wind turbine + battery calculations:
+        /// Calculate the turbine radius.
+        /// Calculate the min and max rpm based on the wind speed and tip ratio.
+        /// Calculate the minimal phase voltage using the battery voltage (e.g. 48 volt)
+        /// Calculate the maximal phase voltage by multiplying the minimal phase voltage with the ratio between the max and min rpm (RPM Max / RPM Min).
+        /// - Other + battery calculations:
+        ///  Calculate the maximal phase voltage by multiplying the minimal phase voltage (e.g. 48 volt) with the ratio between the set max and min rpm (RPM Max / RPM Min).
+        /// - Wind turbine + grid calculations:
+        /// Calculate the turbine radius.
+        /// Calculate the minimal AND maximal phase voltage using the inverter min and max voltages.
+        /// Calculate the minimal rpm by multiplying the minimal rpm with the ratio between the min and max phase voltage (Phase voltage min / Phase voltage max).
+        /// Calculate the minimal wind speed based on this minimal RPM value.
+        /// - Other + grid calculations:
+        /// Calculate the minimal AND maximal phase voltage using the inverter min and max voltages.
+        /// Calculate the minimal rpm by multiplying the minimal rpm with the ratio between the min and max phase voltage (Phase voltage min / Phase voltage max).
+        /// Calculate the minimal wind speed based on this minimal RPM value.
+        /// </summary>
+        public void UpdateCalculations(bool debug)
+        {
+            //TODO: Check calculations
+            
             PhaseWireVoltageDrop = VoltageDrop(PhaseWireLength, PhaseWireDiameter, MaxPhaseCurrent, 3);
             PhaseWireResistance = CalculateWireResistance(PhaseWireLength, PhaseWireDiameter);
 
@@ -962,38 +974,47 @@ namespace AxialFluxGeneratorDesigner
             //Battery connection
             if (GeneratorEnergyStorageConnection == 0)
             {
-                PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMinBattery, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
-
+                
                 //Turbine
                 if (GeneratorFrontEnd == 0)
                 {
-                    TurbineRpmMin = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMin, TurbineSpeedTipRatioMin, TurbineRotorRadius);
-                    PhaseVoltageMax = CalculateBatteryVoltage(TurbineRpmMin, TurbineRpmMax, PhaseVoltageMin);
+                    PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
+                    TurbineRotorRadius = CalculateTurbineRotorRadius(GeneratorPower, TurbineAirDensity, TurbineMaximumPowerCoefficient, TurbineWindspeedMax, GeneratorEfficiency);
+                    FrontEndRpmMin = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMin, TurbineSpeedTipRatioMin, TurbineRotorRadius);
+                    FrontEndRpmMax = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax, TurbineSpeedTipRatioMax, TurbineRotorRadius);
+                    PhaseVoltageMax = CalculateBatteryVoltage(FrontEndRpmMin, FrontEndRpmMax, PhaseVoltageMin);
                 }
                 //Other
                 else if (GeneratorFrontEnd == 1)
                 {
-                    PhaseVoltageMax = CalculateBatteryVoltage(OtherRpmMin, OtherRpmMax, PhaseVoltageMin);
+                    PhaseVoltageMin = ((CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop) / GeneratorEfficiency);
+                    //TODO: Correct for voltage drop?
+                    PhaseVoltageMax = CalculateBatteryVoltage(FrontEndRpmMin, FrontEndRpmMax, PhaseVoltageMin) / GeneratorEfficiency; 
                 }
             }
             //Grid connection
             if (GeneratorEnergyStorageConnection == 1)
             {
-                PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMinGrid, RectifierDiodeVoltageDrop+ RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
-                PhaseVoltageMax = CalculatePhaseVoltage(DcVoltageMaxGrid, RectifierDiodeVoltageDrop+ RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
-
                 //Turbine
                 if (GeneratorFrontEnd == 0)
                 {
-                    TurbineRpmMin = CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax, TurbineRpmMax);
-                    TurbineWindspeedMin = CalculateTurbineOptimalWindSpeed(TurbineRpmMin, TurbineRotorRadius, TurbineSpeedTipRatioMin);
+                    PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
+                    PhaseVoltageMax = CalculatePhaseVoltage(DcVoltageMax, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
+                    TurbineRotorRadius = CalculateTurbineRotorRadius(GeneratorPower, TurbineAirDensity, TurbineMaximumPowerCoefficient, TurbineWindspeedMax,GeneratorEfficiency);
+                    FrontEndRpmMax = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax, TurbineSpeedTipRatioMax, TurbineRotorRadius);
+                    FrontEndRpmMin = CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax, FrontEndRpmMax);
+                    TurbineWindspeedMin = CalculateTurbineOptimalWindSpeed(FrontEndRpmMin, TurbineRotorRadius, TurbineSpeedTipRatioMin);
                 }
                 //Other
                 else if (GeneratorFrontEnd == 1)
                 {
-                    OtherRpmMin = CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax, OtherRpmMax);
+                    PhaseVoltageMin = (CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop)/GeneratorEfficiency;
+                    PhaseVoltageMax = (CalculatePhaseVoltage(DcVoltageMax, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop)/GeneratorEfficiency;
+                    FrontEndRpmMin = CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax, FrontEndRpmMax);
                 }
             }
+
+            FrontEndTorque = CalculateTorque(GeneratorPower, FrontEndRpmMax);
 
             MaxPhaseCurrent = CalculateMaximumPhaseCurrent(GeneratorPower, 286);
             //Debug.WriteLine("Max phase current (A): " + MaxPhaseCurrent);
@@ -1016,7 +1037,7 @@ namespace AxialFluxGeneratorDesigner
             MagnetCount = CalculatePolePairs(CoilCount);
             //Debug.WriteLine("Magnet count: " + MagnetCount * 2);
 
-            CoilTurns = CalculateCoilWindings(PhaseVoltageMin, MagnetCount, TurbineRpmMin, CoilsPerPhase, MagnetPoleFlux,
+            CoilTurns = CalculateCoilWindings(PhaseVoltageMin, MagnetCount, FrontEndRpmMin, CoilsPerPhase, MagnetPoleFlux,
                 CoilWindingCoefficient);
             //Debug.WriteLine("Coil turns: " + CoilTurns);
 
@@ -1056,7 +1077,16 @@ namespace AxialFluxGeneratorDesigner
             CoilInductance = CalculateCoilInductance(CoilTurns, CoilWireDiameter, CoilThickness);
             //Debug.WriteLine("CoilInductance: " + CoilInductance);
         }
-        #endregion 
-        #endregion
+
+        private void DebugPrint(bool debug, string text, double value)
+        {
+            Debug.WriteLine(text + ": " + value);
+        }
+
+        #endregion Generator methods
+
+        #endregion Axial Flux Designer methods
     }
+
+    
 }

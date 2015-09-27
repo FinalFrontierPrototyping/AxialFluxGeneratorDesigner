@@ -511,7 +511,6 @@ namespace AxialFluxGeneratorDesigner
         /// <returns>Phase voltage (rms) (V)</returns>
         public double CalculatePhaseVoltage(double dcVoltage, double diodeVoltageDrop)
         {
-            Debug.WriteLine(diodeVoltageDrop);
             //return (dc_voltage + 1.4) / (Math.Sqrt(3) * (Math.Sqrt(2) * (3 / Math.PI)));
             return (dcVoltage + diodeVoltageDrop) / (Math.Sqrt(3) * (Math.Sqrt(2)));
         }

@@ -229,11 +229,11 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         public double CoilWindingCoefficient { get; set; } = 0.95;
 
-        //TODO: Add more information
         /// <summary>
-        /// The heat coefficient (W/cm<sup>2</sup>).
+        /// The heat coefficient (W/m<sup>2</sup>). The heat coefficient in the article is 0.3 (W/cm<sup>2</sup>). However has to be converted to (W/m<sup>2</sup>).
+        /// 0.3 (W/cm<sup>2</sup>) becomes 3000 (W/m<sup>2</sup>) (multiplied by 10000).
         /// </summary>
-        public double CoilHeatCoefficient { get; set; } = 0.30;
+        public double CoilHeatCoefficient { get; set; } = 3000;
 
         /// <summary>
         /// Is the fraction of the core window area that is filled by copper.
@@ -556,7 +556,7 @@ namespace AxialFluxGeneratorDesigner
             var wireRadius = wireDiameter / 2;
             var wireResistance = (copperResistivity * wireLength) / (Math.PI * Math.Pow(MillimetersToMeters(wireRadius), 2));
 
-            if (Double.IsNaN(wireResistance) || Double.IsInfinity(wireResistance))
+            if (double.IsNaN(wireResistance) || double.IsInfinity(wireResistance))
             {
                 wireResistance = 0.0;
             }
@@ -586,7 +586,7 @@ namespace AxialFluxGeneratorDesigner
                 voltageDrop = wireCurrent * (Math.Sqrt(3) * wireResistance);
             }
 
-            if (Double.IsNaN(voltageDrop) || Double.IsInfinity(voltageDrop))
+            if (double.IsNaN(voltageDrop) || double.IsInfinity(voltageDrop))
             {
                 voltageDrop = 0.0;
             }
@@ -695,7 +695,7 @@ namespace AxialFluxGeneratorDesigner
             var coilLegWidth = (maxPhaseCurrent * coilWindings) /
                                Math.Sqrt((2 * CoilHeatCoefficient * CoilFillFactor * MillimetersToMeters(axialThickness)) /
                                          copperResistivity);
-            return coilLegWidth * 10;
+            return coilLegWidth;
         }
 
         /// <summary>
@@ -1077,10 +1077,12 @@ namespace AxialFluxGeneratorDesigner
             //Debug.WriteLine("CoilInductance: " + CoilInductance);
         }
 
+/*
         private void DebugPrint(bool debug, string text, double value)
         {
             Debug.WriteLine(text + ": " + value);
         }
+*/
 
         #endregion Generator methods
 

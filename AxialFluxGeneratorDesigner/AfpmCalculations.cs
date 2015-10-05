@@ -50,23 +50,17 @@ namespace AxialFluxGeneratorDesigner
 
         /// <summary>
         /// The speed tip ratio for the maximal rpm (ans so maximal wind speed).
-        /// The tip-speed ratio, λ, or TSR for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design.
+        /// The tip-speed ratio (lambda) or Tip speed Ratio for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design.
         /// Higher tip speeds result in higher noise levels and require stronger blades due to large centrifugal forces.
         /// </summary>
-        //Where the tip speed of the blade is defined as follows:
-        //\f\text{Tip Speed} (\Lambda) = \frac{\text{Tip speed of blade (m/s)}}{\text{Total Wind speed (m/s}}\f
-        //\f\text{Tip speed of blade (m/s)} = \frac{\text{ rotor rotational speed (rad/sec.)}}{\text{Wind speed (m/s)}}\f
 
         public double TurbineSpeedTipRatioMax { get; set; } = 7;
 
         /// <summary>
         /// The speed tip ratio for the minimal rpm (and so minimal wind speed).
-        /// The tip-speed ratio, λ, or TSR for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design.
+        /// The tip-speed ratio (lambda) or Tip speed Ratio for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design.
         /// Higher tip speeds result in higher noise levels and require stronger blades due to large centrifugal forces.
         /// </summary>
-        // \f\text{Tip Speed} (\Lambda) = \frac{\text{Tip speed of blade (m/s)}}{\text{Total Wind speed (m/s}}\f
-        // Where the tip speed of the blade is defined as follows:
-        // \f\text{Tip speed of blade (m/s)} = \frac{\text{ rotor rotational speed (rad/sec.)}}{\text{Wind speed (m/s)}}\f
         public double TurbineSpeedTipRatioMin { get; set; } = 8.75;
 
         /// <summary>
@@ -358,6 +352,7 @@ namespace AxialFluxGeneratorDesigner
         };
 
         /// <summary>
+        /// TODO: Add documentation!
         /// </summary>
         public double MagnetRemanentFluxDensity { get; set; }
 
@@ -372,18 +367,22 @@ namespace AxialFluxGeneratorDesigner
         public double MagnetWidth { get; set; } = 46;
 
         /// <summary>
+        /// TODO: Add documentation!
         /// </summary>
         public double RotorInnerOuterRadiusRatio { get; set; }
 
         /// <summary>
+        /// TODO: Add documentation!
         /// </summary>
         public double RotorInnerRadius { get; set; }
 
         /// <summary>
+        /// TODO: Add documentation!
         /// </summary>
         public double RotorOuterRadius { get; set; }
 
         /// <summary>
+        /// TODO: Add documentation!
         /// </summary>
         public double RotorThickness { get; set; }
 
@@ -392,6 +391,7 @@ namespace AxialFluxGeneratorDesigner
         #region Rectifier properties
 
         /// <summary>
+        /// TODO: Add documentation!
         /// </summary>
         public double RectifierDiodeVoltageDrop { get; set; } = 1.4;
 
@@ -644,10 +644,10 @@ namespace AxialFluxGeneratorDesigner
         public double CalculateMagnetFluxDensity(double remanentFluxDensity, double coerciveFieldStrength,
             double magnetThickness, double gap)
         {
-            double ksat = 1;
+            const double ksat = 1;
             var statorThickness = CalculateStatorThickness(magnetThickness, gap);
-            var vacuum_permeability = (0.4 * Math.PI) / 1000000;
-            var coilPermeability = (1 / vacuum_permeability) * (remanentFluxDensity / (coerciveFieldStrength * 1000));
+            const double vacuumPermeability = (0.4 * Math.PI) / 1000000;
+            var coilPermeability = (1 / vacuumPermeability) * (remanentFluxDensity / (coerciveFieldStrength * 1000));
             var fluxDensity = remanentFluxDensity /
                               (1 +
                                (coilPermeability *
@@ -689,7 +689,7 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         /// <param name="maxPhaseCurrent">The max. phase current (A)</param>
         /// <param name="coilWindings">The amount of coil windings (n)</param>
-        /// <param name="axialThickness">The stator thickness (mm)</param>
+        /// <param name="axialThickness">The stator thickness (m)</param>
         /// <returns>Returns the coil leg width (mm)</returns>
         public double CalculateCoilLegWidth(double maxPhaseCurrent, int coilWindings, double axialThickness)
         {
@@ -697,7 +697,7 @@ namespace AxialFluxGeneratorDesigner
             var coilLegWidth = (maxPhaseCurrent * coilWindings) /
                                Math.Sqrt((2 * CoilHeatCoefficient * CoilFillFactor * MillimetersToMeters(axialThickness)) /
                                          copperResistivity);
-            return coilLegWidth;
+            return coilLegWidth*1000;
         }
 
         /// <summary>

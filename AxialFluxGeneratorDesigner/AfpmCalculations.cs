@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+// ReSharper disable once RedundantUsingDirective
 using System.Diagnostics;
 
 namespace AxialFluxGeneratorDesigner
@@ -230,8 +231,9 @@ namespace AxialFluxGeneratorDesigner
         public double CoilWindingCoefficient { get; set; } = 0.95;
 
         /// <summary>
-        /// The heat coefficient (W/m<sup>2</sup>). The heat coefficient in the article is 0.3 (W/cm<sup>2</sup>). However has to be converted to (W/m<sup>2</sup>).
-        /// 0.3 (W/cm<sup>2</sup>) becomes 3000 (W/m<sup>2</sup>) (multiplied by 10000).
+        /// The heat coefficient (W/m<sup>2</sup>) describes the heat dissipation of a coil surface. After the coils are casted in the resin two sides are exposed to the air.
+        /// If no proper cooling is provides make sure that this value is lower then 3000 (2000 - 2500). 
+        /// The heat coefficient in the article is 0.3 (W/cm<sup>2</sup>). However has to be converted to (W/m<sup>2</sup>) (0.3 (W/cm<sup>2</sup>) becomes 3000 (W/m<sup>2</sup>) (multiplied by 10000)).
         /// </summary>
         public double CoilHeatCoefficient { get; set; } = 3000;
 
@@ -417,9 +419,9 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         /// <param name="generatorNominalPower"> The maximal generator power (W)</param>
         /// <param name="airDensity"> The air density (kg/m3)</param>
-        /// <param name="maximumPowerCoefficient">The generator efficiency (0.9 (90%)) is normal</param>
+        /// <param name="maximumPowerCoefficient">The power coefficient (0.35 (35%)) is normal</param>
         /// <param name="windSpeed">The maximum wind speed (m/s)</param>
-        /// /// <param name="generatorEfficiency">TODO: Add</param>
+        /// <param name="generatorEfficiency"> The generator efficiency (0.9 (90%)) is normal</param>
         /// <returns>The rotor radius (m)</returns>
         public double CalculateTurbineRotorRadius(double generatorNominalPower, double airDensity,
             double maximumPowerCoefficient, double windSpeed, double generatorEfficiency)
@@ -962,7 +964,6 @@ namespace AxialFluxGeneratorDesigner
         public void UpdateCalculations(bool debug)
         {
             //TODO: Check calculations
-            
             PhaseWireVoltageDrop = VoltageDrop(PhaseWireLength, PhaseWireDiameter, MaxPhaseCurrent, 3);
             PhaseWireResistance = CalculateWireResistance(PhaseWireLength, PhaseWireDiameter);
 

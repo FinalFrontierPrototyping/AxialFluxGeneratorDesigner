@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+
 // ReSharper disable once RedundantUsingDirective
-using System.Diagnostics;
 
 namespace AxialFluxGeneratorDesigner
 {
@@ -226,7 +226,7 @@ namespace AxialFluxGeneratorDesigner
 
         /// <summary>
         /// The heat coefficient (W/m<sup>2</sup>) describes the heat dissipation of a coil surface. After the coils are casted in the resin two sides are exposed to the air.
-        /// If no proper cooling is provides make sure that this value is lower then 3000 (2000 - 2500). 
+        /// If no proper cooling is provides make sure that this value is lower then 3000 (2000 - 2500).
         /// The heat coefficient in the article is 0.3 (W/cm<sup>2</sup>). However has to be converted to (W/m<sup>2</sup>) (0.3 (W/cm<sup>2</sup>) becomes 3000 (W/m<sup>2</sup>) (multiplied by 10000)).
         /// </summary>
         public double CoilHeatCoefficient { get; set; } = 3000;
@@ -697,7 +697,7 @@ namespace AxialFluxGeneratorDesigner
             var coilLegWidth = (maxPhaseCurrent * coilWindings) /
                                Math.Sqrt((2 * CoilHeatCoefficient * CoilFillFactor * MillimetersToMeters(axialThickness)) /
                                          copperResistivity);
-            return coilLegWidth*1000;
+            return coilLegWidth * 1000;
         }
 
         /// <summary>
@@ -939,7 +939,7 @@ namespace AxialFluxGeneratorDesigner
         #region Generator methods
 
         /// <summary>
-        /// This method can be called to update all calculations. 
+        /// This method can be called to update all calculations.
         /// The principle is that the generator is driven by an external force applied to the generator shaft. This force is expressed and RPM and has a minimal and maximal value. The input RPM depends on various factors.
         /// To accommodate the user there is the possibility to calculate the RPM values using an turbine. However, there is also the possibility to enter direct RPM values.This can be useful if another device is used (e.g. water wheel or Stirling engine).
         /// The input devices are called the front end of the generator or generator input. Besides two input options there is also the possibility to store/return the produced energy. There is the possibility to store the produced energy in a battery or the produced energy is returned to the grid using an inverter.
@@ -974,7 +974,6 @@ namespace AxialFluxGeneratorDesigner
             //Battery connection
             if (GeneratorEnergyStorageConnection == 0)
             {
-                
                 //Turbine
                 if (GeneratorFrontEnd == 0)
                 {
@@ -989,7 +988,7 @@ namespace AxialFluxGeneratorDesigner
                 {
                     PhaseVoltageMin = ((CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop) / GeneratorEfficiency);
                     //TODO: Correct for voltage drop?
-                    PhaseVoltageMax = CalculateBatteryVoltage(FrontEndRpmMin, FrontEndRpmMax, PhaseVoltageMin) / GeneratorEfficiency; 
+                    PhaseVoltageMax = CalculateBatteryVoltage(FrontEndRpmMin, FrontEndRpmMax, PhaseVoltageMin) / GeneratorEfficiency;
                 }
             }
             //Grid connection
@@ -1000,7 +999,7 @@ namespace AxialFluxGeneratorDesigner
                 {
                     PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
                     PhaseVoltageMax = CalculatePhaseVoltage(DcVoltageMax, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
-                    TurbineRotorRadius = CalculateTurbineRotorRadius(GeneratorPower, TurbineAirDensity, TurbineMaximumPowerCoefficient, TurbineWindspeedMax,GeneratorEfficiency);
+                    TurbineRotorRadius = CalculateTurbineRotorRadius(GeneratorPower, TurbineAirDensity, TurbineMaximumPowerCoefficient, TurbineWindspeedMax, GeneratorEfficiency);
                     FrontEndRpmMax = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax, TurbineSpeedTipRatioMax, TurbineRotorRadius);
                     FrontEndRpmMin = CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax, FrontEndRpmMax);
                     TurbineWindspeedMin = CalculateTurbineOptimalWindSpeed(FrontEndRpmMin, TurbineRotorRadius, TurbineSpeedTipRatioMin);
@@ -1008,8 +1007,8 @@ namespace AxialFluxGeneratorDesigner
                 //Other
                 else if (GeneratorFrontEnd == 1)
                 {
-                    PhaseVoltageMin = (CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop)/GeneratorEfficiency;
-                    PhaseVoltageMax = (CalculatePhaseVoltage(DcVoltageMax, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop)/GeneratorEfficiency;
+                    PhaseVoltageMin = (CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop) / GeneratorEfficiency;
+                    PhaseVoltageMax = (CalculatePhaseVoltage(DcVoltageMax, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop) / GeneratorEfficiency;
                     FrontEndRpmMin = CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax, FrontEndRpmMax);
                 }
             }
@@ -1078,17 +1077,15 @@ namespace AxialFluxGeneratorDesigner
             //Debug.WriteLine("CoilInductance: " + CoilInductance);
         }
 
-/*
-        private void DebugPrint(bool debug, string text, double value)
-        {
-            Debug.WriteLine(text + ": " + value);
-        }
-*/
+        /*
+                private void DebugPrint(bool debug, string text, double value)
+                {
+                    Debug.WriteLine(text + ": " + value);
+                }
+        */
 
         #endregion Generator methods
 
         #endregion Axial Flux Designer methods
     }
-
-    
 }

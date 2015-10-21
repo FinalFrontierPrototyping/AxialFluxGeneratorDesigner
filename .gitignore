@@ -194,3 +194,22 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+/AxialFluxGeneratorDesigner/bin/Debug/latex/refman.pdf
+/Doxyfile
+/*.gitignore
+/AxialFluxGeneratorDesigner/OldCode.cs
+/Documentation/*.gls
+/Documentation/*.ilg
+/Documentation/*.ist
+/Documentation/*.log
+/Documentation/*.nlo
+/Documentation/*.nls
+/Documentation/*.gz
+/Documentation/*.tex
+/Documentation/*.jpg
+/Documentation/*.acn
+/Documentation/*.acr
+/Documentation/*.alg
+/Documentation/*.aux
+/Documentation/*.glg
+/Documentation/*.glo

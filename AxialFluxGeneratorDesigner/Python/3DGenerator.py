@@ -8,6 +8,9 @@ import Sketcher
 import Part
 import Draft
 
+def translate(context, text):
+    return text
+
 class AFPM:
     def __init__(self, magnet_length, magnet_height, coil_count, leg_width, between_coil, wire_diameter, coil_thickness,
                  outer_radius, inner_radius):
@@ -22,6 +25,7 @@ class AFPM:
         self.wire_diameter = float(wire_diameter)
         self.coil_thickness = float(coil_thickness)
         self.leg_width = float(leg_width)
+
         self.angle_degrees = 360 / self.coil_count
         self.angle_rad = (self.angle_degrees * math.pi) / 180
         self.bottom_max_width = self.leg_width * 2

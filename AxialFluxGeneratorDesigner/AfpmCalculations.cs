@@ -936,6 +936,31 @@ namespace AxialFluxGeneratorDesigner
 
         #endregion General methods
 
+        #region New coil calculations
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="coilCount"></param>
+        /// <param name="coilLegWidth"></param>
+        /// <param name="betweenCoilDistance"></param>
+        /// <returns> The inner rotor radius (mm)</returns>
+        public double CalculateStatorInnerRadius(double coilCount, double coilLegWidth, double betweenCoilDistance)
+        {
+            return (((coilLegWidth * 2) + betweenCoilDistance) * coilCount) / (2 * Math.PI);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public double CalculateStatorOuterRadius()
+        {
+            return 1;
+        }
+
+        #endregion
+
         #region Generator methods
 
         /// <summary>

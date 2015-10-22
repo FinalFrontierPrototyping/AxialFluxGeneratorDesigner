@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 // ReSharper disable once RedundantUsingDirective
 
@@ -215,7 +216,7 @@ namespace AxialFluxGeneratorDesigner
 
         /// <summary>
         /// In power engineering, winding factor is what makes the rms generated voltage in a three-phase AC electrical generator become lesser.
-        /// This is because the armature winding of each phase is distributed in a number of slots. Since the emf induced in different slots are not in phase, their phasor sum is less than their numerical sum.
+        /// This is because the armature winding of each phase is distributed in a number of slots. Since the emf induced in different slots are not in phase, their phase sum is less than their numerical sum.
         /// This reduction factor is called distribution factor Kd. Another factor that can reduce the winding factor is when the slot pitch is smaller than the pole pitch, called pitch factor Kp.
         /// <para> </para>
         /// The winding factor can be calculated as Kw = Kd * Kp.
@@ -839,34 +840,41 @@ namespace AxialFluxGeneratorDesigner
             return 2 * Math.PI * radius * (angle / 360);
         }
 
-        /*
-                /// <summary>
-                ///     This method calculated the (upper or lower) line length of a coil.
-                /// </summary>
-                /// <param name="angle">The angle of the coil section (Deg)</param>
-                /// <param name="radius">The radius (mm)</param>
-                /// <returns>The line length (mm)</returns>
-                private double CalculateCoilLineLength(double angle, double radius)
-                {
-                    return 2 * radius * Math.Sin((angle * Math.PI) / 360);
-                }
-        */
+        /// <summary>
+        ///     This method calculated the (upper or lower) line length of a coil.
+        /// </summary>
+        /// <param name="angle">The angle of the coil section (Deg)</param>
+        /// <param name="radius">The radius (mm)</param>
+        /// <returns>The line length (mm)</returns>
+        private double CalculateCoilLineLength(double angle, double radius)
+        {
+            return 2 * radius * Math.Sin((angle * Math.PI) / 360);
+        }
 
-        /*
-                /// <summary>
-                ///     This method calculates the tangent of a coil corner. In this way a rounded corner can be created using an arc.
-                /// </summary>
-                /// <param name="radius">The radius (mm)</param>
-                /// <returns>The distance from the angle to the tangent of the circle (mm)</returns>
-                private double CalculateCircleTangent(double radius)
-                {
-                    return (1 + Math.Sqrt(2)) * radius;
-                }
-        */
+        /// <summary>
+        ///     This method calculates the tangent of a coil corner. In this way a rounded corner can be created using an arc.
+        /// </summary>
+        /// <param name="radius">The radius (mm)</param>
+        /// <returns>The distance from the angle to the tangent of the circle (mm)</returns>
+        private double CalculateCircleTangent(double radius)
+        {
+            return (1 + Math.Sqrt(2)) * radius;
+        }
 
         #endregion Stator and coil methods
 
         #region Rotor methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="phaseCount"></param>
+        /// <param name="coilPhaseCount"></param>
+        /// <returns></returns>
+        public int CalculateCoilCount(int phaseCount, int coilPhaseCount)
+        {
+            return phaseCount * coilPhaseCount;
+        }
 
         /// <summary>
         ///     This method calculates the amount of magnets.
@@ -923,6 +931,86 @@ namespace AxialFluxGeneratorDesigner
 
         #endregion Rotor methods
 
+        #region New coil calculations
+
+
+        /// <summary>
+        /// This method calculates the inner radius of the stator.
+        /// </summary>
+        /// <param name="coilCount">The total amount of coils.</param>
+        /// <param name="coilLegWidth">The coil leg width (mm)</param>
+        /// <param name="betweenCoilDistance">The distance between two coils (mm)</param>
+        /// <returns>The inner radius of the stator (mm)</returns>
+        public double CalculateStatorInnerRadius(double coilCount, double coilLegWidth, double betweenCoilDistance)
+        {
+            return CalculateNGonInnerRadius(coilLegWidth + betweenCoilDistance, coilCount);
+        }
+
+        /// <summary>
+        /// This method calculates the outer radius of the stator.
+        /// </summary>
+        /// <param name="coilCount">The total amount of coils.</param>
+        /// <param name="coilLegWidth">The coil leg width (mm)</param>
+        /// <param name="betweenCoilDistance">The distance between two coils (mm)</param>
+        /// <param name="magnetHeight">The height of the used magnet (mm)</param>
+        /// <returns>The outer radius of the stator (mm)</returns>
+        public double CalculateStatorOuterRadius(double coilCount, double coilLegWidth, double betweenCoilDistance, double magnetHeight)
+        {
+            double rotorInnerRadius = CalculateNGonInnerRadius(coilLegWidth + betweenCoilDistance, coilCount);
+            return rotorInnerRadius + coilLegWidth + magnetHeight + coilLegWidth;
+        }
+
+        /// <summary>
+        /// This method calculated the length of a single vertex of a polygon. 
+        /// This method is mainly used to calculate the outer vertex length of a coil.
+        /// </summary>
+        /// <param name="innerNGonRadius">The inner radius of the polygon (mm)</param>
+        /// <param name="verticesCount"> The amount of vertices</param>
+        /// <returns>The length of a vertex (mm)</returns>
+        public double CalculateCoilVertexLength(double innerNGonRadius, int verticesCount)
+        {
+            return innerNGonRadius * (2 * Math.Sin(Math.PI / verticesCount));
+        }
+
+        /// <summary>
+        /// Calculate the outer radius of a polygon
+        /// Excircle radius (re):  = a / ( 2 * sin(π/n) ) is the official formula. 
+        /// Where a is the vertex length and n is the amount of vertices.
+        /// </summary>
+        /// <param name="vertexLenght">The vertex length (mm)</param>
+        /// <param name="verticesCount">The amount of vertices</param>
+        /// <returns>The outer radius of a polygon (mm)</returns>
+        public double CalculateNGonOuterRadius(double vertexLenght, double verticesCount)
+        {
+            return vertexLenght / (2 * Math.Sin(Math.PI / verticesCount));
+        }
+
+        /// <summary>
+        /// Calculate the inner radius of a polygon
+        /// Incircle radius (ri):  = a / ( 2 * tan(π/n) ) is the official formula. 
+        /// Where a is the vertex length and n is the amount of vertices.
+        /// </summary>
+        /// <param name="vertexLenght">The vertex length (mm)</param>
+        /// <param name="verticesCount">The amount of vertices</param>
+        /// <returns></returns>
+        public double CalculateNGonInnerRadius(double vertexLenght, double verticesCount)
+        {
+            return vertexLenght / (2 * Math.Tan(Math.PI / verticesCount));
+        }
+
+        /// <summary>
+        /// This method calculates the outer radius of a corner of a coil
+        /// </summary>
+        /// <param name="coilInnerRadius"></param>
+        /// <param name="coilLegWidth"></param>
+        /// <returns></returns>
+        public double CalculateCoilOuterRadius(double coilInnerRadius, double coilLegWidth)
+        {
+            return coilInnerRadius + coilLegWidth;
+        }
+
+        #endregion
+
         #region General methods
 
         /// <summary>
@@ -934,32 +1022,11 @@ namespace AxialFluxGeneratorDesigner
             return mm / 1000;
         }
 
+        private void DebugPrint(bool debug, string text, double value)
+        {
+            Debug.WriteLine(text + ": " + value);
+        }
         #endregion General methods
-
-        #region New coil calculations
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="coilCount"></param>
-        /// <param name="coilLegWidth"></param>
-        /// <param name="betweenCoilDistance"></param>
-        /// <returns> The inner rotor radius (mm)</returns>
-        public double CalculateStatorInnerRadius(double coilCount, double coilLegWidth, double betweenCoilDistance)
-        {
-            return (((coilLegWidth * 2) + betweenCoilDistance) * coilCount) / (2 * Math.PI);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public double CalculateStatorOuterRadius()
-        {
-            return 1;
-        }
-
-        #endregion
 
         #region Generator methods
 
@@ -1055,8 +1122,7 @@ namespace AxialFluxGeneratorDesigner
             MagnetPoleFlux = CalculateMaximumPoleFlux(MagnetFluxDensity, MagnetWidth, MagnetLength);
             //Debug.WriteLine("Magnet pole flux: " + MagnetPoleFlux);
 
-            //Create method!
-            CoilCount = CoilsPerPhase * PhaseCount;
+            CoilCount = CalculateCoilCount(PhaseCount, CoilsPerPhase);
 
             MagnetCount = CalculatePolePairs(CoilCount);
             //Debug.WriteLine("Magnet count: " + MagnetCount * 2);
@@ -1101,13 +1167,6 @@ namespace AxialFluxGeneratorDesigner
             CoilInductance = CalculateCoilInductance(CoilTurns, CoilWireDiameter, CoilThickness);
             //Debug.WriteLine("CoilInductance: " + CoilInductance);
         }
-
-        /*
-                private void DebugPrint(bool debug, string text, double value)
-                {
-                    Debug.WriteLine(text + ": " + value);
-                }
-        */
 
         #endregion Generator methods
 

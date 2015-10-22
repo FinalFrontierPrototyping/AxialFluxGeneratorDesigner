@@ -76,7 +76,7 @@ namespace UnitTests
         [TestMethod]
         public void TestCoilLegWidth()
         {
-            Assert.AreEqual(0.0276787345012158, _test.CalculateCoilLegWidth(4.27, 337, 13.76), Delta);
+            Assert.AreEqual(27.6787345012158, _test.CalculateCoilLegWidth(4.27, 337, 13.76), Delta);
         }
 
         [TestMethod]
@@ -150,7 +150,7 @@ namespace UnitTests
 
             //Coil leg width
             double coilLegWidth = _test.CalculateCoilLegWidth(4.27, coilWindings, statorThickness);
-            Assert.AreEqual(0.0266262055747546, coilLegWidth, Delta);
+            Assert.AreEqual(26.6262055747546, coilLegWidth, Delta);
         }
 
         [TestMethod]
@@ -210,8 +210,6 @@ namespace UnitTests
 
             Assert.AreEqual(119, _test.FrontEndRpmMin, Delta);
             Assert.AreEqual(297, _test.FrontEndRpmMax, Delta);
-            //Assert.AreEqual(53.9615970092586, test.PhaseVoltageMax, delta);
-            //Assert.AreEqual(53.9615970092586, test.TurbineWindspeedMin, delta);
         }
 
         [TestMethod]
@@ -230,6 +228,8 @@ namespace UnitTests
             Assert.AreEqual(41.4968426932404, _test.PhaseVoltageMax, Delta);
         }
 
+        /// <summary>
+        /// </summary>
         [TestMethod]
         public void TestGridyOtherCase()
         {
@@ -242,6 +242,20 @@ namespace UnitTests
 
             Assert.AreEqual(91.35689522158, _test.PhaseVoltageMin, Delta);
             Assert.AreEqual(227.439658709534, _test.PhaseVoltageMax, Delta);
+        }
+
+        [TestMethod]
+        public void TestNGonOuterRadius()
+        {
+            Assert.AreEqual(84.1703510330223, _test.CalculateNGonOuterRadius(35, 15), Delta);
+            Assert.AreEqual(43.85706600244631, _test.CalculateNGonOuterRadius(30, 9), Delta);
+        }
+
+        [TestMethod]
+        public void TestNGonInnerRadius()
+        {
+            Assert.AreEqual(82.33102691587295, _test.CalculateNGonInnerRadius(35, 15), Delta);
+            Assert.AreEqual(41.212161291819335, _test.CalculateNGonInnerRadius(30, 9), Delta);
         }
     }
 }

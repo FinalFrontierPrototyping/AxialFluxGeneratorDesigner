@@ -106,7 +106,6 @@
     <Compile Include="FormAfpmDesigner.Designer.cs">
       <DependentUpon>FormAfpmDesigner.cs</DependentUpon>
     </Compile>
-    <Compile Include="OldCode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormAfpmDesigner.resx">

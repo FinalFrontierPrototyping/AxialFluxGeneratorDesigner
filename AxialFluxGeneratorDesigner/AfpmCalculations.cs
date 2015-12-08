@@ -54,7 +54,6 @@ namespace AxialFluxGeneratorDesigner
         /// The tip-speed ratio (lambda) or Tip speed Ratio for wind turbines is the ratio between the tangential speed of the tip of a blade and the actual velocity of the wind, v. The tip-speed ratio is related to efficiency, with the optimum varying with blade design.
         /// Higher tip speeds result in higher noise levels and require stronger blades due to large centrifugal forces.
         /// </summary>
-
         public double TurbineSpeedTipRatioMax { get; set; } = 7;
 
         /// <summary>
@@ -174,6 +173,21 @@ namespace AxialFluxGeneratorDesigner
         #region Stator properties
 
         /// <summary>
+        /// TODO: Add documentation!
+        /// </summary>
+        public double StatorInnerRadius { get; set; }
+
+        /// <summary>
+        /// TODO: Add documentation!
+        /// </summary>
+        public double StatorOuterRadius { get; set; }
+
+        /// <summary>
+        /// The distance between two coils (mm).
+        /// </summary>
+        public double BetweenCoilDistance { get; set; } = 5;
+
+        /// <summary>
         /// The maximal phase voltage that a sing phase has to produce.
         /// </summary>
         public double PhaseVoltageMax { get; set; }
@@ -203,6 +217,17 @@ namespace AxialFluxGeneratorDesigner
         #endregion Stator properties
 
         #region Stator coil properties
+
+        /// <summary>
+        /// The width of the top outer vertex.
+        ///  </summary>
+        public double CoilOuterVertexTopWidth { get; set; }
+
+        /// <summary>
+        /// The width of the bottom outer vertex.
+        /// </summary>
+        public double CoilOuterVertexBottomWidth { get; set; }
+
 
         /// <summary>
         /// The cross sectional area of a coil (mm<sup>2</sup>)
@@ -757,6 +782,7 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="betweenCoilGap">The gap between two coils (mm)</param>
         /// <param name="magnetHeight">The height of the magnet (mm)</param>
         /// <returns>A tuple containing the coil dimensions (mm)</returns>
+        //[Obsolete("Old coil inner dimensions calculation method!", true)]
         public Tuple<double, double, double, double> CoilInnerDimensions(double coilLegWidth, int coilCount,
             double coilGap, double betweenCoilGap, double magnetHeight)
         {
@@ -797,6 +823,7 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="betweenCoilGap">The gap between two coils (mm)</param>
         /// <param name="magnetHeight">The height of the magnet (mm)</param>
         /// <returns>A tuple containing the coil dimensions (mm)</returns>
+        //[Obsolete("Old coil outer dimensions calculation method!", true)]
         public Tuple<double, double, double, double> CoilOuterDimensions(double coilLegWidth, int coilCount,
             double coilGap, double betweenCoilGap, double magnetHeight)
         {
@@ -904,6 +931,7 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="polePairs"></param>
         /// <param name="magnetWidth"></param>
         /// <returns></returns>
+        [Obsolete("Old generator inner radius calculation method!", true)]
         public double CalculateGeneratorInnerRadius(int totalCoils, double coilWidth, int polePairs, double magnetWidth)
         {
             return (((2 * totalCoils) * coilWidth) + polePairs * magnetWidth) / (2 * Math.PI);
@@ -914,6 +942,7 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="generatorInnerRadius"></param>
         /// <param name="magnetLength"></param>
         /// <returns></returns>
+        [Obsolete("Old generator outer radius calculation method!", true)]
         public double CalculateCalculateGeneratorOuterRadius(double generatorInnerRadius, double magnetLength)
         {
             return ((2 * generatorInnerRadius) + (2 * magnetLength)) / 2;
@@ -933,6 +962,16 @@ namespace AxialFluxGeneratorDesigner
 
         #region New coil calculations
 
+        /// <summary>
+        /// This method calculates the outer radius of a corner of a coil.
+        /// </summary>
+        /// <param name="coilInnerRadius">Inner radius of the coil (mm).</param>
+        /// <param name="coilLegWidth">The coil leg width (mm).</param>
+        /// <returns>the coil outer radius (mm).</returns>
+        public double CalculateCoilOuterCornerRadius(double coilInnerRadius, double coilLegWidth)
+        {
+            return coilInnerRadius + coilLegWidth;
+        }
 
         /// <summary>
         /// This method calculates the inner radius of the stator.
@@ -954,22 +993,58 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="betweenCoilDistance">The distance between two coils (mm)</param>
         /// <param name="magnetHeight">The height of the used magnet (mm)</param>
         /// <returns>The outer radius of the stator (mm)</returns>
-        public double CalculateStatorOuterRadius(double coilCount, double coilLegWidth, double betweenCoilDistance, double magnetHeight)
+        public double CalculateStatorOuterRadius(double coilCount, double coilLegWidth, double betweenCoilDistance,
+            double magnetHeight)
         {
-            double rotorInnerRadius = CalculateNGonInnerRadius(coilLegWidth + betweenCoilDistance, coilCount);
+            var rotorInnerRadius = CalculateNGonInnerRadius(coilLegWidth + betweenCoilDistance, coilCount);
             return rotorInnerRadius + coilLegWidth + magnetHeight + coilLegWidth;
         }
 
         /// <summary>
-        /// This method calculated the length of a single vertex of a polygon. 
-        /// This method is mainly used to calculate the outer vertex length of a coil.
+        /// This method calculates the top vertex length of the outer coil trapezoid.
         /// </summary>
-        /// <param name="innerNGonRadius">The inner radius of the polygon (mm)</param>
+        /// <param name="outerNGonRadius">The inner radius of the polygon (mm)</param>
         /// <param name="verticesCount"> The amount of vertices</param>
         /// <returns>The length of a vertex (mm)</returns>
-        public double CalculateCoilVertexLength(double innerNGonRadius, int verticesCount)
+        public double CalculateOuterCoilTopVertexLength(double outerNGonRadius, int verticesCount)
         {
-            return innerNGonRadius * (2 * Math.Sin(Math.PI / verticesCount));
+            return outerNGonRadius * (2 * Math.Sin(Math.PI / verticesCount));
+        }
+
+        /// <summary>
+        /// This method calculates the bottom vertex length of the outer coil trapezoid.
+        /// </summary>
+        /// <param name="coilLegWidth">The coil leg width (mm)</param>
+        /// <returns>The bottom vertex length of the outer coil trapezoid (mm).</returns>
+        public double CalculateOuterCoilBottomVertexLength(double coilLegWidth)
+        {
+            return 2 * coilLegWidth;
+        }
+
+        /// <summary>
+        /// This method calculates the bottom vertex length of the inner coil trapezoid.
+        /// </summary>
+        /// <param name="coilLegWidth"></param>
+        /// <param name="coilAngle"></param>
+        /// <returns></returns>
+        public double CalculateInnerCoilBottomVertexLength(double coilLegWidth, double coilAngle)
+        {
+            var rad = (coilAngle/2) * (Math.PI / 180.0);
+            return (Math.Tan(rad) * coilLegWidth) * 2;
+        }
+
+        /// <summary>
+        /// This method calculates the top vertex length of the inner coil trapezoid.
+        /// </summary>
+        /// <param name="coilLegWidth"></param>
+        /// <param name="magnetHeight"></param>
+        /// <param name="coilAngle"></param>
+        /// <returns></returns>
+        public double CalculateInnerTopVertexLength(double coilLegWidth, double magnetHeight, double coilAngle)
+        {
+            var length = coilLegWidth + magnetHeight;
+            var rad = (coilAngle/2) * (Math.PI / 180.0);
+            return (Math.Tan(rad) * length) * 2;
         }
 
         /// <summary>
@@ -998,17 +1073,6 @@ namespace AxialFluxGeneratorDesigner
             return vertexLenght / (2 * Math.Tan(Math.PI / verticesCount));
         }
 
-        /// <summary>
-        /// This method calculates the outer radius of a corner of a coil
-        /// </summary>
-        /// <param name="coilInnerRadius"></param>
-        /// <param name="coilLegWidth"></param>
-        /// <returns></returns>
-        public double CalculateCoilOuterRadius(double coilInnerRadius, double coilLegWidth)
-        {
-            return coilInnerRadius + coilLegWidth;
-        }
-
         #endregion
 
         #region General methods
@@ -1017,7 +1081,7 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         /// <param name="mm"></param>
         /// <returns></returns>
-        private double MillimetersToMeters(double mm)
+        private static double MillimetersToMeters(double mm)
         {
             return mm / 1000;
         }
@@ -1026,6 +1090,7 @@ namespace AxialFluxGeneratorDesigner
         {
             Debug.WriteLine(text + ": " + value);
         }
+
         #endregion General methods
 
         #region Generator methods
@@ -1055,58 +1120,9 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         public void UpdateCalculations(bool debug)
         {
-            //TODO: Check calculations
-            PhaseWireVoltageDrop = VoltageDrop(PhaseWireLength, PhaseWireDiameter, MaxPhaseCurrent, 3);
-            PhaseWireResistance = CalculateWireResistance(PhaseWireLength, PhaseWireDiameter);
+            UpdateFrontEndCalculations();
 
-            //TODO: Check max phase current?
-            RectifierWireVoltageDrop = VoltageDrop(RectifierWireLength, RectifierWireDiameter, MaxPhaseCurrent, 1);
-            RectifierWireResistance = CalculateWireResistance(RectifierWireLength, RectifierWireDiameter);
-
-            //Battery connection
-            if (GeneratorEnergyStorageConnection == 0)
-            {
-                //Turbine
-                if (GeneratorFrontEnd == 0)
-                {
-                    PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
-                    TurbineRotorRadius = CalculateTurbineRotorRadius(GeneratorPower, TurbineAirDensity, TurbineMaximumPowerCoefficient, TurbineWindspeedMax, GeneratorEfficiency);
-                    FrontEndRpmMin = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMin, TurbineSpeedTipRatioMin, TurbineRotorRadius);
-                    FrontEndRpmMax = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax, TurbineSpeedTipRatioMax, TurbineRotorRadius);
-                    PhaseVoltageMax = CalculateBatteryVoltage(FrontEndRpmMin, FrontEndRpmMax, PhaseVoltageMin);
-                }
-                //Other
-                else if (GeneratorFrontEnd == 1)
-                {
-                    PhaseVoltageMin = ((CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop) / GeneratorEfficiency);
-                    //TODO: Correct for voltage drop?
-                    PhaseVoltageMax = CalculateBatteryVoltage(FrontEndRpmMin, FrontEndRpmMax, PhaseVoltageMin) / GeneratorEfficiency;
-                }
-            }
-            //Grid connection
-            if (GeneratorEnergyStorageConnection == 1)
-            {
-                //Turbine
-                if (GeneratorFrontEnd == 0)
-                {
-                    PhaseVoltageMin = CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
-                    PhaseVoltageMax = CalculatePhaseVoltage(DcVoltageMax, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop;
-                    TurbineRotorRadius = CalculateTurbineRotorRadius(GeneratorPower, TurbineAirDensity, TurbineMaximumPowerCoefficient, TurbineWindspeedMax, GeneratorEfficiency);
-                    FrontEndRpmMax = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax, TurbineSpeedTipRatioMax, TurbineRotorRadius);
-                    FrontEndRpmMin = CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax, FrontEndRpmMax);
-                    TurbineWindspeedMin = CalculateTurbineOptimalWindSpeed(FrontEndRpmMin, TurbineRotorRadius, TurbineSpeedTipRatioMin);
-                }
-                //Other
-                else if (GeneratorFrontEnd == 1)
-                {
-                    PhaseVoltageMin = (CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop) / GeneratorEfficiency;
-                    PhaseVoltageMax = (CalculatePhaseVoltage(DcVoltageMax, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) + PhaseWireVoltageDrop) / GeneratorEfficiency;
-                    FrontEndRpmMin = CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax, FrontEndRpmMax);
-                }
-            }
-
-            FrontEndTorque = CalculateTorque(GeneratorPower, FrontEndRpmMax);
-
+            //TODO remve 286 V??
             MaxPhaseCurrent = CalculateMaximumPhaseCurrent(GeneratorPower, 286);
             //Debug.WriteLine("Max phase current (A): " + MaxPhaseCurrent);
 
@@ -1127,7 +1143,8 @@ namespace AxialFluxGeneratorDesigner
             MagnetCount = CalculatePolePairs(CoilCount);
             //Debug.WriteLine("Magnet count: " + MagnetCount * 2);
 
-            CoilTurns = CalculateCoilWindings(PhaseVoltageMin, MagnetCount, FrontEndRpmMin, CoilsPerPhase, MagnetPoleFlux,
+            CoilTurns = CalculateCoilWindings(PhaseVoltageMin, MagnetCount, FrontEndRpmMin, CoilsPerPhase,
+                MagnetPoleFlux,
                 CoilWindingCoefficient);
             //Debug.WriteLine("Coil turns: " + CoilTurns);
 
@@ -1143,10 +1160,20 @@ namespace AxialFluxGeneratorDesigner
             CoilWireDiameter = CalculateCoilWireDiameter(CoilCrossSectionalArea);
             //Debug.WriteLine("Coil wire diameter: " + CoilWireDiameter);
 
-            RotorInnerRadius = CalculateGeneratorInnerRadius(CoilCount, CoilLegWidth, MagnetCount, MagnetWidth);
+            StatorInnerRadius = CalculateStatorInnerRadius(CoilCount, CoilLegWidth, BetweenCoilDistance);
+            Debug.WriteLine("Stator inner radius: " + StatorInnerRadius);
+
+            StatorOuterRadius = CalculateStatorOuterRadius(CoilCount, CoilLegWidth, BetweenCoilDistance, MagnetLength);
+            Debug.WriteLine("Stator outer radius: " + StatorOuterRadius);
+
+            CoilOuterVertexTopWidth = CalculateOuterCoilTopVertexLength(StatorOuterRadius, CoilCount);
+            Debug.WriteLine("Coil outer top vertex width: " + CoilOuterVertexTopWidth);
+
+
+            RotorInnerRadius = 0;
             //Debug.WriteLine("Rotor outer radius: " + RotorInnerRadius);
 
-            RotorOuterRadius = CalculateCalculateGeneratorOuterRadius(RotorInnerRadius, MagnetLength);
+            RotorOuterRadius = 0;
             //Debug.WriteLine("Rotor inner radius: " + RotorOuterRadius);
 
             RotorInnerOuterRadiusRatio = CalculateGeneratorInnerOuterRadiusRatio(RotorInnerRadius, RotorOuterRadius);
@@ -1166,6 +1193,99 @@ namespace AxialFluxGeneratorDesigner
 
             CoilInductance = CalculateCoilInductance(CoilTurns, CoilWireDiameter, CoilThickness);
             //Debug.WriteLine("CoilInductance: " + CoilInductance);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void UpdateFrontEndCalculations()
+        {
+            //TODO: Check calculations
+            PhaseWireVoltageDrop = VoltageDrop(PhaseWireLength, PhaseWireDiameter, MaxPhaseCurrent, 3);
+            PhaseWireResistance = CalculateWireResistance(PhaseWireLength, PhaseWireDiameter);
+
+            //TODO: Check max phase current?
+            RectifierWireVoltageDrop = VoltageDrop(RectifierWireLength, RectifierWireDiameter, MaxPhaseCurrent, 1);
+            RectifierWireResistance = CalculateWireResistance(RectifierWireLength, RectifierWireDiameter);
+
+            //Battery connection
+            if (GeneratorEnergyStorageConnection == 0)
+            {
+                //Turbine
+                if (GeneratorFrontEnd == 0)
+                {
+                    PhaseVoltageMin =
+                        CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
+                        PhaseWireVoltageDrop;
+                    TurbineRotorRadius = CalculateTurbineRotorRadius(GeneratorPower, TurbineAirDensity,
+                        TurbineMaximumPowerCoefficient, TurbineWindspeedMax, GeneratorEfficiency);
+                    FrontEndRpmMin = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMin, TurbineSpeedTipRatioMin,
+                        TurbineRotorRadius);
+                    FrontEndRpmMax = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax, TurbineSpeedTipRatioMax,
+                        TurbineRotorRadius);
+                    PhaseVoltageMax = CalculateBatteryVoltage(FrontEndRpmMin, FrontEndRpmMax, PhaseVoltageMin);
+                }
+                //Other
+                else if (GeneratorFrontEnd == 1)
+                {
+                    PhaseVoltageMin =
+                        ((CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
+                          PhaseWireVoltageDrop) / GeneratorEfficiency);
+                    //TODO: Correct for voltage drop?
+                    PhaseVoltageMax = CalculateBatteryVoltage(FrontEndRpmMin, FrontEndRpmMax, PhaseVoltageMin) /
+                                      GeneratorEfficiency;
+                }
+            }
+            //Grid connection
+            if (GeneratorEnergyStorageConnection == 1)
+            {
+                //Turbine
+                if (GeneratorFrontEnd == 0)
+                {
+                    PhaseVoltageMin =
+                        CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
+                        PhaseWireVoltageDrop;
+                    PhaseVoltageMax =
+                        CalculatePhaseVoltage(DcVoltageMax, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
+                        PhaseWireVoltageDrop;
+                    TurbineRotorRadius = CalculateTurbineRotorRadius(GeneratorPower, TurbineAirDensity,
+                        TurbineMaximumPowerCoefficient, TurbineWindspeedMax, GeneratorEfficiency);
+                    FrontEndRpmMax = CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax, TurbineSpeedTipRatioMax,
+                        TurbineRotorRadius);
+                    FrontEndRpmMin = CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax, FrontEndRpmMax);
+                    TurbineWindspeedMin = CalculateTurbineOptimalWindSpeed(FrontEndRpmMin, TurbineRotorRadius,
+                        TurbineSpeedTipRatioMin);
+                }
+                //Other
+                else if (GeneratorFrontEnd == 1)
+                {
+                    PhaseVoltageMin =
+                        (CalculatePhaseVoltage(DcVoltageMin, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
+                         PhaseWireVoltageDrop) / GeneratorEfficiency;
+                    PhaseVoltageMax =
+                        (CalculatePhaseVoltage(DcVoltageMax, RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
+                         PhaseWireVoltageDrop) / GeneratorEfficiency;
+                    FrontEndRpmMin = CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax, FrontEndRpmMax);
+                }
+            }
+
+            FrontEndTorque = CalculateTorque(GeneratorPower, FrontEndRpmMax);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void UpdateStatorCalculations()
+        {
+            
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void UpdateRotorCalculations()
+        {
+
         }
 
         #endregion Generator methods

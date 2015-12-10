@@ -1,5 +1,4 @@
-﻿using HelixToolkit.Wpf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -9,45 +8,47 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using System.Windows.Media.Media3D;
+using System.Windows.Forms.Integration;
 using System.Windows.Input;
+using System.Windows.Media.Media3D;
+using HelixToolkit.Wpf;
 
 namespace AxialFluxGeneratorDesigner
 {
     /// <summary>
-    /// This is the GUI part of the AFPMG Designer
+    ///     This is the GUI part of the AFPMG Designer
     /// </summary>
     public partial class FormAfpmDesigner : Form
     {
         /// <summary>
-        /// Check if the form GUI components are initialized.
-        /// </summary>
-        public bool IsInitialized = false;
-
-        /// <summary>
-        /// The Class containing the code to perform calculations
-        /// </summary>
-        private readonly Afpm _generator = new Afpm();
-
-        /// <summary>
-        /// The object that are used to display the 3D model 
-        /// </summary>
-        private readonly HelixViewport3D _generatorView = new HelixViewport3D();
-
-        private ModelVisual3D device3D = new ModelVisual3D();
-
-        /// <summary>
-        /// The amount of iteration steps that are done.
+        ///     The amount of iteration steps that are done.
         /// </summary>
         private const int Iterations = 100;
 
         /// <summary>
-        /// The data table that is used to hold the iterated data
+        ///     The Class containing the code to perform calculations
+        /// </summary>
+        private readonly Afpm _generator = new Afpm();
+
+        /// <summary>
+        ///     The object that are used to display the 3D model
+        /// </summary>
+        private readonly HelixViewport3D _generatorView = new HelixViewport3D();
+
+        /// <summary>
+        ///     The data table that is used to hold the iterated data
         /// </summary>
         private readonly DataTable _tableGeneratorSummary = new DataTable();
 
+        private readonly ModelVisual3D _device3D = new ModelVisual3D();
+
         /// <summary>
-        ///The constructor of the Form class.
+        ///     Check if the form GUI components are initialized.
+        /// </summary>
+        private bool _isInitialized;
+
+        /// <summary>
+        ///     The constructor of the Form class.
         /// </summary>
         public FormAfpmDesigner()
         {
@@ -56,7 +57,7 @@ namespace AxialFluxGeneratorDesigner
         }
 
         /// <summary>
-        /// The method that is triggered if the index of the selected tab is changed.
+        ///     The method that is triggered if the index of the selected tab is changed.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -127,10 +128,8 @@ namespace AxialFluxGeneratorDesigner
         }
 
         /// <summary>
-        /// This method is called when the form is loaded
+        ///     This method is called when the form is loaded
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
             elementHost1.Child = _generatorView;
@@ -213,7 +212,7 @@ namespace AxialFluxGeneratorDesigner
             _tableGeneratorSummary.Rows.Add("Rectifier wire voltage drop (V)");
             _tableGeneratorSummary.Rows.Add("Rectifier wire resistance (Ohm)");
 
-            for (int i = 0; i < Iterations + 1; i++)
+            for (var i = 0; i < Iterations + 1; i++)
             {
                 _tableGeneratorSummary.Columns.Add("Iteration " + (i + 1), typeof (double));
             }
@@ -287,7 +286,7 @@ namespace AxialFluxGeneratorDesigner
             _generator.MagnetRemanentFluxDensity = _generator.MagnetProperties[cmbMagnetGrade.SelectedIndex].Item2;
             _generator.MagnetCoerciveFieldStrength = _generator.MagnetProperties[cmbMagnetGrade.SelectedIndex].Item3;
 
-            IsInitialized = true;
+            _isInitialized = true;
 
             UpdateTrigger();
 
@@ -363,49 +362,49 @@ namespace AxialFluxGeneratorDesigner
 
         private void numDCVoltage_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.DcVoltageMax = (double) numInverterVoltageMax.Value;
             UpdateTrigger();
         }
 
         private void numCoilsPerPhaseCount_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.CoilsPerPhase = (int) numCoilsPerPhaseCount.Value;
             UpdateTrigger();
         }
 
         private void numlMagnetThickness_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.MagnetThickness = (double) numMagnetThickness.Value;
             UpdateTrigger();
         }
 
         private void numMagnetWidth_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.MagnetWidth = (double) numMagnetWidth.Value;
             UpdateTrigger();
         }
 
         private void numMagnetLength_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.MagnetLength = (double) numMagnetLength.Value;
             UpdateTrigger();
         }
 
         private void numMechanicalGap_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.MechamicalGap = (double) numMechanicalGap.Value;
             UpdateTrigger();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.MagnetGrade = _generator.MagnetProperties[cmbMagnetGrade.SelectedIndex].Item1;
             _generator.MagnetRemanentFluxDensity = _generator.MagnetProperties[cmbMagnetGrade.SelectedIndex].Item2;
             _generator.MagnetCoerciveFieldStrength = _generator.MagnetProperties[cmbMagnetGrade.SelectedIndex].Item3;
@@ -420,49 +419,49 @@ namespace AxialFluxGeneratorDesigner
 
         private void numShaftPower_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.GeneratorPower = (int) numShaftPower.Value;
             UpdateTrigger();
         }
 
         private void numWindSpeedNom_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.TurbineWindspeedMax = (double) numWindSpeedNom.Value;
             UpdateTrigger();
         }
 
         private void numTipRatioNom_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.TurbineSpeedTipRatioMax = (double) numTipRatioNom.Value;
             UpdateTrigger();
         }
 
         private void numInverterVoltageMin_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.DcVoltageMin = (double) numVoltageMin.Value;
             UpdateTrigger();
         }
 
         private void numTipRatioCutIn_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.TurbineSpeedTipRatioMin = (double) numTipRatioCutIn.Value;
             UpdateTrigger();
         }
 
         private void numMaximumPowerCoefficient_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.TurbineMaximumPowerCoefficient = (double) numMaximumPowerCoefficient.Value;
             UpdateTrigger();
         }
 
         private void numAirDensity_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.TurbineAirDensity = (double) numAirDensity.Value;
             UpdateTrigger();
         }
@@ -475,114 +474,114 @@ namespace AxialFluxGeneratorDesigner
 
         private void numCoilWindingCoefficient_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.CoilWindingCoefficient = (double) numCoilWindingCoefficient.Value;
             UpdateTrigger();
         }
 
         private void cmbEnergyStorage_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             UpdateComboBoxes();
             UpdateTrigger();
         }
 
         private void cmbGeneratorFrontEnd_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             UpdateComboBoxes();
             UpdateTrigger();
         }
 
         private void numWindSpeedCutIn_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.TurbineWindspeedMin = (double) numWindSpeedCutIn.Value;
             UpdateTrigger();
         }
 
         private void numCoilFillFactor_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.CoilFillFactor = (double) numCoilFillFactor.Value;
             UpdateTrigger();
         }
 
         private void numCoilHeatCoefficient_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.CoilHeatCoefficient = (double) numCoilHeatCoefficient.Value;
             UpdateTrigger();
         }
 
         private void numGeneratorEfficiency_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.GeneratorEfficiency = (double) (numGeneratorEfficiency.Value/100);
             UpdateTrigger();
         }
 
         private void numPhaseWireLength_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.PhaseWireLength = (double) numPhaseWireLength.Value;
             UpdateTrigger();
         }
 
         private void numPhaseWireDiameter_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.PhaseWireDiameter = (double) numPhaseWireDiameter.Value;
             UpdateTrigger();
         }
 
         private void numRectifierWireLength_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.RectifierWireLength = (double) numRectifierWireLength.Value;
             UpdateTrigger();
         }
 
         private void numRectifierWireDiameter_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.RectifierWireDiameter = (double) numRectifierWireDiameter.Value;
             UpdateTrigger();
         }
 
         private void numRectifierDiodeVoltageDrop_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.RectifierDiodeVoltageDrop = (double) numRectifierDiodeVoltageDrop.Value;
             UpdateTrigger();
         }
 
         private void numRpmMax_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.FrontEndRpmMax = (int) numRpmMax.Value;
             UpdateTrigger();
         }
 
         private void numRpmMin_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsInitialized) return;
+            if (!_isInitialized) return;
             _generator.FrontEndRpmMin = (int) numRpmMin.Value;
             UpdateTrigger();
         }
 
+        //TODO: Add documentation
         /// <summary>
-        ///
         /// </summary>
-        public double IterableCalculate(NumericUpDown lower, NumericUpDown upper, int iteration)
+        private double IterableCalculate(NumericUpDown lower, NumericUpDown upper, int iteration)
         {
-            return ((double) lower.Value + (((double) upper.Value - (double) lower.Value)/Iterations)*iteration);
+            return (double) lower.Value + ((double) upper.Value - (double) lower.Value)/Iterations*iteration;
         }
 
+        //TODO: Add documentation
         /// <summary>
-        ///
         /// </summary>
-        public void FillIterationTable()
+        private void FillIterationTable()
         {
             for (var i = 0; i < 100 + 1; i++)
             {
@@ -700,7 +699,6 @@ namespace AxialFluxGeneratorDesigner
         }
 
         /// <summary>
-        ///
         /// </summary>
         public void UpdateComboBoxes()
         {
@@ -899,7 +897,7 @@ namespace AxialFluxGeneratorDesigner
         {
             try
             {
-                using (MemoryStream ms = new MemoryStream())
+                using (var ms = new MemoryStream())
                 {
                     chartData1.SaveImage(ms, ChartImageFormat.Bmp);
                     var bm = new Bitmap(ms);
@@ -908,7 +906,7 @@ namespace AxialFluxGeneratorDesigner
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Image save error: " + ex.Message);
+                MessageBox.Show(@"Image save error: " + ex.Message);
             }
         }
 
@@ -916,21 +914,21 @@ namespace AxialFluxGeneratorDesigner
         {
             if (HasNull(_tableGeneratorSummary))
             {
-                MessageBox.Show("Iterate data first!");
+                MessageBox.Show(@"Iterate data first!");
             }
             else
             {
                 try
                 {
-                    List<double> xValue = new List<double>();
-                    List<double> yValue = new List<double>();
+                    var xValue = new List<double>();
+                    var yValue = new List<double>();
 
                     foreach (var series in chartData1.Series)
                     {
                         series.Points.Clear();
                     }
 
-                    for (int i = 1; i < _tableGeneratorSummary.Columns.Count; i++)
+                    for (var i = 1; i < _tableGeneratorSummary.Columns.Count; i++)
                     {
                         xValue.Add(
                             Convert.ToDouble(_tableGeneratorSummary.Rows[cmbChart1xAxis.SelectedIndex][i].ToString()));
@@ -941,7 +939,7 @@ namespace AxialFluxGeneratorDesigner
                     if (Math.Abs(xValue.Min() - xValue.Max()) < 0.0000001 ||
                         Math.Abs(yValue.Min() - yValue.Max()) < 0.0000001)
                     {
-                        MessageBox.Show("The selected data cannot be charted!");
+                        MessageBox.Show(@"The selected data cannot be charted!");
                     }
                     else
                     {
@@ -963,7 +961,7 @@ namespace AxialFluxGeneratorDesigner
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Chart error: " + ex.Message);
+                    MessageBox.Show(@"Chart error: " + ex.Message);
                 }
             }
         }
@@ -972,21 +970,21 @@ namespace AxialFluxGeneratorDesigner
         {
             if (HasNull(_tableGeneratorSummary))
             {
-                MessageBox.Show("Iterate data first!");
+                MessageBox.Show(@"Iterate data first!");
             }
             else
             {
                 try
                 {
-                    List<double> xValue = new List<double>();
-                    List<double> yValue = new List<double>();
+                    var xValue = new List<double>();
+                    var yValue = new List<double>();
 
                     foreach (var series in chartData2.Series)
                     {
                         series.Points.Clear();
                     }
 
-                    for (int i = 1; i < _tableGeneratorSummary.Columns.Count; i++)
+                    for (var i = 1; i < _tableGeneratorSummary.Columns.Count; i++)
                     {
                         xValue.Add(
                             Convert.ToDouble(_tableGeneratorSummary.Rows[cmbChart2xAxis.SelectedIndex][i].ToString()));
@@ -997,7 +995,7 @@ namespace AxialFluxGeneratorDesigner
                     if (Math.Abs(xValue.Min() - xValue.Max()) < 0.000000001 ||
                         Math.Abs(yValue.Min() - yValue.Max()) < 0.000000001)
                     {
-                        MessageBox.Show("The selected data cannot be charted!");
+                        MessageBox.Show(@"The selected data cannot be charted!");
                     }
                     else
                     {
@@ -1019,7 +1017,7 @@ namespace AxialFluxGeneratorDesigner
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Chart error: " + ex.Message);
+                    MessageBox.Show(@"Chart error: " + ex.Message);
                 }
             }
         }
@@ -1037,15 +1035,16 @@ namespace AxialFluxGeneratorDesigner
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Image save error: " + ex.Message);
+                MessageBox.Show(@"Image save error: " + ex.Message);
             }
         }
 
+        //TODO: Add Documentation
         /// <summary>
         /// </summary>
         /// <param name="table"></param>
         /// <returns></returns>
-        public static bool HasNull(DataTable table)
+        private static bool HasNull(DataTable table)
         {
             return
                 table.Columns.Cast<DataColumn>().Any(column => table.Rows.OfType<DataRow>().Any(r => r.IsNull(column)));
@@ -1100,9 +1099,9 @@ namespace AxialFluxGeneratorDesigner
             }
             Debug.WriteLine("Done");
             var lights = new DefaultLights();
-            device3D.Content = Display3D("AFPM.obj");
+            _device3D.Content = Display3D("AFPM.obj");
             _generatorView.Children.Add(lights);
-            _generatorView.Children.Add(device3D);
+            _generatorView.Children.Add(_device3D);
             _generatorView.ZoomSensitivity = 3;
         }
 
@@ -1110,7 +1109,7 @@ namespace AxialFluxGeneratorDesigner
         {
         }
 
-        private void elementHost1_ChildChanged(object sender, System.Windows.Forms.Integration.ChildChangedEventArgs e)
+        private void elementHost1_ChildChanged(object sender, ChildChangedEventArgs e)
         {
         }
 
@@ -1123,7 +1122,7 @@ namespace AxialFluxGeneratorDesigner
                 _generatorView.RotateGesture = new MouseGesture(MouseAction.LeftClick);
 
                 //Import 3D model file
-                ModelImporter import = new ModelImporter();
+                var import = new ModelImporter();
 
                 //Load the 3D model file
                 device = import.Load(model);
@@ -1131,7 +1130,7 @@ namespace AxialFluxGeneratorDesigner
             catch (Exception e)
             {
                 // Handle exception in case can not file 3D model
-                MessageBox.Show("Exception Error : " + e.StackTrace);
+                MessageBox.Show(@"Exception Error : " + e.StackTrace);
             }
             return device;
         }

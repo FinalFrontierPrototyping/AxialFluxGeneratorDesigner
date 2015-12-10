@@ -25,6 +25,8 @@ namespace AxialFluxGeneratorDesigner
         /// </summary>
         private const int Iterations = 100;
 
+        private readonly ModelVisual3D _device3D = new ModelVisual3D();
+
         /// <summary>
         ///     The Class containing the code to perform calculations
         /// </summary>
@@ -39,8 +41,6 @@ namespace AxialFluxGeneratorDesigner
         ///     The data table that is used to hold the iterated data
         /// </summary>
         private readonly DataTable _tableGeneratorSummary = new DataTable();
-
-        private readonly ModelVisual3D _device3D = new ModelVisual3D();
 
         /// <summary>
         ///     Check if the form GUI components are initialized.

@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace AxialFluxGeneratorDesigner
 {
+    //TODO: Add check method for division by zero.
     /// <summary>
     ///     This class can be used to design a Axial Flux Permanent Magnet Generator.
     /// </summary>
@@ -528,7 +529,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="turbineRotorRadius">The radius of the rotor (m)</param>
         /// <param name="tipSpeedRatio">The tip speed ratio</param>
         /// <returns>The wind speed (m/s)</returns>
-        private static double CalculateTurbineOptimalWindSpeed(double speedRpm, double turbineRotorRadius, double tipSpeedRatio)
+        private static double CalculateTurbineOptimalWindSpeed(double speedRpm, double turbineRotorRadius,
+            double tipSpeedRatio)
         {
             return 2*Math.PI*speedRpm*turbineRotorRadius/(60*tipSpeedRatio);
         }
@@ -573,7 +575,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="diodeVoltageDrop">Drop voltage losses in various power cables (V)</param>
         /// <param name="rectifierVoltageDrop"></param>
         /// <returns></returns>
-        public static double CalculateDcVoltage(double phaseVoltage, double diodeVoltageDrop, double rectifierVoltageDrop)
+        public static double CalculateDcVoltage(double phaseVoltage, double diodeVoltageDrop,
+            double rectifierVoltageDrop)
         {
             return phaseVoltage*(Math.Sqrt(3)*Math.Sqrt(2)) - rectifierVoltageDrop - diodeVoltageDrop;
         }
@@ -665,7 +668,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="insideCircumference">The inside circumference of the coil (mm)</param>
         /// <param name="outsideCircumference">The outside circumference of the coil (mm)</param>
         /// <returns>The wire length of the coil (m)</returns>
-        public static double CalculateCoilWireLength(int windingCount, double insideCircumference, double outsideCircumference)
+        public static double CalculateCoilWireLength(int windingCount, double insideCircumference,
+            double outsideCircumference)
         {
             return (insideCircumference + outsideCircumference)/2*windingCount/1000;
         }
@@ -727,7 +731,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="coilsPhase">The amount of coils per phase</param>
         /// <param name="coilWindingFactor"></param>
         /// <returns>The total amount of coil windings</returns>
-        public static int CalculateCoilWindings(double phaseVoltage, int magnets, double rpm, int coilsPhase, double poleFlux,
+        public static int CalculateCoilWindings(double phaseVoltage, int magnets, double rpm, int coilsPhase,
+            double poleFlux,
             double coilWindingFactor)
         {
             return (int) (Math.Sqrt(2)*phaseVoltage/(coilsPhase*2*Math.PI*coilWindingFactor*rpm*poleFlux*magnets/120));
@@ -742,7 +747,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="coilHeatCoefficient"></param>
         /// <param name="coilFillFactor"></param>
         /// <returns>Returns the coil leg width (mm)</returns>
-        public static double CalculateCoilLegWidth(double maxPhaseCurrent, int coilWindings, double axialThickness, double coilHeatCoefficient, double coilFillFactor)
+        public static double CalculateCoilLegWidth(double maxPhaseCurrent, int coilWindings, double axialThickness,
+            double coilHeatCoefficient, double coilFillFactor)
         {
             const double copperResistivity = 0.0000000168;
             var coilLegWidth = maxPhaseCurrent*coilWindings/
@@ -759,7 +765,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="coilWindings">The amount of coil windings (n)</param>
         /// <param name="coilFillFactor"></param>
         /// <returns>The area of the coil surface (mm2)</returns>
-        public static double CalculateCoilCrossSectionalArea(double coilWidth, double statorThickness, int coilWindings, double coilFillFactor)
+        public static double CalculateCoilCrossSectionalArea(double coilWidth, double statorThickness, int coilWindings,
+            double coilFillFactor)
         {
             var coilCrossSeactionalArea = coilFillFactor*coilWidth*statorThickness/coilWindings;
             return coilCrossSeactionalArea;
@@ -772,7 +779,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="phaseVoltageCutin"></param>
         /// <param name="generatorEfficiency"></param>
         /// <returns></returns>
-        public static double CalculateMaximumPhaseCurrent(double generatorNominalPower, double phaseVoltageCutin, double generatorEfficiency)
+        public static double CalculateMaximumPhaseCurrent(double generatorNominalPower, double phaseVoltageCutin,
+            double generatorEfficiency)
         {
             return 1.1*generatorNominalPower/(3*phaseVoltageCutin*generatorEfficiency);
         }
@@ -958,7 +966,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="magnetWidth"></param>
         /// <returns></returns>
         [Obsolete("Old generator inner radius calculation method!", true)]
-        public static double CalculateGeneratorInnerRadius(int totalCoils, double coilWidth, int polePairs, double magnetWidth)
+        public static double CalculateGeneratorInnerRadius(int totalCoils, double coilWidth, int polePairs,
+            double magnetWidth)
         {
             return (2*totalCoils*coilWidth + polePairs*magnetWidth)/(2*Math.PI);
         }
@@ -979,7 +988,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="generatorInnerRadius"></param>
         /// <param name="generatorOuterRadius"></param>
         /// <returns></returns>
-        public static double CalculateGeneratorInnerOuterRadiusRatio(double generatorInnerRadius, double generatorOuterRadius)
+        public static double CalculateGeneratorInnerOuterRadiusRatio(double generatorInnerRadius,
+            double generatorOuterRadius)
         {
             return generatorInnerRadius/generatorOuterRadius;
         }
@@ -1006,7 +1016,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="coilLegWidth">The coil leg width (mm)</param>
         /// <param name="betweenCoilDistance">The distance between two coils (mm)</param>
         /// <returns>The inner radius of the stator (mm)</returns>
-        public static double CalculateStatorInnerRadius(double coilCount, double coilLegWidth, double betweenCoilDistance)
+        public static double CalculateStatorInnerRadius(double coilCount, double coilLegWidth,
+            double betweenCoilDistance)
         {
             return CalculateNGonInnerRadius(coilLegWidth + betweenCoilDistance, coilCount);
         }
@@ -1019,7 +1030,8 @@ namespace AxialFluxGeneratorDesigner
         /// <param name="betweenCoilDistance">The distance between two coils (mm)</param>
         /// <param name="magnetHeight">The height of the used magnet (mm)</param>
         /// <returns>The outer radius of the stator (mm)</returns>
-        public static double CalculateStatorOuterRadius(double coilCount, double coilLegWidth, double betweenCoilDistance,
+        public static double CalculateStatorOuterRadius(double coilCount, double coilLegWidth,
+            double betweenCoilDistance,
             double magnetHeight)
         {
             var rotorInnerRadius = CalculateNGonInnerRadius(coilLegWidth + betweenCoilDistance, coilCount);
@@ -1256,11 +1268,13 @@ namespace AxialFluxGeneratorDesigner
                 MagnetPoleFlux, CoilWindingCoefficient);
             //Debug.WriteLine("Coil turns: " + CoilTurns);
 
-            CoilLegWidth = CalculateCoilLegWidth(MaxPhaseCurrent, CoilTurns, CoilThickness, CoilHeatCoefficient, CoilFillFactor);
+            CoilLegWidth = CalculateCoilLegWidth(MaxPhaseCurrent, CoilTurns, CoilThickness, CoilHeatCoefficient,
+                CoilFillFactor);
             //Debug.WriteLine("Coil leg width: " + CoilLegWidth);
             //Debug.WriteLine("Generator RPM: " + GeneratorRpm);
 
-            CoilCrossSectionalArea = CalculateCoilCrossSectionalArea(CoilLegWidth, CoilThickness, CoilTurns, CoilFillFactor);
+            CoilCrossSectionalArea = CalculateCoilCrossSectionalArea(CoilLegWidth, CoilThickness, CoilTurns,
+                CoilFillFactor);
             //Debug.WriteLine("Coil cross sectional area: " + CoilCrossSectionalArea);
 
             MaxCurrentDensity = CalculateMaximumCurrentDensity(MaxPhaseCurrent, CoilCrossSectionalArea);

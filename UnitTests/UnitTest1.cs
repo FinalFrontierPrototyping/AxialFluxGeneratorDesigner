@@ -9,111 +9,98 @@ namespace UnitTests
         private readonly Afpm _test = new Afpm();
         private const double Delta = 0.000000000001;
 
+        #region Front end tests
         [TestMethod]
-        public void TestRotorRadius()
+        public void TestTurbineRotorRadius()
         {
-            Assert.AreEqual(2.38413613504448, _test.CalculateTurbineRotorRadius(3000, 1.2, 0.35, 10, 0.8), Delta);
-            Assert.AreEqual(2.24778510448245, _test.CalculateTurbineRotorRadius(3000, 1.2, 0.35, 10, 0.9), Delta);
-            Assert.AreEqual(2.13243618622923, _test.CalculateTurbineRotorRadius(3000, 1.2, 0.35, 10, 1.0), Delta);
+            Assert.AreEqual(2.38413613504448, Afpm.CalculateTurbineRotorRadius(3000, 1.2, 0.35, 10, 0.8), Delta);
+            Assert.AreEqual(2.24778510448245, Afpm.CalculateTurbineRotorRadius(3000, 1.2, 0.35, 10, 0.9), Delta);
+            Assert.AreEqual(2.13243618622923, Afpm.CalculateTurbineRotorRadius(3000, 1.2, 0.35, 10, 1.0), Delta);
         }
 
         [TestMethod]
         public void TestTurbineOptimalSpeed()
         {
-            Assert.AreEqual(111, _test.CalculateTurbineOptimalRotationSpeed(3, 8.75, 2.25), Delta);
-            Assert.AreEqual(297, _test.CalculateTurbineOptimalRotationSpeed(10, 7, 2.25), Delta);
-        }
+            Assert.AreEqual(111, Afpm.CalculateTurbineOptimalRotationSpeed(3, 8.75, 2.25), Delta);
+            Assert.AreEqual(297, Afpm.CalculateTurbineOptimalRotationSpeed(10, 7, 2.25), Delta);
+        } 
+        #endregion
 
         [TestMethod]
         public void TestPhaseVoltage()
         {
-            Assert.AreEqual(19.5959179422654, _test.CalculatePhaseVoltage(48, 0), Delta);
-            Assert.AreEqual(20.1674655489148, _test.CalculatePhaseVoltage(48, 1.4), Delta);
-            Assert.AreEqual(9.79795897113271, _test.CalculatePhaseVoltage(24, 0), Delta);
-            Assert.AreEqual(10.3695065777821, _test.CalculatePhaseVoltage(24, 1.4), Delta);
-            Assert.AreEqual(4.89897948556636, _test.CalculatePhaseVoltage(12, 0), Delta);
-            Assert.AreEqual(5.47052709221576, _test.CalculatePhaseVoltage(12, 1.4), Delta);
+            Assert.AreEqual(19.5959179422654, Afpm.CalculatePhaseVoltage(48, 0), Delta);
+            Assert.AreEqual(20.1674655489148, Afpm.CalculatePhaseVoltage(48, 1.4), Delta);
+            Assert.AreEqual(9.79795897113271, Afpm.CalculatePhaseVoltage(24, 0), Delta);
+            Assert.AreEqual(10.3695065777821, Afpm.CalculatePhaseVoltage(24, 1.4), Delta);
+            Assert.AreEqual(4.89897948556636, Afpm.CalculatePhaseVoltage(12, 0), Delta);
+            Assert.AreEqual(5.47052709221576, Afpm.CalculatePhaseVoltage(12, 1.4), Delta);
         }
 
         [TestMethod]
         public void TestPolePairs()
         {
-            Assert.AreEqual(8, _test.CalculatePolePairs(6));
-            Assert.AreEqual(20, _test.CalculatePolePairs(15));
-            Assert.AreEqual(28, _test.CalculatePolePairs(21));
+            Assert.AreEqual(8, Afpm.CalculatePolePairs(6));
+            Assert.AreEqual(20, Afpm.CalculatePolePairs(15));
+            Assert.AreEqual(28, Afpm.CalculatePolePairs(21));
         }
 
         [TestMethod]
         public void TestStatorThickness()
         {
-            Assert.AreEqual(14, _test.CalculateStatorThickness(10, 3), Delta);
-            Assert.AreEqual(17.8, _test.CalculateStatorThickness(12, 3.1), Delta);
-            Assert.AreEqual(29.6, _test.CalculateStatorThickness(20, 5.2), Delta);
+            Assert.AreEqual(14, Afpm.CalculateStatorThickness(10, 3), Delta);
+            Assert.AreEqual(17.8, Afpm.CalculateStatorThickness(12, 3.1), Delta);
+            Assert.AreEqual(29.6, Afpm.CalculateStatorThickness(20, 5.2), Delta);
         }
 
         [TestMethod]
         public void TestMagnetFluxDensity()
         {
-            Assert.AreEqual(0.527994086359978, _test.CalculateMagnetFluxDensity(1.1, 808, 10, 2), Delta);
-            Assert.AreEqual(0.645153110460925, _test.CalculateMagnetFluxDensity(1.445, 927.5, 10, 2), Delta);
-            Assert.AreEqual(0.645153110460925, _test.CalculateMagnetFluxDensity(1.445, 927.5, 15, 2), Delta);
+            Assert.AreEqual(0.527994086359978, Afpm.CalculateMagnetFluxDensity(1.1, 808, 10, 2), Delta);
+            Assert.AreEqual(0.645153110460925, Afpm.CalculateMagnetFluxDensity(1.445, 927.5, 10, 2), Delta);
+            Assert.AreEqual(0.645153110460925, Afpm.CalculateMagnetFluxDensity(1.445, 927.5, 15, 2), Delta);
         }
 
         [TestMethod]
         public void TestMaximumPoleFlux()
         {
-            Assert.AreEqual(0.00006451531105, _test.CalculateMaximumPoleFlux(0.645153110460925, 10, 10), Delta);
-            Assert.AreEqual(0.000096772966575, _test.CalculateMaximumPoleFlux(0.645153110460925, 10, 15), Delta);
-            Assert.AreEqual(0.000096772966575, _test.CalculateMaximumPoleFlux(0.645153110460925, 15, 10), Delta);
+            Assert.AreEqual(0.00006451531105, Afpm.CalculateMaximumPoleFlux(0.645153110460925, 10, 10), Delta);
+            Assert.AreEqual(0.000096772966575, Afpm.CalculateMaximumPoleFlux(0.645153110460925, 10, 15), Delta);
+            Assert.AreEqual(0.000096772966575, Afpm.CalculateMaximumPoleFlux(0.645153110460925, 15, 10), Delta);
         }
 
         [TestMethod]
         public void TestCoilWindings()
         {
-            Assert.AreEqual(339, _test.CalculateCoilWindings(82.22, 20, 85, 5, 0.00081, 0.95));
+            Assert.AreEqual(339, Afpm.CalculateCoilWindings(82.22, 20, 85, 5, 0.00081, 0.95));
         }
 
         [TestMethod]
         public void TestCoilLegWidth()
         {
-            Assert.AreEqual(27.6787345012158, _test.CalculateCoilLegWidth(4.27, 337, 13.76), Delta);
+            Assert.AreEqual(27.6787345012158, Afpm.CalculateCoilLegWidth(4.27, 337, 13.76, 3000 ,0.55), Delta);
         }
 
         [TestMethod]
         public void TestCoilCrossSectionalArea()
         {
-            Assert.AreEqual(0.70829293768546000000, _test.CalculateCoilCrossSectionalArea(31.54, 13.76, 337), Delta);
+            Assert.AreEqual(0.70829293768546000000, Afpm.CalculateCoilCrossSectionalArea(31.54, 13.76, 337, 0.55), Delta);
         }
 
         [TestMethod]
         public void TestMaximumCurrentDensity()
         {
-            Assert.AreEqual(6.02857909885899, _test.CalculateMaximumCurrentDensity(4.27, 0.70829293768546000000), Delta);
+            Assert.AreEqual(6.02857909885899, Afpm.CalculateMaximumCurrentDensity(4.27, 0.70829293768546000000), Delta);
         }
 
         [TestMethod]
         public void TestCoilWireDiameter()
         {
-            Assert.AreEqual(0.94964550097274, _test.CalculateCoilWireDiameter(0.70829293768546000000), Delta);
+            Assert.AreEqual(0.94964550097274, Afpm.CalculateCoilWireDiameter(0.70829293768546000000), Delta);
         }
 
-        [TestMethod]
-        public void TestGeneratorInnerRadius()
-        {
-            Assert.AreEqual(297.014954798095, _test.CalculateGeneratorInnerRadius(15, 31.54, 20, 46), Delta);
-        }
 
-        [TestMethod]
-        public void TestGeneratorOuterRadius()
-        {
-            Assert.AreEqual(327, _test.CalculateCalculateGeneratorOuterRadius(297, 30), Delta);
-        }
 
-        [TestMethod]
-        public void TestGeneratorInnerOuterRadiusRatio()
-        {
-            Assert.AreEqual(0.898989898989899, _test.CalculateGeneratorInnerOuterRadiusRatio(267, 297), Delta);
-        }
 
         [TestMethod]
         public void TestCaseStudy()
@@ -129,27 +116,27 @@ namespace UnitTests
             int coils_phase = 5;
 
             //Phase voltage
-            double phaseVoltage = _test.CalculatePhaseVoltage(dc_voltage, 1.4);
+            double phaseVoltage = Afpm.CalculatePhaseVoltage(dc_voltage, 1.4);
             Assert.AreEqual(82.221205699422, phaseVoltage, Delta);
 
             //Stator thickness
-            double statorThickness = _test.CalculateStatorThickness(magnet_thickness, single_gap);
+            double statorThickness = Afpm.CalculateStatorThickness(magnet_thickness, single_gap);
             Assert.AreEqual(14, statorThickness, Delta);
 
             //Flux density
-            double fluxDensity = _test.CalculateMagnetFluxDensity(1.275, 927.5, magnet_thickness, single_gap);
+            double fluxDensity = Afpm.CalculateMagnetFluxDensity(1.275, 927.5, magnet_thickness, single_gap);
             Assert.AreEqual(0.608905169159082, fluxDensity, Delta);
 
             //Pole flux
-            double poleFlux = _test.CalculateMaximumPoleFlux(fluxDensity, magnet_width, magnet_length);
+            double poleFlux = Afpm.CalculateMaximumPoleFlux(fluxDensity, magnet_width, magnet_length);
             Assert.AreEqual(0.000840289133439534, poleFlux, Delta);
 
             //Coil windings
-            int coilWindings = _test.CalculateCoilWindings(phaseVoltage, magnets, rpm, coils_phase, poleFlux, 0.95);
+            int coilWindings = Afpm.CalculateCoilWindings(phaseVoltage, magnets, rpm, coils_phase, poleFlux, 0.95);
             Assert.AreEqual(327, coilWindings, Delta);
 
             //Coil leg width
-            double coilLegWidth = _test.CalculateCoilLegWidth(4.27, coilWindings, statorThickness);
+            double coilLegWidth = Afpm.CalculateCoilLegWidth(4.27, coilWindings, statorThickness, 3000, 0.55);
             Assert.AreEqual(26.6262055747546, coilLegWidth, Delta);
         }
 
@@ -165,18 +152,18 @@ namespace UnitTests
         [TestMethod]
         public void TestCalculateWireResistance()
         {
-            var wireResistance = _test.CalculateWireResistance(10, 1);
+            var wireResistance = Afpm.CalculateWireResistance(10, 1);
             Assert.AreEqual(0.213904243515507, wireResistance, Delta);
 
-            var wireResistance1 = _test.CalculateWireResistance(100, 0.8);
+            var wireResistance1 = Afpm.CalculateWireResistance(100, 0.8);
             Assert.AreEqual(3.3422538049298, wireResistance1, Delta);
         }
 
         [TestMethod]
         public void VoltageDropThreePhase()
         {
-            Assert.AreEqual(3.70493017723444, _test.VoltageDrop(100, 1, 1, 3), Delta);
-            Assert.AreEqual(4.27808487031015, _test.VoltageDrop(100, 1, 1, 1), Delta);
+            Assert.AreEqual(3.70493017723444, Afpm.VoltageDrop(100, 1, 1, 3), Delta);
+            Assert.AreEqual(4.27808487031015, Afpm.VoltageDrop(100, 1, 1, 1), Delta);
         }
 
         [TestMethod]
@@ -247,15 +234,52 @@ namespace UnitTests
         [TestMethod]
         public void TestNGonOuterRadius()
         {
-            Assert.AreEqual(84.1703510330223, _test.CalculateNGonOuterRadius(35, 15), Delta);
-            Assert.AreEqual(43.85706600244631, _test.CalculateNGonOuterRadius(30, 9), Delta);
+            Assert.AreEqual(84.1703510330223, Afpm.CalculateNGonOuterRadius(35, 15), Delta);
+            Assert.AreEqual(43.85706600244631, Afpm.CalculateNGonOuterRadius(30, 9), Delta);
         }
 
         [TestMethod]
         public void TestNGonInnerRadius()
         {
-            Assert.AreEqual(82.33102691587295, _test.CalculateNGonInnerRadius(35, 15), Delta);
-            Assert.AreEqual(41.212161291819335, _test.CalculateNGonInnerRadius(30, 9), Delta);
+            Assert.AreEqual(82.33102691587295, Afpm.CalculateNGonInnerRadius(35, 15), Delta);
+            Assert.AreEqual(41.212161291819335, Afpm.CalculateNGonInnerRadius(30, 9), Delta);
+        }
+
+        [TestMethod]
+        public void TestStatorInnerRadius()
+        {
+            Assert.AreEqual(47.0463010947845, Afpm.CalculateStatorInnerRadius(15, 15, 5), Delta);
+        }
+
+        //TODO: Check calculation
+        [TestMethod]
+        public void TestStatorOuterRadius()
+        {
+            Assert.AreEqual(97.0463010947846, Afpm.CalculateStatorOuterRadius(15, 15, 5, 20), Delta);
+        }
+
+        [TestMethod]
+        public void TestCoilOuterBottomVertex()
+        {
+            Assert.AreEqual(30, Afpm.CalculateOuterCoilBottomVertexLength(15), Delta);
+        }
+
+        [TestMethod]
+        public void TestCoilOuterTopVertex()
+        {
+            Assert.AreEqual(41.5823381635519, Afpm.CalculateOuterCoilTopVertexLength(100, 15), Delta);
+        }
+
+        [TestMethod]
+        public void TestCoilInnerBottomVertex()
+        {
+            Assert.AreEqual(6.37669685010066, Afpm.CalculateInnerCoilBottomVertexLength(15, 24), Delta);
+        }
+
+        [TestMethod]
+        public void TestCoilInnerTopVertex()
+        {
+            Assert.AreEqual(14.878959316901500, Afpm.CalculateInnerTopVertexLength(15, 20, 24), Delta);
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
+using AxialFluxGeneratorDesigner.Calculations;
 using HelixToolkit.Wpf;
 
 namespace AxialFluxGeneratorDesigner
@@ -30,7 +31,7 @@ namespace AxialFluxGeneratorDesigner
         /// <summary>
         ///     The Class containing the code to perform calculations
         /// </summary>
-        private readonly Afpm _generator = new Afpm();
+        private readonly Generator _generator = new Generator();
 
         /// <summary>
         ///     The object that are used to display the 3D model
@@ -46,6 +47,13 @@ namespace AxialFluxGeneratorDesigner
         ///     Check if the form GUI components are initialized.
         /// </summary>
         private bool _isInitialized;
+
+        /// <summary>
+        /// This timer updates the calculations automaticially
+        /// The timer is implemented to overcome calculations problems
+        /// TODO: Add more info
+        /// </summary>
+        private Timer GuiUpdateTimer = new Timer();
 
         /// <summary>
         ///     The constructor of the Form class.
@@ -256,7 +264,6 @@ namespace AxialFluxGeneratorDesigner
             lblCoerciveFieldStrengthValue.Text =
                 _generator.MagnetProperties[cmbMagnetGrade.SelectedIndex].Item3.ToString(CultureInfo.InvariantCulture);
 
-            numCoilWindingCoefficient.Value = (decimal) _generator.CoilWindingCoefficient;
             numAirDensity.Value = (decimal) _generator.TurbineAirDensity;
             numVoltageMin.Value = (decimal) _generator.DcVoltageMin;
             numInverterVoltageMax.Value = (decimal) _generator.DcVoltageMax;
@@ -272,13 +279,14 @@ namespace AxialFluxGeneratorDesigner
             numShaftPower.Value = (decimal) _generator.GeneratorPower;
             numWindSpeedCutIn.Value = (decimal) _generator.TurbineWindspeedMin;
             numCoilFillFactor.Value = (decimal) _generator.CoilFillFactor;
-            numCoilHeatCoefficient.Value = (decimal) _generator.CoilHeatCoefficient;
+            numMaxCoilCurrentDensity.Value = (decimal) _generator.MaxCurrentDensity;
             numGeneratorEfficiency.Value = (decimal) _generator.GeneratorEfficiency*100;
             numPhaseWireLength.Value = (decimal) _generator.PhaseWireLength;
             numPhaseWireDiameter.Value = (decimal) _generator.PhaseWireDiameter;
             numRectifierWireLength.Value = (decimal) _generator.RectifierWireLength;
             numRectifierWireDiameter.Value = (decimal) _generator.RectifierWireDiameter;
             numRectifierDiodeVoltageDrop.Value = (decimal) _generator.RectifierDiodeVoltageDrop;
+            numInnerCoilRadius.Value = (decimal) _generator.CoilInnerRadius;
 
             numRpmMin.Value = _generator.FrontEndRpmMin;
             numRpmMax.Value = _generator.FrontEndRpmMax;
@@ -288,7 +296,12 @@ namespace AxialFluxGeneratorDesigner
 
             _isInitialized = true;
 
-            UpdateTrigger();
+            GuiUpdateTimer.Tick += GuiUpdateTimerOnTick;
+            GuiUpdateTimer.Enabled = true;
+            GuiUpdateTimer.Interval = 500;
+
+
+            
 
             //FillIterationTable();
 
@@ -300,6 +313,13 @@ namespace AxialFluxGeneratorDesigner
             //GenerateImage(tableLayoutPanel3);
             //GenerateImage(tableLayoutPanel4);
             //GenerateImage(tableLayoutPanel7);
+
+            //numRpmMax.DataBindings.Add("Value", _generator, "FrontEndRpmMax", false, DataSourceUpdateMode.OnPropertyChanged);
+        }
+
+        private void GuiUpdateTimerOnTick(object sender, EventArgs eventArgs)
+        {
+            UpdateTrigger();
         }
 
         private void UpdateGuiElements()
@@ -312,8 +332,8 @@ namespace AxialFluxGeneratorDesigner
                 Math.Round(_generator.MagnetFluxDensity, 2).ToString(CultureInfo.InvariantCulture);
             lblMagnetFluxValue.Text =
                 Math.Round(_generator.MagnetPoleFlux*1000, 2).ToString(CultureInfo.InvariantCulture);
-            lblMaxCoilCurrentDensityValue.Text =
-                Math.Round(_generator.MaxCurrentDensity, 2).ToString(CultureInfo.InvariantCulture);
+            //lblCoilHeatCoefficientValue.Text = Math.Round(_generator.MaxCurrentDensity, 2).ToString(CultureInfo.InvariantCulture);
+            lblCoilHeatCoefficientValue.Text = "N/A";
             lblCoilWireDiameterValue.Text =
                 Math.Round(_generator.CoilWireDiameter, 2).ToString(CultureInfo.InvariantCulture);
             lblRotorOuterRadiusValue.Text =
@@ -358,48 +378,47 @@ namespace AxialFluxGeneratorDesigner
                 Math.Round(_generator.FrontEndTorque, 2).ToString(CultureInfo.InvariantCulture);
             numRpmMin.Value = _generator.FrontEndRpmMin;
             numRpmMax.Value = _generator.FrontEndRpmMax;
+            lblCoilAngle.Text = Math.Round(_generator.CoilAngle, 2).ToString(CultureInfo.InvariantCulture);
+            lblStatorInnerRadiusValue.Text = Math.Round(_generator.StatorInnerRadius, 2).ToString(CultureInfo.InvariantCulture);
+            lblStatorOuterRadiusValue.Text = Math.Round(_generator.StatorOuterRadius, 2).ToString(CultureInfo.InvariantCulture);
+            lblAverageCoilTurnLengthValue.Text = Math.Round(_generator.CoilAverageTurnLength, 2).ToString(CultureInfo.InvariantCulture);
+            lblCoilSideSurfaceValue.Text = Math.Round(_generator.CoilSideSurface, 2).ToString(CultureInfo.InvariantCulture);
         }
 
         private void numDCVoltage_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.DcVoltageMax = (double) numInverterVoltageMax.Value;
-            UpdateTrigger();
         }
 
         private void numCoilsPerPhaseCount_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.CoilsPerPhase = (int) numCoilsPerPhaseCount.Value;
-            UpdateTrigger();
         }
 
         private void numlMagnetThickness_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.MagnetThickness = (double) numMagnetThickness.Value;
-            UpdateTrigger();
         }
 
         private void numMagnetWidth_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.MagnetWidth = (double) numMagnetWidth.Value;
-            UpdateTrigger();
         }
 
         private void numMagnetLength_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.MagnetLength = (double) numMagnetLength.Value;
-            UpdateTrigger();
         }
 
         private void numMechanicalGap_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.MechamicalGap = (double) numMechanicalGap.Value;
-            UpdateTrigger();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -413,57 +432,48 @@ namespace AxialFluxGeneratorDesigner
                 _generator.MagnetProperties[cmbMagnetGrade.SelectedIndex].Item2.ToString(CultureInfo.InvariantCulture);
             lblCoerciveFieldStrengthValue.Text =
                 _generator.MagnetProperties[cmbMagnetGrade.SelectedIndex].Item3.ToString(CultureInfo.InvariantCulture);
-
-            UpdateTrigger();
         }
 
         private void numShaftPower_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.GeneratorPower = (int) numShaftPower.Value;
-            UpdateTrigger();
         }
 
         private void numWindSpeedNom_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.TurbineWindspeedMax = (double) numWindSpeedNom.Value;
-            UpdateTrigger();
         }
 
         private void numTipRatioNom_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.TurbineSpeedTipRatioMax = (double) numTipRatioNom.Value;
-            UpdateTrigger();
         }
 
         private void numInverterVoltageMin_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.DcVoltageMin = (double) numVoltageMin.Value;
-            UpdateTrigger();
         }
 
         private void numTipRatioCutIn_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.TurbineSpeedTipRatioMin = (double) numTipRatioCutIn.Value;
-            UpdateTrigger();
         }
 
         private void numMaximumPowerCoefficient_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.TurbineMaximumPowerCoefficient = (double) numMaximumPowerCoefficient.Value;
-            UpdateTrigger();
         }
 
         private void numAirDensity_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.TurbineAirDensity = (double) numAirDensity.Value;
-            UpdateTrigger();
         }
 
         private void UpdateTrigger()
@@ -472,102 +482,82 @@ namespace AxialFluxGeneratorDesigner
             UpdateGuiElements();
         }
 
-        private void numCoilWindingCoefficient_ValueChanged(object sender, EventArgs e)
-        {
-            if (!_isInitialized) return;
-            _generator.CoilWindingCoefficient = (double) numCoilWindingCoefficient.Value;
-            UpdateTrigger();
-        }
-
         private void cmbEnergyStorage_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             UpdateComboBoxes();
-            UpdateTrigger();
         }
 
         private void cmbGeneratorFrontEnd_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             UpdateComboBoxes();
-            UpdateTrigger();
         }
 
         private void numWindSpeedCutIn_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.TurbineWindspeedMin = (double) numWindSpeedCutIn.Value;
-            UpdateTrigger();
         }
 
         private void numCoilFillFactor_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.CoilFillFactor = (double) numCoilFillFactor.Value;
-            UpdateTrigger();
         }
 
         private void numCoilHeatCoefficient_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
-            _generator.CoilHeatCoefficient = (double) numCoilHeatCoefficient.Value;
-            UpdateTrigger();
+            _generator.MaxCurrentDensity = (double) numMaxCoilCurrentDensity.Value;
         }
 
         private void numGeneratorEfficiency_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.GeneratorEfficiency = (double) (numGeneratorEfficiency.Value/100);
-            UpdateTrigger();
         }
 
         private void numPhaseWireLength_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.PhaseWireLength = (double) numPhaseWireLength.Value;
-            UpdateTrigger();
         }
 
         private void numPhaseWireDiameter_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.PhaseWireDiameter = (double) numPhaseWireDiameter.Value;
-            UpdateTrigger();
         }
 
         private void numRectifierWireLength_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.RectifierWireLength = (double) numRectifierWireLength.Value;
-            UpdateTrigger();
         }
 
         private void numRectifierWireDiameter_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.RectifierWireDiameter = (double) numRectifierWireDiameter.Value;
-            UpdateTrigger();
         }
 
         private void numRectifierDiodeVoltageDrop_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.RectifierDiodeVoltageDrop = (double) numRectifierDiodeVoltageDrop.Value;
-            UpdateTrigger();
         }
 
         private void numRpmMax_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.FrontEndRpmMax = (int) numRpmMax.Value;
-            UpdateTrigger();
         }
 
         private void numRpmMin_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
             _generator.FrontEndRpmMin = (int) numRpmMin.Value;
-            UpdateTrigger();
         }
 
         //TODO: Add documentation
@@ -581,7 +571,7 @@ namespace AxialFluxGeneratorDesigner
         //TODO: Add documentation
         /// <summary>
         /// </summary>
-        private void FillIterationTable()
+        public void FillIterationTable()
         {
             for (var i = 0; i < 100 + 1; i++)
             {
@@ -1133,6 +1123,18 @@ namespace AxialFluxGeneratorDesigner
                 MessageBox.Show(@"Exception Error : " + e.StackTrace);
             }
             return device;
+        }
+
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            if (!_isInitialized) return;
+            _generator.BetweenCoilDistance = (double)numBetweenCoilDistance.Value;
+        }
+
+        private void numInnerCoilRadius_ValueChanged(object sender, EventArgs e)
+        {
+            if (!_isInitialized) return;
+            _generator.CoilInnerRadius = (double)numInnerCoilRadius.Value;
         }
     }
 }

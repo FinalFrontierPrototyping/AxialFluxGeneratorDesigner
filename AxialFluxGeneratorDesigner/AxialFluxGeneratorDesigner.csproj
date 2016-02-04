@@ -99,15 +99,22 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AfpmCalculations.cs" />
+    <Compile Include="Calculations\DataModel.cs" />
+    <Compile Include="Calculations\Common.cs" />
     <Compile Include="FormAfpmDesigner.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormAfpmDesigner.Designer.cs">
       <DependentUpon>FormAfpmDesigner.cs</DependentUpon>
     </Compile>
+    <Compile Include="Calculations\FrontEnd.cs" />
+    <Compile Include="Calculations\Generator.cs" />
+    <Compile Include="Gui\Iterator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Calculations\Stator.cs" />
+    <Compile Include="Calculations\Rotor.cs" />
+    <Compile Include="Calculations\StatorDimensions.cs" />
     <EmbeddedResource Include="FormAfpmDesigner.resx">
       <DependentUpon>FormAfpmDesigner.cs</DependentUpon>
     </EmbeddedResource>
@@ -154,6 +161,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

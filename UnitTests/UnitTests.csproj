@@ -50,8 +50,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="StatorDimensionsTests.cs" />
+    <Compile Include="FrontEndTests.cs" />
+    <Compile Include="GeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RotorTests.cs" />
+    <Compile Include="StatorTests.cs" />
+    <Compile Include="UseCaseTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AxialFluxGeneratorDesigner\AxialFluxGeneratorDesigner.csproj">

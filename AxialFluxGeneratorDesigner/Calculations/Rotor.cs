@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 
 namespace AxialFluxGeneratorDesigner.Calculations
 {
@@ -70,6 +71,30 @@ namespace AxialFluxGeneratorDesigner.Calculations
         public static double CalculateMaximumPoleFlux(double fluxDensity, double magnetWidth, double magnetLength)
         {
             return fluxDensity*Common.MillimetersToMeters(magnetWidth)*Common.MillimetersToMeters(magnetLength);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="coilCount"></param>
+        /// <param name="bottomCoilSegmentLength"></param>
+        /// <returns></returns>
+        public static double CalculateRotorInnerRadius(int coilCount, double bottomCoilSegmentLength)
+        {
+            var centralAngle = StatorDimensions.CalculateCentralCoilAngle(coilCount);
+            var topAngle = StatorDimensions.CalculateTopCoilAngle(centralAngle);
+            return StatorDimensions.CalculateOppositeTan(bottomCoilSegmentLength/2, topAngle);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="innerRotorRadius"></param>
+        /// <param name="coilHeight"></param>
+        /// <returns></returns>
+        public static double CalculateRotorOuterRadius(double innerRotorRadius, double coilHeight)
+        {
+            return innerRotorRadius + coilHeight;
         }
     }
 }

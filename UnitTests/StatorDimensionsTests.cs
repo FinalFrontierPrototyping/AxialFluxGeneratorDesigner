@@ -283,7 +283,7 @@ namespace UnitTests
             Assert.AreEqual(128.9439666595, statorDimensions.Item1, Delta);
             Assert.AreEqual(363.746601588801, statorDimensions.Item2, Delta);
             Assert.AreEqual(246.345284124151, statorDimensions.Item3, Delta);
-            Assert.AreEqual(6574.57843136729, statorDimensions.Item4, Delta);
+            Assert.AreEqual(9205.92326771951, statorDimensions.Item4, Delta);
             Assert.AreEqual(102.333154005708, statorDimensions.Item5, Delta);
             Assert.AreEqual(192.333154005708, statorDimensions.Item6, Delta);
         }

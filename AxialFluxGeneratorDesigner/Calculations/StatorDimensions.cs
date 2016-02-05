@@ -460,11 +460,11 @@ namespace AxialFluxGeneratorDesigner.Calculations
         #region Calculation of coil surface
 
         /// <summary>
-        /// 
+        /// This method calculates the surface of a coil side.
         /// </summary>
-        /// <param name="coilLegWidth"></param>
-        /// <param name="averageCoilCircumference"></param>
-        /// <returns></returns>
+        /// <param name="coilLegWidth"> The coil leg width (mm)</param>
+        /// <param name="averageCoilCircumference"> The average coil circumference (mm)</param>
+        /// <returns>The surface of a single coil side (cm2)</returns>
         public static double CalculateCoilSurfaceRounded(double coilLegWidth, double averageCoilCircumference)
         {
             return coilLegWidth*averageCoilCircumference;

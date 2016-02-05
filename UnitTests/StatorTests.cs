@@ -63,5 +63,14 @@ namespace UnitTests
             var coilLegWidth = Stator.CalculateCoilLegWidthMod(4.27, 337, 13.76, 5, 0.55);
             Assert.AreEqual(38.0282769556025, coilLegWidth, Delta);
         }
+
+        [TestMethod]
+        //Test values of Hugh Piggot are used.
+        public void TestCalculateCoilHeatCoefficient()
+        {
+            var coilSurface = 224*23;
+            var coilHeatCoefficient = Stator.CalculateCoilHeatCoefficient(coilSurface, 0.64, 8.3);
+            Assert.AreEqual(0.285258799171843, coilHeatCoefficient, Delta);
+        }
     }
 }

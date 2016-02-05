@@ -161,7 +161,8 @@ namespace AxialFluxGeneratorDesigner.Calculations
         public static double CalculateCoilLegWidthMod(double maxPhaseCurrent, int coilWindings, double axialThickness,
             double currentDensity, double coilFillFactor)
         {
-            var coilLegWidth = ((maxPhaseCurrent/currentDensity)*coilWindings)/(coilFillFactor*axialThickness);
+            var copperCrossSection = CalculateCopperCrossSection(currentDensity, maxPhaseCurrent);
+            var coilLegWidth = (copperCrossSection*coilWindings)/(coilFillFactor*axialThickness);
             return coilLegWidth;
         }
 
@@ -176,7 +177,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
         public static double CalculateCoilCrossSectionalArea(double coilWidth, double statorThickness, int coilWindings,
             double coilFillFactor)
         {
-            var coilCrossSeactionalArea = coilFillFactor*coilWidth*statorThickness/coilWindings;
+            var coilCrossSeactionalArea = (coilFillFactor*coilWidth*statorThickness)/coilWindings;
             return coilCrossSeactionalArea;
         }
 
@@ -225,6 +226,19 @@ namespace AxialFluxGeneratorDesigner.Calculations
         public static double CalculateCopperCrossSection(double maxCurrentDensity, double maxCurrent)
         {
             return maxCurrent/maxCurrentDensity;
+        }
+
+        /// <summary>
+        /// This method calculates the coil heat dissipation value. Try to keep this value > 3000 W/m2 (0.3 W/c.
+        /// </summary>
+        /// <param name="coilSurface">The surface of a coil side (cm2)</param>
+        /// <param name="coilResistance">The resistance of a coil (Ohm)</param>
+        /// <param name="coilMaxCurrent">The  maximum coil current (A)</param>
+        /// <returns></returns>
+        public static double CalculateCoilHeatCoefficient(double coilSurface, double coilResistance, double coilMaxCurrent)
+        {
+            var power = (2.0/3)*coilResistance*Math.Pow(coilMaxCurrent, 2);
+            return power/(2*(coilSurface/100)); //mm2 to cm2
         }
     }
 }

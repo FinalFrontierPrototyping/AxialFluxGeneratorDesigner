@@ -287,7 +287,7 @@ namespace AxialFluxGeneratorDesigner
             numRectifierWireDiameter.Value = (decimal) _generator.RectifierWireDiameter;
             numRectifierDiodeVoltageDrop.Value = (decimal) _generator.RectifierDiodeVoltageDrop;
             numInnerCoilRadius.Value = (decimal) _generator.CoilInnerRadius;
-
+            numBetweenCoilDistance.Value = (decimal) _generator.BetweenCoilDistance;
             numRpmMin.Value = _generator.FrontEndRpmMin;
             numRpmMax.Value = _generator.FrontEndRpmMax;
 
@@ -383,6 +383,7 @@ namespace AxialFluxGeneratorDesigner
             lblStatorOuterRadiusValue.Text = Math.Round(_generator.StatorOuterRadius, 2).ToString(CultureInfo.InvariantCulture);
             lblAverageCoilTurnLengthValue.Text = Math.Round(_generator.CoilAverageTurnLength, 2).ToString(CultureInfo.InvariantCulture);
             lblCoilSideSurfaceValue.Text = Math.Round(_generator.CoilSideSurface, 2).ToString(CultureInfo.InvariantCulture);
+            lblCoilHeatCoefficientValue.Text = Math.Round(_generator.CoilHeatCoefficient, 2).ToString(CultureInfo.InvariantCulture);
         }
 
         private void numDCVoltage_ValueChanged(object sender, EventArgs e)

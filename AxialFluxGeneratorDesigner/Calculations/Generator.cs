@@ -218,6 +218,9 @@ namespace AxialFluxGeneratorDesigner.Calculations
 
             CoilInductance = Stator.CalculateCoilInductance(CoilTurns, CoilWireDiameter, CoilThickness);
             Common.DebugPrint(debug, "CoilInductance", CoilInductance);
+
+            CoilHeatCoefficient = Stator.CalculateCoilHeatCoefficient(CoilSideSurface, CoilResistance, MaxPhaseCurrent);
+            Common.DebugPrint(debug, "CoilHeatCoefficient", CoilHeatCoefficient);
         }
 
         /// <summary>

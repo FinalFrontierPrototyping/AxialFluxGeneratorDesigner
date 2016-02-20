@@ -114,7 +114,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Calculations\Stator.cs" />
     <Compile Include="Calculations\Rotor.cs" />
-    <Compile Include="Calculations\StatorDimensions.cs" />
+    <Compile Include="Calculations\StatorDimensionsStatic.cs" />
+    <Compile Include="Calculations\StatorDimensionsDynamic.cs" />
     <EmbeddedResource Include="FormAfpmDesigner.resx">
       <DependentUpon>FormAfpmDesigner.cs</DependentUpon>
     </EmbeddedResource>

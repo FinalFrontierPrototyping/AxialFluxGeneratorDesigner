@@ -50,7 +50,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="StatorDimensionsTests.cs" />
+    <Compile Include="StatorDimensionsDynamicTests.cs" />
+    <Compile Include="StatorDimensionsStaticTests.cs" />
     <Compile Include="FrontEndTests.cs" />
     <Compile Include="GeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

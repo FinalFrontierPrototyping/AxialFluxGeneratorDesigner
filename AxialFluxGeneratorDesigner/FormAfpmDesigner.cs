@@ -53,7 +53,7 @@ namespace AxialFluxGeneratorDesigner
         /// The timer is implemented to overcome calculations problems
         /// TODO: Add more info
         /// </summary>
-        private Timer GuiUpdateTimer = new Timer();
+        private readonly Timer _guiUpdateTimer = new Timer();
 
         /// <summary>
         ///     The constructor of the Form class.
@@ -110,8 +110,8 @@ namespace AxialFluxGeneratorDesigner
                 numCoilFillFactorUpper.Value = (decimal) _generator.CoilFillFactor;
                 numMagnetThicknessLower.Value = (decimal) _generator.MagnetThickness;
                 numMagnetThicknessUpper.Value = (decimal) _generator.MagnetThickness;
-                numMagnetLengthLower.Value = (decimal) _generator.MagnetLength;
-                numMagnetLengthUpper.Value = (decimal) _generator.MagnetLength;
+                numMagnetLengthLower.Value = (decimal) _generator.MagnetHeight;
+                numMagnetLengthUpper.Value = (decimal) _generator.MagnetHeight;
                 numMagnetWidthLower.Value = (decimal) _generator.MagnetWidth;
                 numMagnetWidthUpper.Value = (decimal) _generator.MagnetWidth;
                 numDiodeVoltageDropLower.Value = (decimal) _generator.RectifierDiodeVoltageDrop;
@@ -272,7 +272,7 @@ namespace AxialFluxGeneratorDesigner
             numTipRatioNom.Value = (decimal) _generator.TurbineSpeedTipRatioMax;
             numMaximumPowerCoefficient.Value = (decimal) _generator.TurbineMaximumPowerCoefficient;
             numMagnetThickness.Value = (decimal) _generator.MagnetThickness;
-            numMagnetLength.Value = (decimal) _generator.MagnetLength;
+            numMagnetLength.Value = (decimal) _generator.MagnetHeight;
             numMagnetWidth.Value = (decimal) _generator.MagnetWidth;
             numCoilsPerPhaseCount.Value = _generator.CoilsPerPhase;
             numMechanicalGap.Value = (decimal) _generator.MechamicalGap;
@@ -296,13 +296,13 @@ namespace AxialFluxGeneratorDesigner
 
             _isInitialized = true;
 
-            GuiUpdateTimer.Tick += GuiUpdateTimerOnTick;
-            GuiUpdateTimer.Enabled = true;
-            GuiUpdateTimer.Interval = 500;
+            _generator.UpdateCalculations(true);
+            UpdateGuiElements();
 
-
+            _guiUpdateTimer.Tick += GuiUpdateTimerOnTick;
+            _guiUpdateTimer.Interval = 500;
+            _guiUpdateTimer.Enabled = true;
             
-
             //FillIterationTable();
 
             //GenerateImage(tlpEnergyStorageConnection);
@@ -332,8 +332,7 @@ namespace AxialFluxGeneratorDesigner
                 Math.Round(_generator.MagnetFluxDensity, 2).ToString(CultureInfo.InvariantCulture);
             lblMagnetFluxValue.Text =
                 Math.Round(_generator.MagnetPoleFlux*1000, 2).ToString(CultureInfo.InvariantCulture);
-            //lblCoilHeatCoefficientValue.Text = Math.Round(_generator.MaxCurrentDensity, 2).ToString(CultureInfo.InvariantCulture);
-            lblCoilHeatCoefficientValue.Text = "N/A";
+            lblCoilHeatCoefficientValue.Text = @"N/A";
             lblCoilWireDiameterValue.Text =
                 Math.Round(_generator.CoilWireDiameter, 2).ToString(CultureInfo.InvariantCulture);
             lblRotorOuterRadiusValue.Text =
@@ -350,10 +349,8 @@ namespace AxialFluxGeneratorDesigner
                 Math.Round(_generator.PhaseVoltageMax, 2).ToString(CultureInfo.InvariantCulture);
             lblMagnetCountValue.Text = _generator.MagnetCount.ToString();
             lblCoilCountValue.Text = _generator.CoilCount.ToString();
-            lblMagnetDistanceValue.Text = Math.Round(_generator.MagnetDistance, 2)
+            lblMagnetDistanceValue.Text = Math.Round(_generator.MagnetBetweenDistance, 2)
                 .ToString(CultureInfo.InvariantCulture);
-            lblMagnetArcPolePitchValue.Text =
-                Math.Round(_generator.MagnetPoleArcPitch, 2).ToString(CultureInfo.InvariantCulture);
             lblMaxPhaseCurrentValue.Text =
                 Math.Round(_generator.MaxPhaseCurrent, 2).ToString(CultureInfo.InvariantCulture);
             numWindSpeedCutIn.Value = (decimal) Math.Round(_generator.TurbineWindspeedMin, 2);
@@ -384,6 +381,14 @@ namespace AxialFluxGeneratorDesigner
             lblAverageCoilTurnLengthValue.Text = Math.Round(_generator.CoilAverageTurnLength, 2).ToString(CultureInfo.InvariantCulture);
             lblCoilSideSurfaceValue.Text = Math.Round(_generator.CoilSideSurface, 2).ToString(CultureInfo.InvariantCulture);
             lblCoilHeatCoefficientValue.Text = Math.Round(_generator.CoilHeatCoefficient, 2).ToString(CultureInfo.InvariantCulture);
+
+            lblCoilOuterTopValue.Text = Math.Round(_generator.CoilOuterTop, 2).ToString(CultureInfo.InvariantCulture);
+            lblCoilOuterBottomValue.Text = Math.Round(_generator.CoilOuterBottom, 2).ToString(CultureInfo.InvariantCulture);
+            lblCoilOuterSideValue.Text = Math.Round(_generator.CoilOuterSide, 2).ToString(CultureInfo.InvariantCulture);
+
+            lblInnerCoilTopLengthValue.Text = Math.Round(_generator.CoilInnerTop, 2).ToString(CultureInfo.InvariantCulture);
+            lblInnerCoilBottomLengthValue.Text = Math.Round(_generator.CoilInnerBottom, 2).ToString(CultureInfo.InvariantCulture);
+            lblInnerCoilSideLengthValue.Text = Math.Round(_generator.CoilInnerSide, 2).ToString(CultureInfo.InvariantCulture);
         }
 
         private void numDCVoltage_ValueChanged(object sender, EventArgs e)
@@ -413,7 +418,7 @@ namespace AxialFluxGeneratorDesigner
         private void numMagnetLength_ValueChanged(object sender, EventArgs e)
         {
             if (!_isInitialized) return;
-            _generator.MagnetLength = (double) numMagnetLength.Value;
+            _generator.MagnetHeight = (double) numMagnetLength.Value;
         }
 
         private void numMechanicalGap_ValueChanged(object sender, EventArgs e)
@@ -564,7 +569,7 @@ namespace AxialFluxGeneratorDesigner
         //TODO: Add documentation
         /// <summary>
         /// </summary>
-        private double IterableCalculate(NumericUpDown lower, NumericUpDown upper, int iteration)
+        private static double IterableCalculate(NumericUpDown lower, NumericUpDown upper, int iteration)
         {
             return (double) lower.Value + ((double) upper.Value - (double) lower.Value)/Iterations*iteration;
         }
@@ -572,7 +577,7 @@ namespace AxialFluxGeneratorDesigner
         //TODO: Add documentation
         /// <summary>
         /// </summary>
-        public void FillIterationTable()
+        private void FillIterationTable()
         {
             for (var i = 0; i < 100 + 1; i++)
             {
@@ -603,7 +608,7 @@ namespace AxialFluxGeneratorDesigner
                 _generator.CoilFillFactor = IterableCalculate(numCoilFillFactorLower, numCoilFillFactorUpper, i);
 
                 _generator.MagnetThickness = IterableCalculate(numMagnetThicknessLower, numMagnetThicknessUpper, i);
-                _generator.MagnetLength = IterableCalculate(numMagnetLengthLower, numMagnetLengthUpper, i);
+                _generator.MagnetHeight = IterableCalculate(numMagnetLengthLower, numMagnetLengthUpper, i);
                 _generator.MagnetWidth = IterableCalculate(numMagnetWidthLower, numMagnetWidthUpper, i);
 
                 _generator.RectifierDiodeVoltageDrop = IterableCalculate(numDiodeVoltageDropLower,
@@ -665,15 +670,15 @@ namespace AxialFluxGeneratorDesigner
 
                 _tableGeneratorSummary.Rows[37][i + 1] = _generator.MagnetThickness;
                 _tableGeneratorSummary.Rows[38][i + 1] = _generator.MagnetWidth;
-                _tableGeneratorSummary.Rows[39][i + 1] = _generator.MagnetLength;
+                _tableGeneratorSummary.Rows[39][i + 1] = _generator.MagnetHeight;
 
                 _tableGeneratorSummary.Rows[40][i + 1] = _generator.MagnetRemanentFluxDensity;
                 _tableGeneratorSummary.Rows[41][i + 1] = _generator.MagnetCoerciveFieldStrength;
                 _tableGeneratorSummary.Rows[42][i + 1] = _generator.MagnetFluxDensity;
                 _tableGeneratorSummary.Rows[43][i + 1] = _generator.MagnetPoleFlux;
 
-                _tableGeneratorSummary.Rows[44][i + 1] = _generator.MagnetDistance;
-                _tableGeneratorSummary.Rows[45][i + 1] = _generator.MagnetPoleArcPitch;
+                _tableGeneratorSummary.Rows[44][i + 1] = _generator.MagnetBetweenDistance;
+                _tableGeneratorSummary.Rows[45][i + 1] = _generator.MagnetPoleArcToPolePitchRatio;
 
                 _tableGeneratorSummary.Rows[46][i + 1] = _generator.RectifierDiodeVoltageDrop;
 
@@ -691,7 +696,7 @@ namespace AxialFluxGeneratorDesigner
 
         /// <summary>
         /// </summary>
-        public void UpdateComboBoxes()
+        private void UpdateComboBoxes()
         {
             //Battery
             if (cmbEnergyStorage.SelectedIndex == 0)
@@ -1063,7 +1068,7 @@ namespace AxialFluxGeneratorDesigner
             {
                 FileName = @"C:\Python27\python.exe",
                 Arguments =
-                    $@"Python\3dGenerator.py {_generator.MagnetLength} {_generator.MagnetWidth} {_generator.CoilCount} {
+                    $@"Python\3dGenerator.py {_generator.MagnetHeight} {_generator.MagnetWidth} {_generator.CoilCount} {
                         _generator.CoilLegWidth} {1} {1} {_generator.CoilThickness} {9} {4}",
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -1136,6 +1141,11 @@ namespace AxialFluxGeneratorDesigner
         {
             if (!_isInitialized) return;
             _generator.CoilInnerRadius = (double)numInnerCoilRadius.Value;
+        }
+
+        private void numPoleArcToPolePitchRatio_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -6,7 +6,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
 {
     /// <summary>
     /// </summary>
-    public static class StatorDimensions
+    public static class StatorDimensionsStatic
     {
         #region Trigonometric functions
 
@@ -521,7 +521,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// <param name="betweenCoilDistance"></param>
         /// <param name="innerCoilRadius"></param>
         /// <returns></returns>
-        public static Tuple<double, double, double, double, double, double> CalculateStatorDimensions(int coilCount, double magnetHeight, double coilLegWidth, double betweenCoilDistance, double innerCoilRadius)
+        public static Tuple<double, double, double, double, double, double, double> CalculateStatorDimensions(int coilCount, double magnetHeight, double coilLegWidth, double betweenCoilDistance, double innerCoilRadius)
         {
             var centralAngle = CalculateCentralCoilAngle(coilCount);
             var bottomAngle = CalculateBottomCoilAngle(centralAngle);
@@ -569,7 +569,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
             var statorInnerRadius = CalculateStatorInnerRadius(coilBottomSegment,topAngle);
             var statorOuterRadius = CalculateStatorOuterRadius(statorInnerRadius, coilLegWidth, magnetHeight, 100);
 
-            var statorDimensions = new Tuple<double, double, double, double, double, double>(innerCoilCircumferenceCorrected, outerCoilCircumferenceCorrected, averageCoilCircumference, coilSurface, statorInnerRadius, statorOuterRadius);
+            var statorDimensions = new Tuple<double, double, double, double, double, double, double>(innerCoilCircumferenceCorrected, outerCoilCircumferenceCorrected, averageCoilCircumference, coilSurface, statorInnerRadius, statorOuterRadius, coilBottomSegment);
 
             return statorDimensions;
         }

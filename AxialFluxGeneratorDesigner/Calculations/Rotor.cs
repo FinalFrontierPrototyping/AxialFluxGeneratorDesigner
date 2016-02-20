@@ -8,34 +8,92 @@ namespace AxialFluxGeneratorDesigner.Calculations
     public static class Rotor
     {
         /// <summary>
-        /// </summary>
-        /// <param name="phaseCount"></param>
-        /// <param name="coilPhaseCount"></param>
-        /// <returns></returns>
-        public static int CalculateCoilCount(int phaseCount, int coilPhaseCount)
-        {
-            return phaseCount*coilPhaseCount;
-        }
-
-        /// <summary>
         ///     This method calculates the amount of magnets.
         /// </summary>
         /// <param name="coilCount">The total amount of coils</param>
         /// <returns>The amount of magnets</returns>
-        public static int CalculatePolePairs(int coilCount)
+        public static int CalculateMagnetCount(int coilCount)
         {
             var poleCount = coilCount*2/0.5/3;
             return (int) poleCount;
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="poleArcToPolePitchRatio"></param>
+        /// <param name="magnetWidth"></param>
+        /// <returns></returns>
+        public static double CalculateMagnetPoleToPolePitch(double poleArcToPolePitchRatio, double magnetWidth)
+        {
+            return magnetWidth/poleArcToPolePitchRatio;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="magnetPoleToPolePitch"></param>
+        /// <param name="magnetWidth"></param>
+        /// <returns></returns>
+        public static double CalculateBetweenPoleDistance(double magnetPoleToPolePitch, double magnetWidth)
+        {
+            return magnetPoleToPolePitch - magnetWidth;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="magnetCount"></param>
+        /// <returns></returns>
+        public static double CalculateMagnetCentralAngle(double magnetCount)
+        {
+            return 360/magnetCount;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="magnetCentralAngle"></param>
+        /// <param name="poleArcToPolePitchRatio"></param>
+        /// <returns></returns>
+        public static double CalculateMagnetSegmentAngle(double magnetCentralAngle, double poleArcToPolePitchRatio)
+        {
+            return magnetCentralAngle*poleArcToPolePitchRatio;
+        }
+   
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="magnetCentralAngle"></param>
+        /// <param name="magnetSegmentAngle"></param>
+        /// <returns></returns>
+        public static double CalculateBetweenMagnetSegmentAngle(double magnetCentralAngle,  double magnetSegmentAngle)
+        {
+            return magnetCentralAngle - magnetSegmentAngle;
+        }
+
+        /// <summary>
+        /// 
         /// </summary>
         /// <param name="magnetWidth"></param>
-        /// <param name="magnetsDistance"></param>
+        /// <param name="magnetSegmentAngle"></param>
         /// <returns></returns>
-        public static double CalculateMagnetPoleArcPitch(double magnetWidth, double magnetsDistance)
+        public static double CalculateRotorInnerRadius(double magnetWidth, double magnetSegmentAngle)
         {
-            return magnetWidth/magnetsDistance;
+
+            return StatorDimensionsStatic.CalculateAdjacentTan(magnetWidth/2, magnetSegmentAngle/2);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rotorInnerRadius"></param>
+        /// <param name="magnetHeight"></param>
+        /// <returns></returns>
+        public static double CalculateRotorOuterRadius(double rotorInnerRadius, double magnetHeight)
+        {
+
+            return rotorInnerRadius + magnetHeight;
         }
 
         /// <summary>
@@ -73,28 +131,41 @@ namespace AxialFluxGeneratorDesigner.Calculations
             return fluxDensity*Common.MillimetersToMeters(magnetWidth)*Common.MillimetersToMeters(magnetLength);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="coilCount"></param>
-        /// <param name="bottomCoilSegmentLength"></param>
-        /// <returns></returns>
-        public static double CalculateRotorInnerRadius(int coilCount, double bottomCoilSegmentLength)
-        {
-            var centralAngle = StatorDimensions.CalculateCentralCoilAngle(coilCount);
-            var topAngle = StatorDimensions.CalculateTopCoilAngle(centralAngle);
-            return StatorDimensions.CalculateOppositeTan(bottomCoilSegmentLength/2, topAngle);
-        }
+
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="innerRotorRadius"></param>
-        /// <param name="coilHeight"></param>
+        /// <param name="outerRotorRadius"></param>
         /// <returns></returns>
-        public static double CalculateRotorOuterRadius(double innerRotorRadius, double coilHeight)
+        public static double CalculateRotorRadiusRatio(double innerRotorRadius, double outerRotorRadius)
         {
-            return innerRotorRadius + coilHeight;
+            return innerRotorRadius / outerRotorRadius;
         }
+
+        ///// <summary>
+        ///// </summary>
+        ///// <param name="magnetWidth"></param>
+        ///// <param name="magnetsDistance"></param>
+        ///// <returns></returns>
+        //[Obsolete]
+        //public static double CalculateMagnetPoleArcPitch(double magnetWidth, double magnetsDistance)
+        //{
+        //    return magnetWidth/magnetsDistance;
+        //}
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="statorInnerRadius"></param>
+        ///// <param name="coiLegWidth"></param>
+        ///// <returns></returns>
+        //[Obsolete]
+        //public static double CalculateRotorInnerRadius(double statorInnerRadius, double coiLegWidth)
+        //{
+
+        //    return statorInnerRadius + coiLegWidth;
+        //}
     }
 }

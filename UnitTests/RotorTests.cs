@@ -11,9 +11,9 @@ namespace UnitTests
         [TestMethod]
         public void TestPolePairs()
         {
-            Assert.AreEqual(8, Rotor.CalculatePolePairs(6));
-            Assert.AreEqual(20, Rotor.CalculatePolePairs(15));
-            Assert.AreEqual(28, Rotor.CalculatePolePairs(21));
+            Assert.AreEqual(8, Rotor.CalculateMagnetCount(6));
+            Assert.AreEqual(20, Rotor.CalculateMagnetCount(15));
+            Assert.AreEqual(28, Rotor.CalculateMagnetCount(21));
         }
 
 

@@ -30,10 +30,49 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// </summary>
         /// <param name="debug"></param>
         /// <param name="text"></param>
+        public static void DebugPrint(bool debug, string text)
+        {
+            Debug.WriteLine(text);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="debug"></param>
+        /// <param name="text"></param>
         /// <param name="value"></param>
         public static void DebugPrint(bool debug, string text, double value)
         {
             Debug.WriteLine(text + ": " + value);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="debug"></param>
+        /// <param name="text"></param>
+        /// <param name="value"></param>
+        public static void DebugPrint(bool debug, string text, int value)
+        {
+            Debug.WriteLine(text + ": " + value);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="debug"></param>
+        /// <param name="var"></param>
+        public static void DebugPrint(bool debug, double var)
+        {
+            Debug.WriteLine(nameof(var)+ ": " + var);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="debug"></param>
+        /// <param name="var"></param>
+        public static void DebugPrint(bool debug, int var)
+        {
+            Debug.WriteLine(nameof(var) + ": " + var);
         }
     }
 }

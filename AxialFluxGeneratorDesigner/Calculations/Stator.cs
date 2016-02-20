@@ -7,6 +7,16 @@ namespace AxialFluxGeneratorDesigner.Calculations
     public static class Stator
     {
         /// <summary>
+        /// </summary>
+        /// <param name="phaseCount"></param>
+        /// <param name="coilPhaseCount"></param>
+        /// <returns></returns>
+        public static int CalculateCoilCount(int phaseCount, int coilPhaseCount)
+        {
+            return phaseCount * coilPhaseCount;
+        }
+
+        /// <summary>
         ///     This method calculates the phase voltage for a 3 phase Y-configuration from the provided DC voltage.
         ///     Vdc = ((3*SQRT(2))/PI) * Vrms
         ///     Vdc = 1.35 * Vrms
@@ -239,6 +249,28 @@ namespace AxialFluxGeneratorDesigner.Calculations
         {
             var power = (2.0/3)*coilResistance*Math.Pow(coilMaxCurrent, 2);
             return power/(2*(coilSurface/100)); //mm2 to cm2
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rotorInnerRadius"></param>
+        /// <param name="coilLegWidth"></param>
+        /// <returns></returns>
+        public static double CalculateStatorInnerRadius(double rotorInnerRadius, double coilLegWidth)
+        {
+            return rotorInnerRadius - coilLegWidth;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rotorOuterRadius"></param>
+        /// <param name="coilLegWidth"></param>
+        /// <returns></returns>
+        public static double CalculateStatorOuterRadius(double rotorOuterRadius, double coilLegWidth)
+        {
+            return rotorOuterRadius + coilLegWidth;
         }
     }
 }

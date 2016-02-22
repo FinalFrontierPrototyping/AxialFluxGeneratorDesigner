@@ -19,7 +19,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
 
         /// <summary>
         /// </summary>
-        public double MagnetBetweenSegmentAngle { get; set; }
+        private double MagnetBetweenSegmentAngle { get; set; }
 
         /// <summary>
         ///     The angle from the center of the stator that the coil covers.
@@ -29,7 +29,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// <summary>
         ///     The radius of the inner coil rounding.
         /// </summary>
-        public double CoilInnerRadius { get; set; } = 5;
+        private double CoilInnerRadius { get; set; } = 5;
 
         /// <summary>
         ///     The radius of the inner coil rounding.
@@ -111,8 +111,6 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// </summary>
         private void UpdateFrontEndCalculations(bool debug)
         {
-            Common.DebugPrint(debug, "-------------------- UpdateStatorCalculations --------------------");
-
             //TODO: Check calculations
 
             PhaseWireVoltageDrop = Stator.VoltageDrop(PhaseWireLength, PhaseWireDiameter,
@@ -207,120 +205,128 @@ namespace AxialFluxGeneratorDesigner.Calculations
 
         /// <summary>
         /// </summary>
-        public void UpdateGeneratorCalculations(bool debug)
+        private void UpdateGeneratorCalculations(bool debug)
         {
-            Common.DebugPrint(debug, "-------------------- UpdateGeneratorCalculations --------------------");
-
             CoilCount = Stator.CalculateCoilCount(PhaseCount, CoilsPerPhase);
-            Common.DebugPrint(debug, CoilCount);
+            Common.DebugPrint(debug, nameof(CoilCount), CoilCount);
 
             MagnetCount = Rotor.CalculateMagnetCount(CoilCount);
-            Common.DebugPrint(debug, MagnetCount*2);
+            //TODO: change!! times two should be in method!
+            Common.DebugPrint(debug, nameof(MagnetCount), MagnetCount*2);
 
             RotorThickness = MagnetThickness;
-            Common.DebugPrint(debug, RotorThickness);
+            Common.DebugPrint(debug, nameof(RotorThickness), RotorThickness);
 
             CoilThickness = Stator.CalculateStatorThickness(MagnetThickness, MechamicalGap);
-            Common.DebugPrint(debug, CoilThickness);
+            Common.DebugPrint(debug, nameof(CoilThickness), CoilThickness);
 
             MagnetFluxDensity = Rotor.CalculateMagnetFluxDensity(MagnetRemanentFluxDensity, MagnetCoerciveFieldStrength,
                 MagnetThickness, MechamicalGap);
-            Common.DebugPrint(debug, MagnetFluxDensity);
+            Common.DebugPrint(debug, nameof(MagnetFluxDensity), MagnetFluxDensity);
 
             MagnetPoleFlux = Rotor.CalculateMaximumPoleFlux(MagnetFluxDensity, MagnetWidth, MagnetHeight);
-            Common.DebugPrint(debug, MagnetPoleFlux);
+            Common.DebugPrint(debug, nameof(MagnetPoleFlux), MagnetPoleFlux);
 
             CoilTurns = Stator.CalculateCoilWindings(PhaseVoltageMin, MagnetCount, FrontEndRpmMin,
                 CoilsPerPhase,
                 MagnetPoleFlux, CoilWindingCoefficient);
-            Common.DebugPrint(debug, CoilTurns);
+            Common.DebugPrint(debug, nameof(CoilTurns), CoilTurns);
 
             MaxPhaseCurrent = Stator.CalculateMaximumPhaseCurrent(GeneratorPower, PhaseVoltageMax, GeneratorEfficiency);
-            Common.DebugPrint(debug, MaxPhaseCurrent);
+            Common.DebugPrint(debug, nameof(MaxPhaseCurrent), MaxPhaseCurrent);
 
             CoilLegWidth = Stator.CalculateCoilLegWidthMod(MaxPhaseCurrent, CoilTurns, CoilThickness,
                 MaxCurrentDensity, CoilFillFactor);
-            Common.DebugPrint(debug, CoilLegWidth);
+            Common.DebugPrint(debug, nameof(CoilLegWidth), CoilLegWidth);
 
             CoilCrossSectionalArea = Stator.CalculateCoilCrossSectionalArea(CoilLegWidth, CoilThickness,
                 CoilTurns,
                 CoilFillFactor);
-            Common.DebugPrint(debug, CoilCrossSectionalArea);
+            Common.DebugPrint(debug, nameof(CoilCrossSectionalArea), CoilCrossSectionalArea);
 
             CoilWireDiameter = Stator.CalculateCoilWireDiameter(CoilCrossSectionalArea);
-            Common.DebugPrint(debug, CoilWireDiameter);
+            Common.DebugPrint(debug, nameof(CoilWireDiameter), CoilWireDiameter);
 
             RotorInnerRadius = Rotor.CalculateRotorInnerRadius(MagnetWidth, MagnetSegmentAngle);
-            Common.DebugPrint(debug, RotorInnerRadius);
+            Common.DebugPrint(debug, nameof(RotorInnerRadius), RotorInnerRadius);
 
             RotorOuterRadius = Rotor.CalculateRotorOuterRadius(RotorInnerRadius, MagnetHeight);
-            Common.DebugPrint(debug, RotorOuterRadius);
+            Common.DebugPrint(debug, nameof(RotorOuterRadius), RotorOuterRadius);
 
             RotorInnerOuterRadiusRatio = Rotor.CalculateRotorRadiusRatio(RotorInnerRadius, RotorOuterRadius);
-            Common.DebugPrint(debug, RotorInnerOuterRadiusRatio);
+            Common.DebugPrint(debug, nameof(RotorInnerOuterRadiusRatio), RotorInnerOuterRadiusRatio);
 
             StatorInnerRadius = Stator.CalculateStatorInnerRadius(RotorInnerRadius, CoilLegWidth);
-            Common.DebugPrint(debug, StatorInnerRadius);
+            Common.DebugPrint(debug, nameof(StatorInnerRadius), StatorInnerRadius);
 
             StatorOuterRadius = Stator.CalculateStatorOuterRadius(RotorOuterRadius, CoilLegWidth);
-            Common.DebugPrint(debug, StatorOuterRadius);
+            Common.DebugPrint(debug, nameof(StatorOuterRadius), StatorOuterRadius);
 
             CoilAngle = StatorDimensionsStatic.CalculateCentralCoilAngle(CoilCount);
-            Common.DebugPrint(debug, "Coil angle", CoilAngle);
+            Common.DebugPrint(debug, nameof(CoilAngle), CoilAngle);
 
             MagnetPoleToPolePitch = Rotor.CalculateMagnetPoleToPolePitch(MagnetPoleArcToPolePitchRatio, MagnetWidth);
-            Common.DebugPrint(debug, MagnetPoleToPolePitch);
+            Common.DebugPrint(debug, nameof(MagnetPoleToPolePitch), MagnetPoleToPolePitch);
 
             MagnetBetweenDistance = Rotor.CalculateBetweenPoleDistance(MagnetPoleToPolePitch, MagnetWidth);
-            Common.DebugPrint(debug, BetweenCoilDistance);
+            Common.DebugPrint(debug, nameof(BetweenCoilDistance), BetweenCoilDistance);
 
             MagnetTotalSegmentAngle = Rotor.CalculateMagnetCentralAngle(MagnetCount);
-            Common.DebugPrint(debug, MagnetTotalSegmentAngle);
+            Common.DebugPrint(debug, nameof(MagnetTotalSegmentAngle), MagnetTotalSegmentAngle);
 
             MagnetSegmentAngle = Rotor.CalculateMagnetSegmentAngle(MagnetTotalSegmentAngle,
                 MagnetPoleArcToPolePitchRatio);
-            Common.DebugPrint(debug, MagnetSegmentAngle);
+            Common.DebugPrint(debug, nameof(MagnetSegmentAngle), MagnetSegmentAngle);
 
             MagnetBetweenSegmentAngle = Rotor.CalculateBetweenMagnetSegmentAngle(MagnetTotalSegmentAngle,
                 MagnetSegmentAngle);
-            Common.DebugPrint(debug, MagnetBetweenSegmentAngle);
+            Common.DebugPrint(debug, nameof(MagnetBetweenSegmentAngle), MagnetBetweenSegmentAngle);
 
             var coilInnerDimensions = StatorDimensionsDynamic.CalculateCoilInnerDimensionsAngular(CoilCount,
                 RotorInnerRadius, RotorOuterRadius, CoilLegWidth, BetweenCoilDistance);
 
             CoilInnerTop = coilInnerDimensions.Item3;
+            Common.DebugPrint(debug, nameof(CoilInnerTop), CoilInnerTop);
+
             CoilInnerBottom = coilInnerDimensions.Item4;
+            Common.DebugPrint(debug, nameof(CoilInnerBottom), CoilInnerBottom);
+
             CoilInnerSide = coilInnerDimensions.Item5;
+            Common.DebugPrint(debug, nameof(CoilInnerSide), CoilInnerSide);
 
             var coilOuterDimensions = StatorDimensionsDynamic.CalculateCoilOuterDimensionsAngular(CoilCount,
                 StatorInnerRadius, StatorOuterRadius, BetweenCoilDistance);
 
             CoilOuterTop = coilOuterDimensions.Item3;
+            Common.DebugPrint(debug, nameof(CoilOuterTop), CoilOuterTop);
+
             CoilOuterBottom = coilOuterDimensions.Item4;
+            Common.DebugPrint(debug, nameof(CoilOuterBottom), CoilOuterBottom);
+
             CoilOuterSide = coilOuterDimensions.Item5;
+            Common.DebugPrint(debug, nameof(CoilOuterSide), CoilOuterSide);
 
             var coilRoundedVariables = StatorDimensionsDynamic.CalculateCoilRoundedVariables(CoilInnerRadius,
                 CoilLegWidth, CoilAngle, coilInnerDimensions, coilOuterDimensions);
 
-            //Calculate values after coil dimensions are available
             CoilAverageTurnLength = coilRoundedVariables.Item3;
-            Common.DebugPrint(debug, "Coil average turn length", CoilAverageTurnLength);
+            Common.DebugPrint(debug, nameof(CoilAverageTurnLength), CoilAverageTurnLength);
 
             CoilSideSurface = coilRoundedVariables.Item4;
-            Common.DebugPrint(debug, "Coil side surface", CoilSideSurface);
+            Common.DebugPrint(debug, nameof(CoilSideSurface), CoilSideSurface);
 
             //TODO: Create method for wire length
             CoilWireLength = Common.MillimetersToMeters(CoilAverageTurnLength*CoilTurns);
-            Common.DebugPrint(debug, "Coil wire length (m)", CoilWireLength);
+            Common.DebugPrint(debug, nameof(CoilWireLength), CoilWireLength);
 
             CoilResistance = Stator.CalculateWireResistance(CoilWireLength, CoilWireDiameter);
-            Common.DebugPrint(debug, CoilResistance);
+            Common.DebugPrint(debug, nameof(CoilResistance), CoilResistance);
 
             CoilInductance = Stator.CalculateCoilInductance(CoilTurns, CoilWireDiameter, CoilThickness);
-            Common.DebugPrint(debug, CoilInductance);
+            Common.DebugPrint(debug, nameof(CoilInductance), CoilInductance);
 
             CoilHeatCoefficient = Stator.CalculateCoilHeatCoefficient(CoilSideSurface, CoilResistance, MaxPhaseCurrent);
-            Common.DebugPrint(debug, CoilHeatCoefficient);
+            Common.DebugPrint(debug, nameof(CoilHeatCoefficient), CoilHeatCoefficient);
         }
 
         #region Front end properties
@@ -682,7 +688,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// <summary>
         ///     ??
         /// </summary>
-        public double MagnetPoleArcToPolePitchRatio { get; set; } = 2/Math.PI;
+        public double MagnetPoleArcToPolePitchRatio { get; set; } = Math.Round(2/Math.PI, 3);
 
         /// <summary>
         ///     ??

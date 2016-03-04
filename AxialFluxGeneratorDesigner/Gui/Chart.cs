@@ -9,6 +9,9 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace AxialFluxGeneratorDesigner.Gui
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ChartData
     {
         private static bool HasNull(DataTable table)
@@ -17,6 +20,13 @@ namespace AxialFluxGeneratorDesigner.Gui
                 table.Columns.Cast<DataColumn>().Any(column => table.Rows.OfType<DataRow>().Any(r => r.IsNull(column)));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="chart"></param>
+        /// <param name="indexAxisX"></param>
+        /// <param name="indexAxisY"></param>
         public void Plot(DataTable table, Chart chart, int indexAxisX, int indexAxisY)
         {
             if (HasNull(table))
@@ -73,6 +83,10 @@ namespace AxialFluxGeneratorDesigner.Gui
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chart"></param>
         public static void SaveImage(Chart chart)
         {
             try

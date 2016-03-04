@@ -1,334 +1,16 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
+
+#endregion
 
 namespace AxialFluxGeneratorDesigner.Calculations
 {
     /// <summary>
     /// </summary>
-    /// pitch
     public class Generator
     {
-        #region Rectifier properties
-
-        /// <summary>
-        ///     TODO: Add documentation!
-        /// </summary>
-        public double RectifierDiodeVoltageDrop { get; set; } = 1.4;
-
-        #endregion Rectifier properties
-
-        /// <summary>
-        /// </summary>
-        private double MagnetBetweenSegmentAngle { get; set; }
-
-        /// <summary>
-        ///     The angle from the center of the stator that the coil covers.
-        /// </summary>
-        public double CoilAngle { get; set; }
-
-        /// <summary>
-        ///     The radius of the inner coil rounding.
-        /// </summary>
-        private double CoilInnerRadius { get; set; } = 5;
-
-        /// <summary>
-        ///     The radius of the inner coil rounding.
-        /// </summary>
-        public double CoilAverageTurnLength { get; set; } = 5;
-
-
-        /// <summary>
-        ///     The surface of a single coil side (cm2)
-        /// </summary>
-        public double CoilSideSurface { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilInnerTop { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilInnerBottom { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilInnerSide { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilOuterTop { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilOuterBottom { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public double CoilOuterSide { get; set; }
-
-        /// <summary>
-        ///     This method can be called to update all calculations.
-        ///     The principle is that the generator is driven by an external force applied to the generator shaft. This force is
-        ///     expressed and RPM and has a minimal and maximal value. The input RPM depends on various factors.
-        ///     To accommodate the user there is the possibility to calculate the RPM values using an turbine. However, there is
-        ///     also the possibility to enter direct RPM values.This can be useful if another device is used (e.g. water wheel or
-        ///     Stirling engine).
-        ///     The input devices are called the front end of the generator or generator input. Besides two input options there is
-        ///     also the possibility to store/return the produced energy. There is the possibility to store the produced energy in
-        ///     a battery or the produced energy is returned to the grid using an inverter.
-        ///     In case of a battery we only know the minimal voltage we want (the battery voltage). The maximal depends on the
-        ///     wind. Based on those.....
-        ///     - Wind turbine + battery calculations:
-        ///     Calculate the turbine radius.
-        ///     Calculate the min and max rpm based on the wind speed and tip ratio.
-        ///     Calculate the minimal phase voltage using the battery voltage (e.g. 48 volt)
-        ///     Calculate the maximal phase voltage by multiplying the minimal phase voltage with the ratio between the max and min
-        ///     rpm (RPM Max / RPM Min).
-        ///     - Other + battery calculations:
-        ///     Calculate the maximal phase voltage by multiplying the minimal phase voltage (e.g. 48 volt) with the ratio between
-        ///     the set max and min rpm (RPM Max / RPM Min).
-        ///     - Wind turbine + grid calculations:
-        ///     Calculate the turbine radius.
-        ///     Calculate the minimal AND maximal phase voltage using the inverter min and max voltages.
-        ///     Calculate the minimal rpm by multiplying the minimal rpm with the ratio between the min and max phase voltage
-        ///     (Phase voltage min / Phase voltage max).
-        ///     Calculate the minimal wind speed based on this minimal RPM value.
-        ///     - Other + grid calculations:
-        ///     Calculate the minimal AND maximal phase voltage using the inverter min and max voltages.
-        ///     Calculate the minimal rpm by multiplying the minimal rpm with the ratio between the min and max phase voltage
-        ///     (Phase voltage min / Phase voltage max).
-        ///     Calculate the minimal wind speed based on this minimal RPM value.
-        /// </summary>
-        public void UpdateCalculations(bool debug)
-        {
-            UpdateFrontEndCalculations(debug);
-            UpdateGeneratorCalculations(debug);
-        }
-
-        /// <summary>
-        ///     This method updates the calculations for the front end of the generator. The device that is responsible for
-        ///     generation of RPM.
-        /// </summary>
-        private void UpdateFrontEndCalculations(bool debug)
-        {
-            //TODO: Check calculations
-
-            PhaseWireVoltageDrop = Stator.VoltageDrop(PhaseWireLength, PhaseWireDiameter,
-                MaxPhaseCurrent, 3);
-            PhaseWireResistance = Stator.CalculateWireResistance(PhaseWireLength, PhaseWireDiameter);
-
-            //TODO: Check max phase current?
-            RectifierWireVoltageDrop = Stator.VoltageDrop(RectifierWireLength, RectifierWireDiameter,
-                MaxPhaseCurrent, 1);
-            RectifierWireResistance = Stator.CalculateWireResistance(RectifierWireLength,
-                RectifierWireDiameter);
-
-            //Battery connection
-            if (GeneratorEnergyStorageConnection == 0)
-            {
-                //Turbine
-                if (GeneratorFrontEnd == 0)
-                {
-                    PhaseVoltageMin =
-                        Stator.CalculatePhaseVoltage(DcVoltageMin,
-                            RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
-                        PhaseWireVoltageDrop;
-                    TurbineRotorRadius = FrontEndCalculations.CalculateTurbineRotorRadius(GeneratorPower,
-                        TurbineAirDensity,
-                        TurbineMaximumPowerCoefficient, TurbineWindspeedMax, GeneratorEfficiency);
-                    FrontEndRpmMin = FrontEndCalculations.CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMin,
-                        TurbineSpeedTipRatioMin,
-                        TurbineRotorRadius);
-                    FrontEndRpmMax = FrontEndCalculations.CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax,
-                        TurbineSpeedTipRatioMax,
-                        TurbineRotorRadius);
-                    PhaseVoltageMax = FrontEndCalculations.CalculateBatteryVoltage(FrontEndRpmMin, FrontEndRpmMax,
-                        PhaseVoltageMin);
-                }
-                //Other
-                else if (GeneratorFrontEnd == 1)
-                {
-                    PhaseVoltageMin =
-                        (Stator.CalculatePhaseVoltage(DcVoltageMin,
-                            RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
-                         PhaseWireVoltageDrop)/GeneratorEfficiency;
-                    //TODO: Correct for voltage drop?
-                    PhaseVoltageMax =
-                        FrontEndCalculations.CalculateBatteryVoltage(FrontEndRpmMin, FrontEndRpmMax, PhaseVoltageMin)/
-                        GeneratorEfficiency;
-                }
-            }
-            //Grid connection
-            if (GeneratorEnergyStorageConnection == 1)
-            {
-                //Turbine
-                if (GeneratorFrontEnd == 0)
-                {
-                    PhaseVoltageMin =
-                        Stator.CalculatePhaseVoltage(DcVoltageMin,
-                            RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
-                        PhaseWireVoltageDrop;
-                    PhaseVoltageMax =
-                        Stator.CalculatePhaseVoltage(DcVoltageMax,
-                            RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
-                        PhaseWireVoltageDrop;
-                    TurbineRotorRadius = FrontEndCalculations.CalculateTurbineRotorRadius(GeneratorPower,
-                        TurbineAirDensity,
-                        TurbineMaximumPowerCoefficient, TurbineWindspeedMax, GeneratorEfficiency);
-                    FrontEndRpmMax = FrontEndCalculations.CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax,
-                        TurbineSpeedTipRatioMax,
-                        TurbineRotorRadius);
-                    FrontEndRpmMin = FrontEndCalculations.CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax,
-                        FrontEndRpmMax);
-                    TurbineWindspeedMin = FrontEndCalculations.CalculateTurbineOptimalWindSpeed(FrontEndRpmMin,
-                        TurbineRotorRadius,
-                        TurbineSpeedTipRatioMin);
-                }
-                //Other
-                else if (GeneratorFrontEnd == 1)
-                {
-                    PhaseVoltageMin =
-                        (Stator.CalculatePhaseVoltage(DcVoltageMin,
-                            RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
-                         PhaseWireVoltageDrop)/GeneratorEfficiency;
-                    PhaseVoltageMax =
-                        (Stator.CalculatePhaseVoltage(DcVoltageMax,
-                            RectifierDiodeVoltageDrop + RectifierWireVoltageDrop) +
-                         PhaseWireVoltageDrop)/GeneratorEfficiency;
-                    FrontEndRpmMin = FrontEndCalculations.CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax,
-                        FrontEndRpmMax);
-                }
-            }
-
-            FrontEndTorque = FrontEndCalculations.CalculateTorque(GeneratorPower, FrontEndRpmMax);
-        }
-
-        /// <summary>
-        /// </summary>
-        private void UpdateGeneratorCalculations(bool debug)
-        {
-            CoilCount = Stator.CalculateCoilCount(PhaseCount, CoilsPerPhase);
-            Common.DebugPrint(debug, nameof(CoilCount), CoilCount);
-
-            MagnetCount = Rotor.CalculateMagnetCount(CoilCount);
-            //TODO: change!! times two should be in method!
-            Common.DebugPrint(debug, nameof(MagnetCount), MagnetCount*2);
-
-            RotorThickness = MagnetThickness;
-            Common.DebugPrint(debug, nameof(RotorThickness), RotorThickness);
-
-            CoilThickness = Stator.CalculateStatorThickness(MagnetThickness, MechamicalGap);
-            Common.DebugPrint(debug, nameof(CoilThickness), CoilThickness);
-
-            MagnetFluxDensity = Rotor.CalculateMagnetFluxDensity(MagnetRemanentFluxDensity, MagnetCoerciveFieldStrength,
-                MagnetThickness, MechamicalGap);
-            Common.DebugPrint(debug, nameof(MagnetFluxDensity), MagnetFluxDensity);
-
-            MagnetPoleFlux = Rotor.CalculateMaximumPoleFlux(MagnetFluxDensity, MagnetWidth, MagnetHeight);
-            Common.DebugPrint(debug, nameof(MagnetPoleFlux), MagnetPoleFlux);
-
-            CoilTurns = Stator.CalculateCoilWindings(PhaseVoltageMin, MagnetCount, FrontEndRpmMin,
-                CoilsPerPhase,
-                MagnetPoleFlux, CoilWindingCoefficient);
-            Common.DebugPrint(debug, nameof(CoilTurns), CoilTurns);
-
-            MaxPhaseCurrent = Stator.CalculateMaximumPhaseCurrent(GeneratorPower, PhaseVoltageMax, GeneratorEfficiency);
-            Common.DebugPrint(debug, nameof(MaxPhaseCurrent), MaxPhaseCurrent);
-
-            CoilLegWidth = Stator.CalculateCoilLegWidthMod(MaxPhaseCurrent, CoilTurns, CoilThickness,
-                MaxCurrentDensity, CoilFillFactor);
-            Common.DebugPrint(debug, nameof(CoilLegWidth), CoilLegWidth);
-
-            CoilCrossSectionalArea = Stator.CalculateCoilCrossSectionalArea(CoilLegWidth, CoilThickness,
-                CoilTurns,
-                CoilFillFactor);
-            Common.DebugPrint(debug, nameof(CoilCrossSectionalArea), CoilCrossSectionalArea);
-
-            CoilWireDiameter = Stator.CalculateCoilWireDiameter(CoilCrossSectionalArea);
-            Common.DebugPrint(debug, nameof(CoilWireDiameter), CoilWireDiameter);
-
-            RotorInnerRadius = Rotor.CalculateRotorInnerRadius(MagnetWidth, MagnetSegmentAngle);
-            Common.DebugPrint(debug, nameof(RotorInnerRadius), RotorInnerRadius);
-
-            RotorOuterRadius = Rotor.CalculateRotorOuterRadius(RotorInnerRadius, MagnetHeight);
-            Common.DebugPrint(debug, nameof(RotorOuterRadius), RotorOuterRadius);
-
-            RotorInnerOuterRadiusRatio = Rotor.CalculateRotorRadiusRatio(RotorInnerRadius, RotorOuterRadius);
-            Common.DebugPrint(debug, nameof(RotorInnerOuterRadiusRatio), RotorInnerOuterRadiusRatio);
-
-            StatorInnerRadius = Stator.CalculateStatorInnerRadius(RotorInnerRadius, CoilLegWidth);
-            Common.DebugPrint(debug, nameof(StatorInnerRadius), StatorInnerRadius);
-
-            StatorOuterRadius = Stator.CalculateStatorOuterRadius(RotorOuterRadius, CoilLegWidth);
-            Common.DebugPrint(debug, nameof(StatorOuterRadius), StatorOuterRadius);
-
-            CoilAngle = StatorDimensionsStatic.CalculateCentralCoilAngle(CoilCount);
-            Common.DebugPrint(debug, nameof(CoilAngle), CoilAngle);
-
-            MagnetPoleToPolePitch = Rotor.CalculateMagnetPoleToPolePitch(MagnetPoleArcToPolePitchRatio, MagnetWidth);
-            Common.DebugPrint(debug, nameof(MagnetPoleToPolePitch), MagnetPoleToPolePitch);
-
-            MagnetBetweenDistance = Rotor.CalculateBetweenPoleDistance(MagnetPoleToPolePitch, MagnetWidth);
-            Common.DebugPrint(debug, nameof(BetweenCoilDistance), BetweenCoilDistance);
-
-            MagnetTotalSegmentAngle = Rotor.CalculateMagnetCentralAngle(MagnetCount);
-            Common.DebugPrint(debug, nameof(MagnetTotalSegmentAngle), MagnetTotalSegmentAngle);
-
-            MagnetSegmentAngle = Rotor.CalculateMagnetSegmentAngle(MagnetTotalSegmentAngle,
-                MagnetPoleArcToPolePitchRatio);
-            Common.DebugPrint(debug, nameof(MagnetSegmentAngle), MagnetSegmentAngle);
-
-            MagnetBetweenSegmentAngle = Rotor.CalculateBetweenMagnetSegmentAngle(MagnetTotalSegmentAngle,
-                MagnetSegmentAngle);
-            Common.DebugPrint(debug, nameof(MagnetBetweenSegmentAngle), MagnetBetweenSegmentAngle);
-
-            var coilInnerDimensions = StatorDimensionsDynamic.CalculateCoilInnerDimensionsAngular(CoilCount,
-                RotorInnerRadius, RotorOuterRadius, CoilLegWidth, BetweenCoilDistance);
-
-            CoilInnerTop = coilInnerDimensions.Item3;
-            Common.DebugPrint(debug, nameof(CoilInnerTop), CoilInnerTop);
-
-            CoilInnerBottom = coilInnerDimensions.Item4;
-            Common.DebugPrint(debug, nameof(CoilInnerBottom), CoilInnerBottom);
-
-            CoilInnerSide = coilInnerDimensions.Item5;
-            Common.DebugPrint(debug, nameof(CoilInnerSide), CoilInnerSide);
-
-            var coilOuterDimensions = StatorDimensionsDynamic.CalculateCoilOuterDimensionsAngular(CoilCount,
-                StatorInnerRadius, StatorOuterRadius, BetweenCoilDistance);
-
-            CoilOuterTop = coilOuterDimensions.Item3;
-            Common.DebugPrint(debug, nameof(CoilOuterTop), CoilOuterTop);
-
-            CoilOuterBottom = coilOuterDimensions.Item4;
-            Common.DebugPrint(debug, nameof(CoilOuterBottom), CoilOuterBottom);
-
-            CoilOuterSide = coilOuterDimensions.Item5;
-            Common.DebugPrint(debug, nameof(CoilOuterSide), CoilOuterSide);
-
-            var coilRoundedVariables = StatorDimensionsDynamic.CalculateCoilRoundedVariables(CoilInnerRadius,
-                CoilLegWidth, CoilAngle, coilInnerDimensions, coilOuterDimensions);
-
-            CoilAverageTurnLength = coilRoundedVariables.Item3;
-            Common.DebugPrint(debug, nameof(CoilAverageTurnLength), CoilAverageTurnLength);
-
-            CoilSideSurface = coilRoundedVariables.Item4;
-            Common.DebugPrint(debug, nameof(CoilSideSurface), CoilSideSurface);
-
-            //TODO: Create method for wire length
-            CoilWireLength = Common.MillimetersToMeters(CoilAverageTurnLength*CoilTurns);
-            Common.DebugPrint(debug, nameof(CoilWireLength), CoilWireLength);
-
-            CoilResistance = Stator.CalculateWireResistance(CoilWireLength, CoilWireDiameter);
-            Common.DebugPrint(debug, nameof(CoilResistance), CoilResistance);
-
-            CoilInductance = Stator.CalculateCoilInductance(CoilTurns, CoilWireDiameter, CoilThickness);
-            Common.DebugPrint(debug, nameof(CoilInductance), CoilInductance);
-
-            CoilHeatCoefficient = Stator.CalculateCoilHeatCoefficient(CoilSideSurface, CoilResistance, MaxPhaseCurrent);
-            Common.DebugPrint(debug, nameof(CoilHeatCoefficient), CoilHeatCoefficient);
-        }
-
         #region Front end properties
 
         /// <summary>
@@ -336,14 +18,16 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     shaft will rotate.
         ///     This value depends on the tip ratio and the wind speed.
         /// </summary>
-        public int FrontEndRpmMax { get; set; }
+        public GeneratorProperty<double> FrontEndRpmMax = new GeneratorProperty<double>(nameof(FrontEndRpmMax), 100, 1,
+            10000);
 
         /// <summary>
         ///     The turbine rpm min is the is the minimal revolutions per minute (rpm) the wind turbine (and thus the generator)
         ///     shaft will rotate.
         ///     This value depends on the tip ratio and the wind speed.
         /// </summary>
-        public int FrontEndRpmMin { get; set; }
+        public GeneratorProperty<double> FrontEndRpmMin = new GeneratorProperty<double>(nameof(FrontEndRpmMin), 100, 1,
+            10000);
 
         /// <summary>
         ///     The torque of the front end (Nm) at the maximal power and rpm.
@@ -365,7 +49,8 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     the area swept by the turbine blade would miss the blade completely and so the kinetic energy would be kept by the
         ///     wind.
         /// </summary>
-        public double TurbineMaximumPowerCoefficient { get; set; } = 0.35;
+        public GeneratorProperty<double> TurbineMaximumPowerCoefficient =
+            new GeneratorProperty<double>(nameof(TurbineMaximumPowerCoefficient), 0.35, 0.0, 1.0);
 
         /// <summary>
         ///     The turbine rotor radius (R<sub>turbine</sub>) is the radius of the wind turbine blades (m).
@@ -379,7 +64,8 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     optimum varying with blade design.
         ///     Higher tip speeds result in higher noise levels and require stronger blades due to large centrifugal forces.
         /// </summary>
-        public double TurbineSpeedTipRatioMax { get; set; } = 7;
+        public GeneratorProperty<double> TurbineSpeedTipRatioMax =
+            new GeneratorProperty<double>(nameof(TurbineSpeedTipRatioMax), 8.75, 1, 100);
 
         /// <summary>
         ///     The speed tip ratio for the minimal rpm (and so minimal wind speed).
@@ -388,22 +74,27 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     optimum varying with blade design.
         ///     Higher tip speeds result in higher noise levels and require stronger blades due to large centrifugal forces.
         /// </summary>
-        public double TurbineSpeedTipRatioMin { get; set; } = 8.75;
+        public GeneratorProperty<double> TurbineSpeedTipRatioMin =
+            new GeneratorProperty<double>(nameof(TurbineSpeedTipRatioMin), 7.0, 1, 100);
 
         /// <summary>
         ///     The turbine maximal wind speed (m/s) that the turbine will experience.
         /// </summary>
-        public double TurbineWindspeedMax { get; set; } = 10;
+        public GeneratorProperty<double> TurbineWindspeedMax = new GeneratorProperty<double>(
+            nameof(TurbineWindspeedMax), 10.0, 0.1, 100);
+
 
         /// <summary>
         ///     The turbine minimal wind speed (m/s) that the turbine will experience.
         /// </summary>
-        public double TurbineWindspeedMin { get; set; } = 3;
+        public GeneratorProperty<double> TurbineWindspeedMin = new GeneratorProperty<double>(
+            nameof(TurbineWindspeedMin), 10.0, 0.1, 100);
 
         /// <summary>
         ///     The air density (kg/m<sup>3</sup>). This value is altitude dependent.
         /// </summary>
-        public double TurbineAirDensity { get; set; } = 1.20;
+        public GeneratorProperty<double> TurbineAirDensity = new GeneratorProperty<double>(nameof(TurbineAirDensity),
+            1.0, 1.0, 2.0);
 
         /// <summary>
         ///     The voltage drop (V) that is caused by the length and diameter of the phase wires from the coil to the diode
@@ -414,12 +105,14 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// <summary>
         ///     The length (m) of a phase wire to the diode bridge rectifier.
         /// </summary>
-        public double PhaseWireLength { get; set; }
+        public GeneratorProperty<double> PhaseWireLength = new GeneratorProperty<double>(nameof(PhaseWireLength), 0, 0,
+            1000);
 
         /// <summary>
         ///     The diameter (mm) of a phase wire to the diode bridge rectifier.
         /// </summary>
-        public double PhaseWireDiameter { get; set; }
+        public GeneratorProperty<double> PhaseWireDiameter = new GeneratorProperty<double>(nameof(PhaseWireDiameter),
+            0.0, 0.0, 10.0);
 
         /// <summary>
         ///     The resistance (Ohm) of a phase wire to the diode bridge rectifier.
@@ -435,7 +128,8 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// <summary>
         ///     The length (m) of a wire from the diode bridge to the grid inverter/ battery.
         /// </summary>
-        public double RectifierWireLength { get; set; }
+        public GeneratorProperty<double> RectifierWireLength = new GeneratorProperty<double>(
+            nameof(RectifierWireLength), 0, 0, 1000);
 
         /// <summary>
         ///     The resistance (Ohm) of a wire from the diode bridge to the grid inverter/ battery.
@@ -445,7 +139,8 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// <summary>
         ///     The diameter (mm) of a wire from the diode bridge to the grid inverter/ battery.
         /// </summary>
-        public double RectifierWireDiameter { get; set; }
+        public GeneratorProperty<double> RectifierWireDiameter =
+            new GeneratorProperty<double>(nameof(RectifierWireDiameter), 0.0, 0.0, 10.0);
 
         #endregion Front end properties
 
@@ -455,23 +150,35 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     The minimal DC voltage output voltage (V).
         ///     This value is default set to 200 volt.
         /// </summary>
-        public double DcVoltageMin { get; set; } = 200;
+        public GeneratorProperty<double> DcInverterVoltageMin =
+            new GeneratorProperty<double>(nameof(DcInverterVoltageMin), 200, 1, 1000);
 
         /// <summary>
         ///     The maximal DC voltage output voltage (V).
         ///     This value is default set to 700 volt.
         /// </summary>
-        public double DcVoltageMax { get; set; } = 700;
+        public GeneratorProperty<double> DcInverterVoltageMax =
+            new GeneratorProperty<double>(nameof(DcInverterVoltageMax), 700, 1, 1000);
+
+        //TODO: Change in code
+        /// <summary>
+        ///     The DC voltage output voltage ob the used battery(V).
+        ///     This value is default set to 48 volt.
+        /// </summary>
+        public GeneratorProperty<double> DcBatteryVoltage = new GeneratorProperty<double>(nameof(DcBatteryVoltage), 48,
+            1, 1000);
 
         /// <summary>
         ///     The maximum power (W) that the generator has to be capable to produce.
         /// </summary>
-        public double GeneratorPower { get; set; } = 3000;
+        public GeneratorProperty<double> GeneratorPower = new GeneratorProperty<double>(nameof(GeneratorPower), 3000, 1,
+            10000);
 
         /// <summary>
         ///     The efficiency of the generator (%). This value is default set to 90%.
         /// </summary>
-        public double GeneratorEfficiency { get; set; } = 0.9;
+        public GeneratorProperty<double> GeneratorEfficiency = new GeneratorProperty<double>(
+            nameof(GeneratorEfficiency), 0.9, 0, 1.0);
 
         /// <summary>
         ///     The mechanical gap between the coil surface and the magnet surface. This value is default set to 3. Try to reduce
@@ -479,7 +186,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     However, keep in mind that the coils can become warm/hot and expand! This could lead to coils touching the magnets
         ///     and thus damage.
         /// </summary>
-        public double MechamicalGap { get; set; } = 3;
+        public GeneratorProperty<double> MechamicalGap = new GeneratorProperty<double>(nameof(MechamicalGap), 3, 1, 10);
 
         /// <summary>
         ///     This property determines the type of energy storage that is used.
@@ -487,7 +194,8 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     1 = grid
         ///     This property is necessary because depending on the energy storage type different calculations are done
         /// </summary>
-        public int GeneratorEnergyStorageConnection { get; set; }
+        public GeneratorProperty<double> GeneratorEnergyStorageConnection =
+            new GeneratorProperty<double>(nameof(GeneratorEnergyStorageConnection), 0, 0, 1);
 
         /// <summary>
         ///     This property determines the front end type that is used to drive the generator.
@@ -497,26 +205,28 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     <para> </para>
         ///     This property is necessary because depending on the front end type different calculations are done.
         /// </summary>
-        public int GeneratorFrontEnd { get; set; }
+        public GeneratorProperty<double> GeneratorFrontEnd = new GeneratorProperty<double>(nameof(GeneratorFrontEnd), 0,
+            0, 1);
 
         #endregion Generator properties
 
         #region Stator properties
 
         /// <summary>
-        ///     TODO: Add documentation!
+        ///     The stator inner radius is the distance (mm) from the center to the bottom of the coil sequence.
         /// </summary>
         public double StatorInnerRadius { get; set; }
 
         /// <summary>
-        ///     TODO: Add documentation!
+        ///     The stator outer radius is the distance (mm) from the center to the top of the coil sequence.
         /// </summary>
         public double StatorOuterRadius { get; set; }
 
         /// <summary>
         ///     The distance between two coils (mm).
         /// </summary>
-        public double BetweenCoilDistance { get; set; } = 5;
+        public GeneratorProperty<double> BetweenCoilDistance = new GeneratorProperty<double>(
+            nameof(BetweenCoilDistance), 5, 0, 50);
 
         /// <summary>
         ///     The maximal phase voltage that a sing phase has to produce.
@@ -532,7 +242,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     The phase count of the generator. The phase count is set to 3 and cannot be changed.
         ///     This because the designer only works with 3-phase generators.
         /// </summary>
-        public int PhaseCount { get; } = 3;
+        private int PhaseCount { get; } = 3;
 
         /// <summary>
         ///     The coil count is the total amount of coils for the generator.
@@ -543,22 +253,11 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// <summary>
         ///     The coils per phase are the amount of coils in each phase.
         /// </summary>
-        public int CoilsPerPhase { get; set; } = 5;
+        public GeneratorProperty<double> CoilsPerPhase = new GeneratorProperty<double>(nameof(CoilsPerPhase), 5, 1, 10);
 
         #endregion Stator properties
 
         #region Stator coil properties
-
-        /// <summary>
-        ///     The width of the top outer side.
-        /// </summary>
-        public double CoilOuterSideTopWidth { get; set; }
-
-        /// <summary>
-        ///     The width of the bottom outer side.
-        /// </summary>
-        public double CoilOuterSideBottomWidth { get; set; }
-
 
         /// <summary>
         ///     The cross sectional area of a coil (mm<sup>2</sup>)
@@ -591,13 +290,14 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     The heat coefficient in the article is 0.3 (W/cm<sup>2</sup>). However has to be converted to (W/m<sup>2</sup>)
         ///     (0.3 (W/cm<sup>2</sup>) becomes 3000 (W/m<sup>2</sup>) (multiplied by 10000)).
         /// </summary>
-        public double CoilHeatCoefficient { get; set; } = 3000;
+        public double CoilHeatCoefficient { get; set; }
 
         /// <summary>
         ///     Is the fraction of the core window area that is filled by copper.
         ///     This value depends mainly on how good the coil is made.
         /// </summary>
-        public double CoilFillFactor { get; set; } = 0.55;
+        public GeneratorProperty<double> CoilFillFactor = new GeneratorProperty<double>(nameof(CoilFillFactor), 0.55,
+            0.1, 1.0);
 
         //TODO: Add more information
         /// <summary>
@@ -634,12 +334,8 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     Current Density (A/mm<sup>2</sup>)is the measurement of electric current (charge flow in amperes) per unit area of
         ///     cross-section (m2).
         /// </summary>
-        public double MaxCurrentDensity { get; set; } = 5;
-
-        /// <summary>
-        ///     The phase current is the current that flows through the coil at the maximal rpm.
-        /// </summary>
-        public double PhaseCurrent { get; set; }
+        public GeneratorProperty<double> MaxCurrentDensity = new GeneratorProperty<double>(nameof(MaxCurrentDensity), 5,
+            1, 20);
 
         /// <summary>
         ///     The phase current is the maximal current (phase current  + 10%) that flows through the coil.
@@ -667,7 +363,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// <summary>
         ///     The magnet grade determines the .....
         /// </summary>
-        public string MagnetGrade { get; set; }
+        public GeneratorProperty<double> MagnetGrade = new GeneratorProperty<double>(nameof(MagnetGrade), 3, 0, 10);
 
         /// <summary>
         ///     The magnetic flux density of a magnet is also called "B field" or "magnetic induction". It is measured in Tesla (SI
@@ -683,15 +379,18 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// <summary>
         ///     The length of a magnet (mm). Default set to 30.
         /// </summary>
-        public double MagnetHeight { get; set; } = 30;
+        public GeneratorProperty<double> MagnetHeight = new GeneratorProperty<double>(nameof(MagnetHeight), 30, 1, 150);
 
+        //TODO: Add documentation
         /// <summary>
         ///     ??
         /// </summary>
-        public double MagnetPoleArcToPolePitchRatio { get; set; } = Math.Round(2/Math.PI, 3);
+        public GeneratorProperty<double> MagnetPoleArcToPolePitchRatio =
+            new GeneratorProperty<double>(nameof(MagnetPoleArcToPolePitchRatio), 2.0/Math.PI, 0.3,
+                0.9);
 
         /// <summary>
-        ///     ??
+        ///     TODO: Add Documentation.
         /// </summary>
         public double MagnetPoleToPolePitch { get; set; }
 
@@ -709,10 +408,6 @@ namespace AxialFluxGeneratorDesigner.Calculations
         public double MagnetSegmentAngle { get; set; }
 
         /// <summary>
-        /// </summary>
-        public double MagnetPoleToPoleCentreDistance { get; set; }
-
-        /// <summary>
         ///     The flux (T) of a magnet to the coil (with mechanical gap included).
         /// </summary>
         public double MagnetPoleFlux { get; set; }
@@ -721,18 +416,19 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     This list contains magnet grades with the associated Magnet remanent flux density (T) and the Magnet coercive field
         ///     strength (A/m).
         /// </summary>
-        public readonly List<Tuple<string, double, double>> MagnetProperties = new List<Tuple<string, double, double>>
+        public readonly List<Tuple<int, string, double, double>> MagnetProperties = new List
+            <Tuple<int, string, double, double>>
         {
-            new Tuple<string, double, double>("N30", 1.1, 808.0),
-            new Tuple<string, double, double>("N33", 1.155, 848.0),
-            new Tuple<string, double, double>("N35", 1.19, 887.5),
-            new Tuple<string, double, double>("N38", 1.24, 887.5),
-            new Tuple<string, double, double>("N40", 1.275, 927.5),
-            new Tuple<string, double, double>("N42", 1.305, 927.5),
-            new Tuple<string, double, double>("N45", 1.345, 927.5),
-            new Tuple<string, double, double>("N48", 1.395, 927.5),
-            new Tuple<string, double, double>("N50", 1.430, 927.5),
-            new Tuple<string, double, double>("N52", 1.445, 927.5)
+            new Tuple<int, string, double, double>(0, "N30", 1.1, 808.0),
+            new Tuple<int, string, double, double>(1, "N33", 1.155, 848.0),
+            new Tuple<int, string, double, double>(2, "N35", 1.19, 887.5),
+            new Tuple<int, string, double, double>(3, "N38", 1.24, 887.5),
+            new Tuple<int, string, double, double>(4, "N40", 1.275, 927.5),
+            new Tuple<int, string, double, double>(5, "N42", 1.305, 927.5),
+            new Tuple<int, string, double, double>(6, "N45", 1.345, 927.5),
+            new Tuple<int, string, double, double>(7, "N48", 1.395, 927.5),
+            new Tuple<int, string, double, double>(8, "N50", 1.430, 927.5),
+            new Tuple<int, string, double, double>(9, "N52", 1.445, 927.5)
         };
 
         /// <summary>
@@ -743,33 +439,316 @@ namespace AxialFluxGeneratorDesigner.Calculations
         /// <summary>
         ///     the magnet thickness (mm).
         /// </summary>
-        public double MagnetThickness { get; set; } = 10;
+        public GeneratorProperty<double> MagnetThickness = new GeneratorProperty<double>(nameof(MagnetThickness), 10, 1,
+            50);
 
         /// <summary>
         ///     The magnet width (mm).
         /// </summary>
-        public double MagnetWidth { get; set; } = 46;
+        public GeneratorProperty<double> MagnetWidth = new GeneratorProperty<double>(nameof(MagnetWidth), 46, 1, 150);
 
         /// <summary>
-        ///     TODO: Add documentation!
+        ///     The ratio between the inner and outer ratio.
         /// </summary>
         public double RotorInnerOuterRadiusRatio { get; set; }
 
         /// <summary>
-        ///     TODO: Add documentation!
+        ///     The inner radius (mm) measured from the center to the bottom of the magnet sequence.
         /// </summary>
         public double RotorInnerRadius { get; set; }
 
         /// <summary>
-        ///     TODO: Add documentation!
+        ///     The outer radius (mm) measured from the center to the top of the magnet sequence.
         /// </summary>
         public double RotorOuterRadius { get; set; }
 
         /// <summary>
-        ///     TODO: Add documentation!
+        ///     The thickness (mm) of the steel rotor plate. To this plate the magnets are mounted.
         /// </summary>
         public double RotorThickness { get; set; }
 
+        /// <summary>
+        ///     The angle in between two magnets.
+        /// </summary>
+        private double MagnetBetweenSegmentAngle { get; set; }
+
+        /// <summary>
+        ///     The angle from the center of the stator that the coil covers.
+        /// </summary>
+        public double CoilAngle { get; set; }
+
+        /// <summary>
+        ///     The radius of the inner coil rounding.
+        /// </summary>
+        private double CoilInnerRadius { get; } = 5;
+
+        /// <summary>
+        ///     The radius of the inner coil rounding.
+        /// </summary>
+        public double CoilAverageTurnLength { get; set; }
+
+        /// <summary>
+        ///     The surface of a single coil side (cm2)
+        /// </summary>
+        public double CoilSideSurface { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilInnerTop { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilInnerBottom { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilInnerSide { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilOuterTop { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilOuterBottom { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public double CoilOuterSide { get; set; }
+
         #endregion Rotor properties
+
+        #region Rectifier properties
+
+        /// <summary>
+        ///     The rectifier diode voltage drop is the voltage drop caused by the passive components of the AD to DC rectifier.
+        /// </summary>
+        public double RectifierDiodeVoltageDrop { get; } = 1.4;
+
+        #endregion Rectifier properties
+
+        /// <summary>
+        ///     This method can be called to update all calculations.
+        ///     The principle is that the generator is driven by an external force applied to the generator shaft. This force is
+        ///     expressed and RPM and has a minimal and maximal value. The input RPM depends on various factors.
+        ///     To accommodate the user there is the possibility to calculate the RPM values using an turbine. However, there is
+        ///     also the possibility to enter direct RPM values.This can be useful if another device is used (e.g. water wheel or
+        ///     Stirling engine).
+        ///     The input devices are called the front end of the generator or generator input. Besides two input options there is
+        ///     also the possibility to store/return the produced energy. There is the possibility to store the produced energy in
+        ///     a battery or the produced energy is returned to the grid using an inverter.
+        ///     In case of a battery we only know the minimal voltage we want (the battery voltage). The maximal depends on the
+        ///     wind. Based on those.....
+        ///     - Wind turbine + battery calculations:
+        ///     Calculate the turbine radius.
+        ///     Calculate the min and max rpm based on the wind speed and tip ratio.
+        ///     Calculate the minimal phase voltage using the battery voltage (e.g. 48 volt)
+        ///     Calculate the maximal phase voltage by multiplying the minimal phase voltage with the ratio between the max and min
+        ///     rpm (RPM Max / RPM Min).
+        ///     - Other + battery calculations:
+        ///     Calculate the maximal phase voltage by multiplying the minimal phase voltage (e.g. 48 volt) with the ratio between
+        ///     the set max and min rpm (RPM Max / RPM Min).
+        ///     - Wind turbine + grid calculations:
+        ///     Calculate the turbine radius.
+        ///     Calculate the minimal AND maximal phase voltage using the inverter min and max voltages.
+        ///     Calculate the minimal rpm by multiplying the minimal rpm with the ratio between the min and max phase voltage
+        ///     (Phase voltage min / Phase voltage max).
+        ///     Calculate the minimal wind speed based on this minimal RPM value.
+        ///     - Other + grid calculations:
+        ///     Calculate the minimal AND maximal phase voltage using the inverter min and max voltages.
+        ///     Calculate the minimal rpm by multiplying the minimal rpm with the ratio between the min and max phase voltage
+        ///     (Phase voltage min / Phase voltage max).
+        ///     Calculate the minimal wind speed based on this minimal RPM value.
+        /// </summary>
+        public void UpdateCalculations(bool debug)
+        {
+            var running = true;
+            var counter = 0;
+            var previousPhaseVoltageMin = 100000.00;
+
+            while(running)
+            {
+                var voltageDrop = RectifierDiodeVoltageDrop + RectifierWireVoltageDrop +
+                                  Stator.CalculateDcVoltage(PhaseWireVoltageDrop);
+
+                //Battery connection
+                if ((int) GeneratorEnergyStorageConnection.Value == 0)
+                {
+                    //Turbine
+                    if ((int) GeneratorFrontEnd.Value == 0)
+                    {
+                        
+                        PhaseVoltageMin = Stator.CalculatePhaseVoltage(DcBatteryVoltage.Value, voltageDrop);
+                        TurbineRotorRadius = FrontEndCalculations.CalculateTurbineRotorRadius(GeneratorPower.Value,
+                            TurbineAirDensity.Value,
+                            TurbineMaximumPowerCoefficient.Value, TurbineWindspeedMax.Value, GeneratorEfficiency.Value);
+                        FrontEndRpmMin.Value =
+                            FrontEndCalculations.CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMin.Value,
+                                TurbineSpeedTipRatioMin.Value,
+                                TurbineRotorRadius);
+                        FrontEndRpmMax.Value =
+                            FrontEndCalculations.CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax.Value,
+                                TurbineSpeedTipRatioMax.Value, TurbineRotorRadius);
+                        PhaseVoltageMax = FrontEndCalculations.CalculateBatteryVoltage(FrontEndRpmMin.Value,
+                            FrontEndRpmMax.Value,
+                            PhaseVoltageMin);
+                    }
+                    //Other
+                    else if ((int) GeneratorFrontEnd.Value == 1)
+                    {
+                        PhaseVoltageMin =
+                            Stator.CalculatePhaseVoltage(DcBatteryVoltage.Value,voltageDrop);
+                        PhaseVoltageMax =
+                            FrontEndCalculations.CalculateBatteryVoltage(FrontEndRpmMin.Value, FrontEndRpmMax.Value,
+                                PhaseVoltageMin);
+                    }
+                }
+                //Grid connection
+                else if ((int) GeneratorEnergyStorageConnection.Value == 1)
+                {
+                    //Turbine
+                    if ((int) GeneratorFrontEnd.Value == 0)
+                    {
+                        PhaseVoltageMin =
+                            Stator.CalculatePhaseVoltage(DcInverterVoltageMin.Value,voltageDrop);
+                        PhaseVoltageMax =
+                            Stator.CalculatePhaseVoltage(DcInverterVoltageMax.Value, voltageDrop);
+                        TurbineRotorRadius = FrontEndCalculations.CalculateTurbineRotorRadius(GeneratorPower.Value,
+                            TurbineAirDensity.Value,
+                            TurbineMaximumPowerCoefficient.Value, TurbineWindspeedMax.Value, GeneratorEfficiency.Value);
+                        FrontEndRpmMax.Value =
+                            FrontEndCalculations.CalculateTurbineOptimalRotationSpeed(TurbineWindspeedMax.Value,
+                                TurbineSpeedTipRatioMax.Value, TurbineRotorRadius);
+                        FrontEndRpmMin.Value = FrontEndCalculations.CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax,
+                            (int) FrontEndRpmMax.Value);
+                        TurbineWindspeedMin.Value =
+                            FrontEndCalculations.CalculateTurbineOptimalWindSpeed(FrontEndRpmMin.Value,
+                                TurbineRotorRadius,
+                                TurbineSpeedTipRatioMin.Value);
+                    }
+                    //Other
+                    else if ((int) GeneratorFrontEnd.Value == 1)
+                    {
+                        PhaseVoltageMin =
+                            Stator.CalculatePhaseVoltage(DcInverterVoltageMin.Value, voltageDrop);
+                        PhaseVoltageMax =
+                            Stator.CalculatePhaseVoltage(DcInverterVoltageMax.Value, voltageDrop);
+                        FrontEndRpmMin.Value = FrontEndCalculations.CalculateGridRpm(PhaseVoltageMin, PhaseVoltageMax,
+                            (int) FrontEndRpmMax.Value);
+                    }
+                }
+
+                if (Math.Abs(PhaseVoltageMin - previousPhaseVoltageMin) < 0.001)
+                {
+                    running = false;
+                }
+
+                MaxPhaseCurrent = Stator.CalculateMaximumPhaseCurrent(GeneratorPower.Value, PhaseVoltageMax,
+                    GeneratorEfficiency.Value);
+
+                //Calculate stator phase wire voltage drop
+                PhaseWireVoltageDrop = Stator.VoltageDrop(PhaseWireLength.Value, PhaseWireDiameter.Value,
+                    MaxPhaseCurrent, 3);
+
+                PhaseWireResistance = Stator.CalculateWireResistance(PhaseWireLength.Value, PhaseWireDiameter.Value);
+
+                //Calculate rectifier phase wire drop
+                RectifierWireVoltageDrop = Stator.VoltageDrop(RectifierWireLength.Value, RectifierWireDiameter.Value,
+                    MaxPhaseCurrent, 1);
+
+                RectifierWireResistance = Stator.CalculateWireResistance(RectifierWireLength.Value,
+                    RectifierWireDiameter.Value);
+
+                previousPhaseVoltageMin = PhaseVoltageMin;
+                counter += 1;
+            }
+
+            FrontEndTorque = FrontEndCalculations.CalculateTorque(GeneratorPower.Value, (int)FrontEndRpmMax.Value);
+
+            CoilCount = Stator.CalculateCoilCount(PhaseCount, (int)CoilsPerPhase.Value);
+
+            MagnetCount = Rotor.CalculateMagnetCount(CoilCount);
+
+            RotorThickness = MagnetThickness.Value;
+
+            CoilThickness = Stator.CalculateStatorThickness(MagnetThickness.Value, MechamicalGap.Value);
+
+            MagnetFluxDensity = Rotor.CalculateMagnetFluxDensity(MagnetRemanentFluxDensity,
+                MagnetCoerciveFieldStrength,
+                MagnetThickness.Value, MechamicalGap.Value);
+
+            MagnetPoleFlux = Rotor.CalculateMaximumPoleFlux(MagnetFluxDensity, MagnetWidth.Value, MagnetHeight.Value);
+
+            CoilTurns = Stator.CalculateCoilWindings(PhaseVoltageMin, MagnetCount, FrontEndRpmMin.Value,
+                (int)CoilsPerPhase.Value,
+                MagnetPoleFlux, CoilWindingCoefficient);
+
+            CoilLegWidth = Stator.CalculateCoilLegWidthMod(MaxPhaseCurrent, CoilTurns, CoilThickness,
+                MaxCurrentDensity.Value, CoilFillFactor.Value);
+
+            CoilCrossSectionalArea = Stator.CalculateCoilCrossSectionalArea(CoilLegWidth, CoilThickness,
+                CoilTurns,
+                CoilFillFactor.Value);
+
+            CoilWireDiameter = Stator.CalculateCoilWireDiameter(CoilCrossSectionalArea);
+
+            MagnetPoleToPolePitch = Rotor.CalculateMagnetPoleToPolePitch(MagnetPoleArcToPolePitchRatio.Value,
+                MagnetWidth.Value);
+
+            MagnetBetweenDistance = Rotor.CalculateBetweenPoleDistance(MagnetPoleToPolePitch, MagnetWidth.Value);
+
+            MagnetTotalSegmentAngle = Rotor.CalculateMagnetCentralAngle(MagnetCount);
+
+            MagnetSegmentAngle = Rotor.CalculateMagnetSegmentAngle(MagnetTotalSegmentAngle,
+                MagnetPoleArcToPolePitchRatio.Value);
+
+            MagnetBetweenSegmentAngle = Rotor.CalculateBetweenMagnetSegmentAngle(MagnetTotalSegmentAngle,
+                MagnetSegmentAngle);
+
+            RotorInnerRadius = Rotor.CalculateRotorInnerRadius(MagnetWidth.Value, MagnetSegmentAngle);
+
+            RotorOuterRadius = Rotor.CalculateRotorOuterRadius(RotorInnerRadius, MagnetHeight.Value);
+
+            RotorInnerOuterRadiusRatio = Rotor.CalculateRotorRadiusRatio(RotorInnerRadius, RotorOuterRadius);
+
+            StatorInnerRadius = Stator.CalculateStatorInnerRadius(RotorInnerRadius, CoilLegWidth);
+
+            StatorOuterRadius = Stator.CalculateStatorOuterRadius(RotorOuterRadius, CoilLegWidth);
+
+            CoilAngle = StatorDimensionsStatic.CalculateCentralCoilAngle(CoilCount);
+
+            var coilInnerDimensions = StatorDimensionsDynamic.CalculateCoilInnerDimensionsAngular(CoilCount,
+                RotorInnerRadius, RotorOuterRadius, CoilLegWidth, BetweenCoilDistance.Value);
+
+            CoilInnerTop = coilInnerDimensions.Item3;
+
+            CoilInnerBottom = coilInnerDimensions.Item4;
+
+            CoilInnerSide = coilInnerDimensions.Item5;
+
+            var coilOuterDimensions = StatorDimensionsDynamic.CalculateCoilOuterDimensionsAngular(CoilCount,
+                StatorInnerRadius, StatorOuterRadius, BetweenCoilDistance.Value);
+
+            CoilOuterTop = coilOuterDimensions.Item3;
+
+            CoilOuterBottom = coilOuterDimensions.Item4;
+
+            CoilOuterSide = coilOuterDimensions.Item5;
+
+            var coilRoundedVariables = StatorDimensionsDynamic.CalculateCoilRoundedVariables(CoilInnerRadius,
+                CoilLegWidth, CoilAngle, coilInnerDimensions, coilOuterDimensions);
+
+            CoilAverageTurnLength = coilRoundedVariables.Item3;
+
+            CoilWireLength = Stator.CalculateCoilWireLength(CoilAverageTurnLength, CoilTurns);
+
+            CoilResistance = Stator.CalculateWireResistance(CoilWireLength, CoilWireDiameter);
+
+            CoilInductance = Stator.CalculateCoilInductance(CoilTurns, CoilWireDiameter, CoilThickness);
+
+            CoilSideSurface = coilRoundedVariables.Item4;
+
+            CoilHeatCoefficient = Stator.CalculateCoilHeatCoefficient(CoilSideSurface, CoilResistance, MaxPhaseCurrent);
+        }
     }
 }

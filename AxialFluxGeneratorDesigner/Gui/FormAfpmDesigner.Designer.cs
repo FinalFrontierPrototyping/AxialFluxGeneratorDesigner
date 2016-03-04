@@ -1,4 +1,4 @@
-﻿namespace AxialFluxGeneratorDesigner
+﻿namespace AxialFluxGeneratorDesigner.Gui
 {
     partial class FormAfpmDesigner
     {
@@ -29,13 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea17 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend17 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea18 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend18 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAfpmDesigner));
             this.numCoilsPerPhaseCount = new System.Windows.Forms.NumericUpDown();
             this.numEnergyStorageVoltageMax = new System.Windows.Forms.NumericUpDown();
             this.lblCoilsPerPhaseCount = new System.Windows.Forms.Label();
@@ -133,8 +134,6 @@
             this.lblStatorOuterRadiusValue = new System.Windows.Forms.Label();
             this.lblStatorInnerRadius = new System.Windows.Forms.Label();
             this.lblStatorOuterRadius = new System.Windows.Forms.Label();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel16 = new System.Windows.Forms.TableLayoutPanel();
             this.lblCoilSideSurfaceValue = new System.Windows.Forms.Label();
             this.lblCoilSideSurface = new System.Windows.Forms.Label();
@@ -192,6 +191,8 @@
             this.lblInverterVoltageMin = new System.Windows.Forms.Label();
             this.lblShaftPower = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.label5 = new System.Windows.Forms.Label();
             this.tabIterator = new System.Windows.Forms.TabPage();
             this.btnIterate = new System.Windows.Forms.Button();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
@@ -284,6 +285,12 @@
             this.tab3D = new System.Windows.Forms.TabPage();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.numCoilsPerPhaseCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numEnergyStorageVoltageMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMagnetThickness)).BeginInit();
@@ -306,7 +313,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numRectifierWireLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPhaseWireDiameter)).BeginInit();
             this.tlpStatorCoils.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel16.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBetweenCoilDistance)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
@@ -323,6 +329,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numGeneratorEfficiency)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.tlpEnergyStorageConnection.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             this.tabIterator.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numRectifierWireDiameterUpper)).BeginInit();
@@ -376,6 +383,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.chartData2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartData1)).BeginInit();
             this.tab3D.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // numCoilsPerPhaseCount
@@ -383,12 +391,7 @@
             this.numCoilsPerPhaseCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.numCoilsPerPhaseCount.Location = new System.Drawing.Point(159, 25);
             this.numCoilsPerPhaseCount.Maximum = new decimal(new int[] {
-            21,
-            0,
-            0,
-            0});
-            this.numCoilsPerPhaseCount.Minimum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
@@ -408,7 +411,7 @@
             this.numEnergyStorageVoltageMax.DecimalPlaces = 2;
             this.numEnergyStorageVoltageMax.Location = new System.Drawing.Point(150, 29);
             this.numEnergyStorageVoltageMax.Maximum = new decimal(new int[] {
-            10000,
+            100000,
             0,
             0,
             0});
@@ -420,7 +423,7 @@
             0,
             0,
             0});
-            this.numEnergyStorageVoltageMax.ValueChanged += new System.EventHandler(this.numDCVoltage_ValueChanged);
+            this.numEnergyStorageVoltageMax.ValueChanged += new System.EventHandler(this.numInverterVoltageMax_ValueChanged);
             // 
             // lblCoilsPerPhaseCount
             // 
@@ -449,12 +452,7 @@
             this.numMagnetThickness.DecimalPlaces = 2;
             this.numMagnetThickness.Location = new System.Drawing.Point(159, 25);
             this.numMagnetThickness.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.numMagnetThickness.Minimum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
@@ -484,12 +482,7 @@
             this.numMagnetWidth.DecimalPlaces = 2;
             this.numMagnetWidth.Location = new System.Drawing.Point(159, 50);
             this.numMagnetWidth.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.numMagnetWidth.Minimum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
@@ -511,7 +504,7 @@
             this.lblMagnetHeight.Name = "lblMagnetHeight";
             this.lblMagnetHeight.Size = new System.Drawing.Size(100, 13);
             this.lblMagnetHeight.TabIndex = 11;
-            this.lblMagnetHeight.Text = "Magnet length (mm)";
+            this.lblMagnetHeight.Text = "Magnet height (mm)";
             // 
             // numMagnetHeight
             // 
@@ -519,12 +512,7 @@
             this.numMagnetHeight.DecimalPlaces = 2;
             this.numMagnetHeight.Location = new System.Drawing.Point(159, 75);
             this.numMagnetHeight.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.numMagnetHeight.Minimum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
@@ -564,12 +552,7 @@
             this.numMechanicalGap.DecimalPlaces = 2;
             this.numMechanicalGap.Location = new System.Drawing.Point(150, 79);
             this.numMechanicalGap.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.numMechanicalGap.Minimum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
@@ -637,7 +620,7 @@
             // 
             this.lblCoilLegWidthValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilLegWidthValue.AutoSize = true;
-            this.lblCoilLegWidthValue.Location = new System.Drawing.Point(159, 92);
+            this.lblCoilLegWidthValue.Location = new System.Drawing.Point(159, 117);
             this.lblCoilLegWidthValue.Name = "lblCoilLegWidthValue";
             this.lblCoilLegWidthValue.Size = new System.Drawing.Size(34, 13);
             this.lblCoilLegWidthValue.TabIndex = 26;
@@ -647,7 +630,7 @@
             // 
             this.lblCoilTurnsValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilTurnsValue.AutoSize = true;
-            this.lblCoilTurnsValue.Location = new System.Drawing.Point(159, 71);
+            this.lblCoilTurnsValue.Location = new System.Drawing.Point(159, 25);
             this.lblCoilTurnsValue.Name = "lblCoilTurnsValue";
             this.lblCoilTurnsValue.Size = new System.Drawing.Size(19, 13);
             this.lblCoilTurnsValue.TabIndex = 30;
@@ -657,7 +640,7 @@
             // 
             this.lblCoilTurns.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilTurns.AutoSize = true;
-            this.lblCoilTurns.Location = new System.Drawing.Point(4, 71);
+            this.lblCoilTurns.Location = new System.Drawing.Point(4, 25);
             this.lblCoilTurns.Name = "lblCoilTurns";
             this.lblCoilTurns.Size = new System.Drawing.Size(50, 13);
             this.lblCoilTurns.TabIndex = 29;
@@ -707,7 +690,7 @@
             // 
             this.lblCoilHeatCoefficientValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilHeatCoefficientValue.AutoSize = true;
-            this.lblCoilHeatCoefficientValue.Location = new System.Drawing.Point(159, 25);
+            this.lblCoilHeatCoefficientValue.Location = new System.Drawing.Point(159, 155);
             this.lblCoilHeatCoefficientValue.Name = "lblCoilHeatCoefficientValue";
             this.lblCoilHeatCoefficientValue.Size = new System.Drawing.Size(28, 13);
             this.lblCoilHeatCoefficientValue.TabIndex = 36;
@@ -717,7 +700,7 @@
             // 
             this.lblCoilWireDiameterValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilWireDiameterValue.AutoSize = true;
-            this.lblCoilWireDiameterValue.Location = new System.Drawing.Point(159, 92);
+            this.lblCoilWireDiameterValue.Location = new System.Drawing.Point(159, 139);
             this.lblCoilWireDiameterValue.Name = "lblCoilWireDiameterValue";
             this.lblCoilWireDiameterValue.Size = new System.Drawing.Size(28, 13);
             this.lblCoilWireDiameterValue.TabIndex = 38;
@@ -727,7 +710,7 @@
             // 
             this.lblCoilWireDiameter.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilWireDiameter.AutoSize = true;
-            this.lblCoilWireDiameter.Location = new System.Drawing.Point(4, 92);
+            this.lblCoilWireDiameter.Location = new System.Drawing.Point(4, 139);
             this.lblCoilWireDiameter.Name = "lblCoilWireDiameter";
             this.lblCoilWireDiameter.Size = new System.Drawing.Size(114, 13);
             this.lblCoilWireDiameter.TabIndex = 37;
@@ -907,15 +890,9 @@
             // numEnergyStoragePower
             // 
             this.numEnergyStoragePower.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.numEnergyStoragePower.DecimalPlaces = 2;
             this.numEnergyStoragePower.Location = new System.Drawing.Point(150, 54);
             this.numEnergyStoragePower.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numEnergyStoragePower.Minimum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
@@ -945,12 +922,7 @@
             this.numEnergyStorageVoltageMin.DecimalPlaces = 2;
             this.numEnergyStorageVoltageMin.Location = new System.Drawing.Point(150, 4);
             this.numEnergyStorageVoltageMin.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numEnergyStorageVoltageMin.Minimum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
@@ -991,12 +963,7 @@
             this.numTipRatioCutIn.DecimalPlaces = 2;
             this.numTipRatioCutIn.Location = new System.Drawing.Point(150, 104);
             this.numTipRatioCutIn.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numTipRatioCutIn.Minimum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
@@ -1026,12 +993,7 @@
             this.numTipRatioNom.DecimalPlaces = 2;
             this.numTipRatioNom.Location = new System.Drawing.Point(150, 29);
             this.numTipRatioNom.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numTipRatioNom.Minimum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
@@ -1066,15 +1028,10 @@
             131072});
             this.numMaximumPowerCoefficient.Location = new System.Drawing.Point(150, 179);
             this.numMaximumPowerCoefficient.Maximum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
-            this.numMaximumPowerCoefficient.Minimum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            131072});
             this.numMaximumPowerCoefficient.Name = "numMaximumPowerCoefficient";
             this.numMaximumPowerCoefficient.Size = new System.Drawing.Size(73, 20);
             this.numMaximumPowerCoefficient.TabIndex = 7;
@@ -1139,7 +1096,7 @@
             // 
             this.lblCoilResistanceValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilResistanceValue.AutoSize = true;
-            this.lblCoilResistanceValue.Location = new System.Drawing.Point(159, 160);
+            this.lblCoilResistanceValue.Location = new System.Drawing.Point(159, 134);
             this.lblCoilResistanceValue.Name = "lblCoilResistanceValue";
             this.lblCoilResistanceValue.Size = new System.Drawing.Size(28, 13);
             this.lblCoilResistanceValue.TabIndex = 98;
@@ -1149,7 +1106,7 @@
             // 
             this.lblCoilResistance.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilResistance.AutoSize = true;
-            this.lblCoilResistance.Location = new System.Drawing.Point(4, 160);
+            this.lblCoilResistance.Location = new System.Drawing.Point(4, 134);
             this.lblCoilResistance.Name = "lblCoilResistance";
             this.lblCoilResistance.Size = new System.Drawing.Size(106, 13);
             this.lblCoilResistance.TabIndex = 97;
@@ -1162,10 +1119,10 @@
             this.tabGenerator.Controls.Add(this.tabCharts);
             this.tabGenerator.Controls.Add(this.tab3D);
             this.tabGenerator.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.tabGenerator.Location = new System.Drawing.Point(2, 5);
+            this.tabGenerator.Location = new System.Drawing.Point(4, 27);
             this.tabGenerator.Name = "tabGenerator";
             this.tabGenerator.SelectedIndex = 0;
-            this.tabGenerator.Size = new System.Drawing.Size(1082, 660);
+            this.tabGenerator.Size = new System.Drawing.Size(1082, 665);
             this.tabGenerator.TabIndex = 101;
             // 
             // tabDesigner
@@ -1173,21 +1130,20 @@
             this.tabDesigner.Controls.Add(this.tableLayoutPanel2);
             this.tabDesigner.Controls.Add(this.tableLayoutPanel7);
             this.tabDesigner.Controls.Add(this.tlpStatorCoils);
-            this.tabDesigner.Controls.Add(this.tableLayoutPanel4);
             this.tabDesigner.Controls.Add(this.tableLayoutPanel16);
             this.tabDesigner.Controls.Add(this.tableLayoutPanel3);
             this.tabDesigner.Controls.Add(this.tableLayoutPanel9);
             this.tabDesigner.Controls.Add(this.tableLayoutPanel8);
             this.tabDesigner.Controls.Add(this.tableLayoutPanel6);
+            this.tabDesigner.Controls.Add(this.tableLayoutPanel4);
             this.tabDesigner.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabDesigner.Location = new System.Drawing.Point(4, 22);
             this.tabDesigner.Name = "tabDesigner";
             this.tabDesigner.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDesigner.Size = new System.Drawing.Size(1074, 634);
+            this.tabDesigner.Size = new System.Drawing.Size(1074, 639);
             this.tabDesigner.TabIndex = 0;
             this.tabDesigner.Text = "Generator Designer";
             this.tabDesigner.UseVisualStyleBackColor = true;
-            this.tabDesigner.Click += new System.EventHandler(this.tabDesigner_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -1196,32 +1152,29 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.tableLayoutPanel2.Controls.Add(this.label11, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.label21, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.lblCoilHeatCoefficientValue, 1, 1);
-            this.tableLayoutPanel2.Controls.Add(this.label20, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.numCoilFillFactor, 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.lblCoilTurns, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.lblCoilTurnsValue, 1, 3);
-            this.tableLayoutPanel2.Controls.Add(this.lblCoilWireDiameter, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(this.label10, 0, 5);
-            this.tableLayoutPanel2.Controls.Add(this.lblCoilWireLength, 0, 6);
-            this.tableLayoutPanel2.Controls.Add(this.lblCoilWireDiameterValue, 1, 4);
-            this.tableLayoutPanel2.Controls.Add(this.lblCoilWireLengthValue, 1, 6);
-            this.tableLayoutPanel2.Controls.Add(this.numMaxCoilCurrentDensity, 1, 5);
-            this.tableLayoutPanel2.Controls.Add(this.lblCoilResistance, 0, 7);
-            this.tableLayoutPanel2.Controls.Add(this.lblCoilResistanceValue, 1, 7);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(247, 124);
+            this.tableLayoutPanel2.Controls.Add(this.lblCoilTurns, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.lblCoilTurnsValue, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.lblCoilWireDiameterValue, 1, 6);
+            this.tableLayoutPanel2.Controls.Add(this.lblStatorThicknessValue, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.lblCoilWireDiameter, 0, 6);
+            this.tableLayoutPanel2.Controls.Add(this.label50, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.label10, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.numCoilFillFactor, 1, 4);
+            this.tableLayoutPanel2.Controls.Add(this.numMaxCoilCurrentDensity, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(this.label20, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.label49, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.lblCoilLegWidthValue, 1, 5);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(498, 124);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 8;
+            this.tableLayoutPanel2.RowCount = 7;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(240, 179);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(240, 158);
             this.tableLayoutPanel2.TabIndex = 129;
             // 
             // label11
@@ -1239,7 +1192,7 @@
             // 
             this.label21.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(4, 25);
+            this.label21.Location = new System.Drawing.Point(4, 155);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(117, 13);
             this.label21.TabIndex = 111;
@@ -1249,7 +1202,7 @@
             // 
             this.label20.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(4, 48);
+            this.label20.Location = new System.Drawing.Point(4, 94);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(66, 13);
             this.label20.TabIndex = 109;
@@ -1265,17 +1218,12 @@
             0,
             0,
             131072});
-            this.numCoilFillFactor.Location = new System.Drawing.Point(159, 46);
+            this.numCoilFillFactor.Location = new System.Drawing.Point(159, 92);
             this.numCoilFillFactor.Maximum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
-            this.numCoilFillFactor.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
             this.numCoilFillFactor.Name = "numCoilFillFactor";
             this.numCoilFillFactor.Size = new System.Drawing.Size(73, 20);
             this.numCoilFillFactor.TabIndex = 110;
@@ -1290,7 +1238,7 @@
             // 
             this.label10.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(4, 115);
+            this.label10.Location = new System.Drawing.Point(4, 69);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(138, 13);
             this.label10.TabIndex = 108;
@@ -1300,7 +1248,7 @@
             // 
             this.lblCoilWireLength.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilWireLength.AutoSize = true;
-            this.lblCoilWireLength.Location = new System.Drawing.Point(4, 138);
+            this.lblCoilWireLength.Location = new System.Drawing.Point(4, 92);
             this.lblCoilWireLength.Name = "lblCoilWireLength";
             this.lblCoilWireLength.Size = new System.Drawing.Size(95, 13);
             this.lblCoilWireLength.TabIndex = 102;
@@ -1310,7 +1258,7 @@
             // 
             this.lblCoilWireLengthValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilWireLengthValue.AutoSize = true;
-            this.lblCoilWireLengthValue.Location = new System.Drawing.Point(159, 138);
+            this.lblCoilWireLengthValue.Location = new System.Drawing.Point(159, 92);
             this.lblCoilWireLengthValue.Name = "lblCoilWireLengthValue";
             this.lblCoilWireLengthValue.Size = new System.Drawing.Size(28, 13);
             this.lblCoilWireLengthValue.TabIndex = 103;
@@ -1325,12 +1273,12 @@
             0,
             0,
             65536});
-            this.numMaxCoilCurrentDensity.Location = new System.Drawing.Point(159, 113);
-            this.numMaxCoilCurrentDensity.Minimum = new decimal(new int[] {
-            1,
+            this.numMaxCoilCurrentDensity.Location = new System.Drawing.Point(159, 67);
+            this.numMaxCoilCurrentDensity.Maximum = new decimal(new int[] {
+            100000,
             0,
             0,
-            65536});
+            0});
             this.numMaxCoilCurrentDensity.Name = "numMaxCoilCurrentDensity";
             this.numMaxCoilCurrentDensity.Size = new System.Drawing.Size(73, 20);
             this.numMaxCoilCurrentDensity.TabIndex = 112;
@@ -1365,7 +1313,7 @@
             this.tableLayoutPanel7.Controls.Add(this.numPhaseWireDiameter, 1, 2);
             this.tableLayoutPanel7.Controls.Add(this.lblPhaseWireResistance1, 0, 2);
             this.tableLayoutPanel7.Controls.Add(this.label9, 0, 5);
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(739, 6);
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(252, 6);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 10;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -1398,7 +1346,7 @@
             this.numPhaseWireLength.DecimalPlaces = 2;
             this.numPhaseWireLength.Location = new System.Drawing.Point(159, 25);
             this.numPhaseWireLength.Maximum = new decimal(new int[] {
-            10000,
+            100000,
             0,
             0,
             0});
@@ -1483,7 +1431,7 @@
             65536});
             this.numRectifierWireDiameter.Location = new System.Drawing.Point(159, 163);
             this.numRectifierWireDiameter.Maximum = new decimal(new int[] {
-            10000,
+            100000,
             0,
             0,
             0});
@@ -1523,7 +1471,7 @@
             this.numRectifierWireLength.DecimalPlaces = 2;
             this.numRectifierWireLength.Location = new System.Drawing.Point(159, 138);
             this.numRectifierWireLength.Maximum = new decimal(new int[] {
-            10000,
+            100000,
             0,
             0,
             0});
@@ -1578,7 +1526,7 @@
             65536});
             this.numPhaseWireDiameter.Location = new System.Drawing.Point(159, 50);
             this.numPhaseWireDiameter.Maximum = new decimal(new int[] {
-            10000,
+            100000,
             0,
             0,
             0});
@@ -1629,7 +1577,7 @@
             this.tlpStatorCoils.Controls.Add(this.lblStatorOuterRadiusValue, 1, 4);
             this.tlpStatorCoils.Controls.Add(this.lblStatorInnerRadius, 0, 3);
             this.tlpStatorCoils.Controls.Add(this.lblStatorOuterRadius, 0, 4);
-            this.tlpStatorCoils.Location = new System.Drawing.Point(247, 6);
+            this.tlpStatorCoils.Location = new System.Drawing.Point(498, 6);
             this.tlpStatorCoils.Name = "tlpStatorCoils";
             this.tlpStatorCoils.RowCount = 5;
             this.tlpStatorCoils.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -1677,9 +1625,9 @@
             this.lblStatorInnerRadius.AutoSize = true;
             this.lblStatorInnerRadius.Location = new System.Drawing.Point(4, 71);
             this.lblStatorInnerRadius.Name = "lblStatorInnerRadius";
-            this.lblStatorInnerRadius.Size = new System.Drawing.Size(62, 13);
+            this.lblStatorInnerRadius.Size = new System.Drawing.Size(87, 13);
             this.lblStatorInnerRadius.TabIndex = 134;
-            this.lblStatorInnerRadius.Text = "Inner radius";
+            this.lblStatorInnerRadius.Text = "Inner radius (mm)";
             // 
             // lblStatorOuterRadius
             // 
@@ -1687,58 +1635,9 @@
             this.lblStatorOuterRadius.AutoSize = true;
             this.lblStatorOuterRadius.Location = new System.Drawing.Point(4, 93);
             this.lblStatorOuterRadius.Name = "lblStatorOuterRadius";
-            this.lblStatorOuterRadius.Size = new System.Drawing.Size(64, 13);
+            this.lblStatorOuterRadius.Size = new System.Drawing.Size(89, 13);
             this.lblStatorOuterRadius.TabIndex = 134;
-            this.lblStatorOuterRadius.Text = "Outer radius";
-            // 
-            // tableLayoutPanel4
-            // 
-            this.tableLayoutPanel4.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-            this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tableLayoutPanel4.Controls.Add(this.lblMagnetWidth, 0, 2);
-            this.tableLayoutPanel4.Controls.Add(this.numMagnetWidth, 1, 2);
-            this.tableLayoutPanel4.Controls.Add(this.lblMagnetHeight, 0, 3);
-            this.tableLayoutPanel4.Controls.Add(this.numMagnetHeight, 1, 3);
-            this.tableLayoutPanel4.Controls.Add(this.lblMagnetGrade, 0, 4);
-            this.tableLayoutPanel4.Controls.Add(this.cmbMagnetGrade, 1, 4);
-            this.tableLayoutPanel4.Controls.Add(this.lblMagnetRemanence, 0, 5);
-            this.tableLayoutPanel4.Controls.Add(this.lblMagnetRemanenceValue, 1, 5);
-            this.tableLayoutPanel4.Controls.Add(this.lblCoerciveFieldStrength, 0, 6);
-            this.tableLayoutPanel4.Controls.Add(this.numMagnetThickness, 1, 1);
-            this.tableLayoutPanel4.Controls.Add(this.lblCoerciveFieldStrengthValue, 1, 6);
-            this.tableLayoutPanel4.Controls.Add(this.lblMagnetFluxDensity, 0, 7);
-            this.tableLayoutPanel4.Controls.Add(this.lblMagnetFluxDensityValue, 1, 7);
-            this.tableLayoutPanel4.Controls.Add(this.lblMagnetFlux, 0, 8);
-            this.tableLayoutPanel4.Controls.Add(this.lblMagnetFluxValue, 1, 8);
-            this.tableLayoutPanel4.Controls.Add(this.lblMagnetThickness, 0, 1);
-            this.tableLayoutPanel4.Controls.Add(this.label5, 0, 0);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(493, 187);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 9;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(240, 207);
-            this.tableLayoutPanel4.TabIndex = 118;
-            // 
-            // label5
-            // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(4, 4);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(89, 13);
-            this.label5.TabIndex = 135;
-            this.label5.Text = "Rotor magnets";
+            this.lblStatorOuterRadius.Text = "Outer radius (mm)";
             // 
             // tableLayoutPanel16
             // 
@@ -1746,36 +1645,38 @@
             this.tableLayoutPanel16.ColumnCount = 2;
             this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tableLayoutPanel16.Controls.Add(this.lblCoilSideSurfaceValue, 1, 6);
-            this.tableLayoutPanel16.Controls.Add(this.lblCoilSideSurface, 0, 6);
-            this.tableLayoutPanel16.Controls.Add(this.label31, 0, 12);
-            this.tableLayoutPanel16.Controls.Add(this.label51, 0, 13);
-            this.tableLayoutPanel16.Controls.Add(this.label13, 0, 8);
-            this.tableLayoutPanel16.Controls.Add(this.lblCoilOuterBottomValue, 1, 9);
-            this.tableLayoutPanel16.Controls.Add(this.label52, 0, 14);
-            this.tableLayoutPanel16.Controls.Add(this.label32, 0, 9);
-            this.tableLayoutPanel16.Controls.Add(this.lblCoilOuterSideValue, 1, 10);
+            this.tableLayoutPanel16.Controls.Add(this.lblCoilWireLengthValue, 1, 4);
+            this.tableLayoutPanel16.Controls.Add(this.lblCoilResistanceValue, 1, 6);
+            this.tableLayoutPanel16.Controls.Add(this.lblCoilWireLength, 0, 4);
+            this.tableLayoutPanel16.Controls.Add(this.lblCoilResistance, 0, 6);
+            this.tableLayoutPanel16.Controls.Add(this.label31, 0, 13);
+            this.tableLayoutPanel16.Controls.Add(this.lblCoilHeatCoefficientValue, 1, 7);
+            this.tableLayoutPanel16.Controls.Add(this.label51, 0, 14);
+            this.tableLayoutPanel16.Controls.Add(this.label13, 0, 9);
+            this.tableLayoutPanel16.Controls.Add(this.lblCoilOuterBottomValue, 1, 10);
+            this.tableLayoutPanel16.Controls.Add(this.label52, 0, 15);
+            this.tableLayoutPanel16.Controls.Add(this.label32, 0, 10);
+            this.tableLayoutPanel16.Controls.Add(this.lblCoilOuterSideValue, 1, 11);
             this.tableLayoutPanel16.Controls.Add(this.label43, 0, 0);
-            this.tableLayoutPanel16.Controls.Add(this.label47, 0, 10);
-            this.tableLayoutPanel16.Controls.Add(this.label48, 0, 7);
-            this.tableLayoutPanel16.Controls.Add(this.lblCoilOuterTopValue, 1, 8);
-            this.tableLayoutPanel16.Controls.Add(this.lblStatorThicknessValue, 1, 3);
+            this.tableLayoutPanel16.Controls.Add(this.label47, 0, 11);
+            this.tableLayoutPanel16.Controls.Add(this.label48, 0, 8);
+            this.tableLayoutPanel16.Controls.Add(this.label21, 0, 7);
+            this.tableLayoutPanel16.Controls.Add(this.lblCoilOuterTopValue, 1, 9);
             this.tableLayoutPanel16.Controls.Add(this.label59, 0, 1);
             this.tableLayoutPanel16.Controls.Add(this.numBetweenCoilDistance, 1, 1);
             this.tableLayoutPanel16.Controls.Add(this.label55, 0, 2);
             this.tableLayoutPanel16.Controls.Add(this.lblCoilAngle, 1, 2);
-            this.tableLayoutPanel16.Controls.Add(this.label50, 0, 3);
-            this.tableLayoutPanel16.Controls.Add(this.label29, 0, 11);
-            this.tableLayoutPanel16.Controls.Add(this.lblInnerCoilBottomLengthValue, 1, 13);
-            this.tableLayoutPanel16.Controls.Add(this.lblInnerCoilTopLengthValue, 1, 12);
-            this.tableLayoutPanel16.Controls.Add(this.lblInnerCoilSideLengthValue, 1, 14);
-            this.tableLayoutPanel16.Controls.Add(this.label49, 0, 4);
-            this.tableLayoutPanel16.Controls.Add(this.lblCoilLegWidthValue, 1, 4);
-            this.tableLayoutPanel16.Controls.Add(this.lblAverageCoilTurnLength, 0, 5);
-            this.tableLayoutPanel16.Controls.Add(this.lblAverageCoilTurnLengthValue, 1, 5);
-            this.tableLayoutPanel16.Location = new System.Drawing.Point(247, 309);
+            this.tableLayoutPanel16.Controls.Add(this.label29, 0, 12);
+            this.tableLayoutPanel16.Controls.Add(this.lblInnerCoilBottomLengthValue, 1, 14);
+            this.tableLayoutPanel16.Controls.Add(this.lblInnerCoilTopLengthValue, 1, 13);
+            this.tableLayoutPanel16.Controls.Add(this.lblInnerCoilSideLengthValue, 1, 15);
+            this.tableLayoutPanel16.Controls.Add(this.lblAverageCoilTurnLength, 0, 3);
+            this.tableLayoutPanel16.Controls.Add(this.lblAverageCoilTurnLengthValue, 1, 3);
+            this.tableLayoutPanel16.Controls.Add(this.lblCoilSideSurface, 0, 5);
+            this.tableLayoutPanel16.Controls.Add(this.lblCoilSideSurfaceValue, 1, 5);
+            this.tableLayoutPanel16.Location = new System.Drawing.Point(498, 288);
             this.tableLayoutPanel16.Name = "tableLayoutPanel16";
-            this.tableLayoutPanel16.RowCount = 15;
+            this.tableLayoutPanel16.RowCount = 16;
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -1791,14 +1692,15 @@
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel16.Size = new System.Drawing.Size(240, 321);
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel16.Size = new System.Drawing.Size(240, 345);
             this.tableLayoutPanel16.TabIndex = 108;
             // 
             // lblCoilSideSurfaceValue
             // 
             this.lblCoilSideSurfaceValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilSideSurfaceValue.AutoSize = true;
-            this.lblCoilSideSurfaceValue.Location = new System.Drawing.Point(159, 134);
+            this.lblCoilSideSurfaceValue.Location = new System.Drawing.Point(159, 113);
             this.lblCoilSideSurfaceValue.Name = "lblCoilSideSurfaceValue";
             this.lblCoilSideSurfaceValue.Size = new System.Drawing.Size(22, 13);
             this.lblCoilSideSurfaceValue.TabIndex = 137;
@@ -1808,7 +1710,7 @@
             // 
             this.lblCoilSideSurface.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilSideSurface.AutoSize = true;
-            this.lblCoilSideSurface.Location = new System.Drawing.Point(4, 134);
+            this.lblCoilSideSurface.Location = new System.Drawing.Point(4, 113);
             this.lblCoilSideSurface.Name = "lblCoilSideSurface";
             this.lblCoilSideSurface.Size = new System.Drawing.Size(115, 13);
             this.lblCoilSideSurface.TabIndex = 136;
@@ -1818,7 +1720,7 @@
             // 
             this.label31.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(4, 260);
+            this.label31.Location = new System.Drawing.Point(4, 281);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(99, 13);
             this.label31.TabIndex = 118;
@@ -1828,7 +1730,7 @@
             // 
             this.label51.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(4, 281);
+            this.label51.Location = new System.Drawing.Point(4, 302);
             this.label51.Name = "label51";
             this.label51.Size = new System.Drawing.Size(119, 13);
             this.label51.TabIndex = 117;
@@ -1838,7 +1740,7 @@
             // 
             this.label13.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(4, 176);
+            this.label13.Location = new System.Drawing.Point(4, 197);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(99, 13);
             this.label13.TabIndex = 108;
@@ -1848,7 +1750,7 @@
             // 
             this.lblCoilOuterBottomValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilOuterBottomValue.AutoSize = true;
-            this.lblCoilOuterBottomValue.Location = new System.Drawing.Point(159, 197);
+            this.lblCoilOuterBottomValue.Location = new System.Drawing.Point(159, 218);
             this.lblCoilOuterBottomValue.Name = "lblCoilOuterBottomValue";
             this.lblCoilOuterBottomValue.Size = new System.Drawing.Size(28, 13);
             this.lblCoilOuterBottomValue.TabIndex = 103;
@@ -1858,7 +1760,7 @@
             // 
             this.label52.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(4, 303);
+            this.label52.Location = new System.Drawing.Point(4, 325);
             this.label52.Name = "label52";
             this.label52.Size = new System.Drawing.Size(98, 13);
             this.label52.TabIndex = 116;
@@ -1868,7 +1770,7 @@
             // 
             this.label32.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(4, 197);
+            this.label32.Location = new System.Drawing.Point(4, 218);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(119, 13);
             this.label32.TabIndex = 102;
@@ -1878,7 +1780,7 @@
             // 
             this.lblCoilOuterSideValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilOuterSideValue.AutoSize = true;
-            this.lblCoilOuterSideValue.Location = new System.Drawing.Point(159, 218);
+            this.lblCoilOuterSideValue.Location = new System.Drawing.Point(159, 239);
             this.lblCoilOuterSideValue.Name = "lblCoilOuterSideValue";
             this.lblCoilOuterSideValue.Size = new System.Drawing.Size(28, 13);
             this.lblCoilOuterSideValue.TabIndex = 98;
@@ -1899,7 +1801,7 @@
             // 
             this.label47.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(4, 218);
+            this.label47.Location = new System.Drawing.Point(4, 239);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(98, 13);
             this.label47.TabIndex = 97;
@@ -1910,17 +1812,17 @@
             this.label48.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label48.AutoSize = true;
             this.label48.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label48.Location = new System.Drawing.Point(4, 155);
+            this.label48.Location = new System.Drawing.Point(4, 176);
             this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(104, 13);
+            this.label48.Size = new System.Drawing.Size(129, 13);
             this.label48.TabIndex = 113;
-            this.label48.Text = "Outer dimensions";
+            this.label48.Text = "Coil Outer dimensions";
             // 
             // lblCoilOuterTopValue
             // 
             this.lblCoilOuterTopValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCoilOuterTopValue.AutoSize = true;
-            this.lblCoilOuterTopValue.Location = new System.Drawing.Point(159, 176);
+            this.lblCoilOuterTopValue.Location = new System.Drawing.Point(159, 197);
             this.lblCoilOuterTopValue.Name = "lblCoilOuterTopValue";
             this.lblCoilOuterTopValue.Size = new System.Drawing.Size(28, 13);
             this.lblCoilOuterTopValue.TabIndex = 36;
@@ -1930,7 +1832,7 @@
             // 
             this.lblStatorThicknessValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblStatorThicknessValue.AutoSize = true;
-            this.lblStatorThicknessValue.Location = new System.Drawing.Point(159, 71);
+            this.lblStatorThicknessValue.Location = new System.Drawing.Point(159, 46);
             this.lblStatorThicknessValue.Name = "lblStatorThicknessValue";
             this.lblStatorThicknessValue.Size = new System.Drawing.Size(19, 13);
             this.lblStatorThicknessValue.TabIndex = 28;
@@ -1949,8 +1851,12 @@
             // numBetweenCoilDistance
             // 
             this.numBetweenCoilDistance.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.numBetweenCoilDistance.DecimalPlaces = 2;
             this.numBetweenCoilDistance.Location = new System.Drawing.Point(159, 25);
+            this.numBetweenCoilDistance.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
             this.numBetweenCoilDistance.Name = "numBetweenCoilDistance";
             this.numBetweenCoilDistance.Size = new System.Drawing.Size(71, 20);
             this.numBetweenCoilDistance.TabIndex = 112;
@@ -1985,28 +1891,28 @@
             // 
             this.label50.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(4, 71);
+            this.label50.Location = new System.Drawing.Point(4, 46);
             this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(72, 13);
+            this.label50.Size = new System.Drawing.Size(97, 13);
             this.label50.TabIndex = 114;
-            this.label50.Text = "Coil thickness";
+            this.label50.Text = "Coil thickness (mm)";
             // 
             // label29
             // 
             this.label29.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label29.AutoSize = true;
             this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(4, 239);
+            this.label29.Location = new System.Drawing.Point(4, 260);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(102, 13);
+            this.label29.Size = new System.Drawing.Size(127, 13);
             this.label29.TabIndex = 115;
-            this.label29.Text = "Inner dimensions";
+            this.label29.Text = "Coil Inner dimensions";
             // 
             // lblInnerCoilBottomLengthValue
             // 
             this.lblInnerCoilBottomLengthValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblInnerCoilBottomLengthValue.AutoSize = true;
-            this.lblInnerCoilBottomLengthValue.Location = new System.Drawing.Point(159, 281);
+            this.lblInnerCoilBottomLengthValue.Location = new System.Drawing.Point(159, 302);
             this.lblInnerCoilBottomLengthValue.Name = "lblInnerCoilBottomLengthValue";
             this.lblInnerCoilBottomLengthValue.Size = new System.Drawing.Size(28, 13);
             this.lblInnerCoilBottomLengthValue.TabIndex = 119;
@@ -2016,7 +1922,7 @@
             // 
             this.lblInnerCoilTopLengthValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblInnerCoilTopLengthValue.AutoSize = true;
-            this.lblInnerCoilTopLengthValue.Location = new System.Drawing.Point(159, 260);
+            this.lblInnerCoilTopLengthValue.Location = new System.Drawing.Point(159, 281);
             this.lblInnerCoilTopLengthValue.Name = "lblInnerCoilTopLengthValue";
             this.lblInnerCoilTopLengthValue.Size = new System.Drawing.Size(28, 13);
             this.lblInnerCoilTopLengthValue.TabIndex = 120;
@@ -2026,7 +1932,7 @@
             // 
             this.lblInnerCoilSideLengthValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblInnerCoilSideLengthValue.AutoSize = true;
-            this.lblInnerCoilSideLengthValue.Location = new System.Drawing.Point(159, 303);
+            this.lblInnerCoilSideLengthValue.Location = new System.Drawing.Point(159, 325);
             this.lblInnerCoilSideLengthValue.Name = "lblInnerCoilSideLengthValue";
             this.lblInnerCoilSideLengthValue.Size = new System.Drawing.Size(28, 13);
             this.lblInnerCoilSideLengthValue.TabIndex = 121;
@@ -2036,7 +1942,7 @@
             // 
             this.label49.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(4, 92);
+            this.label49.Location = new System.Drawing.Point(4, 117);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(94, 13);
             this.label49.TabIndex = 25;
@@ -2046,7 +1952,7 @@
             // 
             this.lblAverageCoilTurnLength.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblAverageCoilTurnLength.AutoSize = true;
-            this.lblAverageCoilTurnLength.Location = new System.Drawing.Point(4, 113);
+            this.lblAverageCoilTurnLength.Location = new System.Drawing.Point(4, 71);
             this.lblAverageCoilTurnLength.Name = "lblAverageCoilTurnLength";
             this.lblAverageCoilTurnLength.Size = new System.Drawing.Size(102, 13);
             this.lblAverageCoilTurnLength.TabIndex = 134;
@@ -2056,7 +1962,7 @@
             // 
             this.lblAverageCoilTurnLengthValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblAverageCoilTurnLengthValue.AutoSize = true;
-            this.lblAverageCoilTurnLengthValue.Location = new System.Drawing.Point(159, 113);
+            this.lblAverageCoilTurnLengthValue.Location = new System.Drawing.Point(159, 71);
             this.lblAverageCoilTurnLengthValue.Name = "lblAverageCoilTurnLengthValue";
             this.lblAverageCoilTurnLengthValue.Size = new System.Drawing.Size(22, 13);
             this.lblAverageCoilTurnLengthValue.TabIndex = 135;
@@ -2083,7 +1989,7 @@
             this.tableLayoutPanel3.Controls.Add(this.lblMagnetDistance, 0, 6);
             this.tableLayoutPanel3.Controls.Add(this.lblMagnetDistanceValue, 1, 6);
             this.tableLayoutPanel3.Controls.Add(this.lblMagnetArcPolePitch, 0, 7);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(493, 6);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(252, 455);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 8;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -2119,15 +2025,10 @@
             131072});
             this.numPoleArcToPolePitchRatio.Location = new System.Drawing.Point(159, 151);
             this.numPoleArcToPolePitchRatio.Maximum = new decimal(new int[] {
-            7,
+            100000,
             0,
             0,
-            65536});
-            this.numPoleArcToPolePitchRatio.Minimum = new decimal(new int[] {
-            4,
-            0,
-            0,
-            65536});
+            0});
             this.numPoleArcToPolePitchRatio.Name = "numPoleArcToPolePitchRatio";
             this.numPoleArcToPolePitchRatio.Size = new System.Drawing.Size(73, 20);
             this.numPoleArcToPolePitchRatio.TabIndex = 134;
@@ -2152,7 +2053,7 @@
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(235, 306);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(240, 306);
             this.tableLayoutPanel9.TabIndex = 128;
             // 
             // cmbGeneratorFrontEnd
@@ -2210,7 +2111,6 @@
             // numRpmMin
             // 
             this.numRpmMin.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.numRpmMin.DecimalPlaces = 2;
             this.numRpmMin.Location = new System.Drawing.Point(150, 129);
             this.numRpmMin.Maximum = new decimal(new int[] {
             100000,
@@ -2230,7 +2130,6 @@
             // numRpmMax
             // 
             this.numRpmMax.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.numRpmMax.DecimalPlaces = 2;
             this.numRpmMax.Location = new System.Drawing.Point(150, 54);
             this.numRpmMax.Maximum = new decimal(new int[] {
             100000,
@@ -2288,15 +2187,10 @@
             131072});
             this.numAirDensity.Location = new System.Drawing.Point(150, 204);
             this.numAirDensity.Maximum = new decimal(new int[] {
-            3,
+            100000,
             0,
             0,
             0});
-            this.numAirDensity.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
             this.numAirDensity.Name = "numAirDensity";
             this.numAirDensity.Size = new System.Drawing.Size(73, 20);
             this.numAirDensity.TabIndex = 104;
@@ -2323,12 +2217,7 @@
             this.numWindSpeedNom.DecimalPlaces = 2;
             this.numWindSpeedNom.Location = new System.Drawing.Point(150, 4);
             this.numWindSpeedNom.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numWindSpeedNom.Minimum = new decimal(new int[] {
-            1,
+            100000,
             0,
             0,
             0});
@@ -2375,7 +2264,7 @@
             this.tableLayoutPanel8.RowCount = 2;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(235, 158);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(240, 158);
             this.tableLayoutPanel8.TabIndex = 127;
             // 
             // tableLayoutPanel1
@@ -2451,8 +2340,8 @@
             this.numGeneratorEfficiency.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.numGeneratorEfficiency.DecimalPlaces = 2;
             this.numGeneratorEfficiency.Location = new System.Drawing.Point(150, 104);
-            this.numGeneratorEfficiency.Minimum = new decimal(new int[] {
-            1,
+            this.numGeneratorEfficiency.Maximum = new decimal(new int[] {
+            100000,
             0,
             0,
             0});
@@ -2472,9 +2361,9 @@
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(4, 107);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(119, 13);
+            this.label22.Size = new System.Drawing.Size(102, 13);
             this.label22.TabIndex = 118;
-            this.label22.Text = "Generator efficiency (%)";
+            this.label22.Text = "Generator efficiency";
             // 
             // tableLayoutPanel6
             // 
@@ -2491,7 +2380,7 @@
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(235, 135);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(240, 135);
             this.tableLayoutPanel6.TabIndex = 126;
             // 
             // lblEnergyStorage
@@ -2567,6 +2456,55 @@
             this.label27.TabIndex = 76;
             this.label27.Text = "Maximal DC voltage (V)";
             // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tableLayoutPanel4.Controls.Add(this.lblMagnetWidth, 0, 2);
+            this.tableLayoutPanel4.Controls.Add(this.numMagnetWidth, 1, 2);
+            this.tableLayoutPanel4.Controls.Add(this.lblMagnetHeight, 0, 3);
+            this.tableLayoutPanel4.Controls.Add(this.numMagnetHeight, 1, 3);
+            this.tableLayoutPanel4.Controls.Add(this.lblMagnetGrade, 0, 4);
+            this.tableLayoutPanel4.Controls.Add(this.cmbMagnetGrade, 1, 4);
+            this.tableLayoutPanel4.Controls.Add(this.lblMagnetRemanence, 0, 5);
+            this.tableLayoutPanel4.Controls.Add(this.lblMagnetRemanenceValue, 1, 5);
+            this.tableLayoutPanel4.Controls.Add(this.lblCoerciveFieldStrength, 0, 6);
+            this.tableLayoutPanel4.Controls.Add(this.numMagnetThickness, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this.lblCoerciveFieldStrengthValue, 1, 6);
+            this.tableLayoutPanel4.Controls.Add(this.lblMagnetFluxDensity, 0, 7);
+            this.tableLayoutPanel4.Controls.Add(this.lblMagnetFluxDensityValue, 1, 7);
+            this.tableLayoutPanel4.Controls.Add(this.lblMagnetFlux, 0, 8);
+            this.tableLayoutPanel4.Controls.Add(this.lblMagnetFluxValue, 1, 8);
+            this.tableLayoutPanel4.Controls.Add(this.lblMagnetThickness, 0, 1);
+            this.tableLayoutPanel4.Controls.Add(this.label5, 0, 0);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(252, 242);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 9;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(240, 207);
+            this.tableLayoutPanel4.TabIndex = 118;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(4, 4);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(89, 13);
+            this.label5.TabIndex = 135;
+            this.label5.Text = "Rotor magnets";
+            // 
             // tabIterator
             // 
             this.tabIterator.Controls.Add(this.btnIterate);
@@ -2575,7 +2513,7 @@
             this.tabIterator.Location = new System.Drawing.Point(4, 22);
             this.tabIterator.Name = "tabIterator";
             this.tabIterator.Padding = new System.Windows.Forms.Padding(3);
-            this.tabIterator.Size = new System.Drawing.Size(1074, 634);
+            this.tabIterator.Size = new System.Drawing.Size(1074, 639);
             this.tabIterator.TabIndex = 1;
             this.tabIterator.Text = "Iteration steps";
             this.tabIterator.UseVisualStyleBackColor = true;
@@ -3971,14 +3909,14 @@
             this.dgvGeneratorSummary.AllowUserToAddRows = false;
             this.dgvGeneratorSummary.AllowUserToDeleteRows = false;
             this.dgvGeneratorSummary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvGeneratorSummary.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvGeneratorSummary.DefaultCellStyle = dataGridViewCellStyle1;
             this.dgvGeneratorSummary.Location = new System.Drawing.Point(333, 6);
             this.dgvGeneratorSummary.Name = "dgvGeneratorSummary";
             this.dgvGeneratorSummary.ReadOnly = true;
@@ -4002,7 +3940,7 @@
             this.tabCharts.Location = new System.Drawing.Point(4, 22);
             this.tabCharts.Name = "tabCharts";
             this.tabCharts.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCharts.Size = new System.Drawing.Size(1074, 634);
+            this.tabCharts.Size = new System.Drawing.Size(1074, 639);
             this.tabCharts.TabIndex = 2;
             this.tabCharts.Text = "Chart";
             this.tabCharts.UseVisualStyleBackColor = true;
@@ -4073,16 +4011,16 @@
             // 
             this.chartData2.BorderlineColor = System.Drawing.Color.Black;
             this.chartData2.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea17.Name = "ChartArea1";
-            this.chartData2.ChartAreas.Add(chartArea17);
-            legend17.Name = "Legend1";
-            this.chartData2.Legends.Add(legend17);
+            chartArea1.Name = "ChartArea1";
+            this.chartData2.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chartData2.Legends.Add(legend1);
             this.chartData2.Location = new System.Drawing.Point(537, 6);
             this.chartData2.Name = "chartData2";
-            series17.ChartArea = "ChartArea1";
-            series17.Legend = "Legend1";
-            series17.Name = "Series1";
-            this.chartData2.Series.Add(series17);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartData2.Series.Add(series1);
             this.chartData2.Size = new System.Drawing.Size(525, 510);
             this.chartData2.TabIndex = 4;
             this.chartData2.Text = "chart2";
@@ -4115,16 +4053,16 @@
             // 
             this.chartData1.BorderlineColor = System.Drawing.Color.Black;
             this.chartData1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea18.Name = "ChartArea1";
-            this.chartData1.ChartAreas.Add(chartArea18);
-            legend18.Name = "Legend1";
-            this.chartData1.Legends.Add(legend18);
+            chartArea2.Name = "ChartArea1";
+            this.chartData1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chartData1.Legends.Add(legend2);
             this.chartData1.Location = new System.Drawing.Point(6, 6);
             this.chartData1.Name = "chartData1";
-            series18.ChartArea = "ChartArea1";
-            series18.Legend = "Legend1";
-            series18.Name = "Series1";
-            this.chartData1.Series.Add(series18);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chartData1.Series.Add(series2);
             this.chartData1.Size = new System.Drawing.Size(525, 510);
             this.chartData1.TabIndex = 0;
             this.chartData1.Text = "chart1";
@@ -4135,7 +4073,7 @@
             this.tab3D.Location = new System.Drawing.Point(4, 22);
             this.tab3D.Name = "tab3D";
             this.tab3D.Padding = new System.Windows.Forms.Padding(3);
-            this.tab3D.Size = new System.Drawing.Size(1074, 634);
+            this.tab3D.Size = new System.Drawing.Size(1074, 639);
             this.tab3D.TabIndex = 3;
             this.tab3D.Text = "Drawings";
             this.tab3D.UseVisualStyleBackColor = true;
@@ -4146,23 +4084,60 @@
             this.elementHost1.Enabled = false;
             this.elementHost1.Location = new System.Drawing.Point(3, 3);
             this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(1068, 628);
+            this.elementHost1.Size = new System.Drawing.Size(1068, 633);
             this.elementHost1.TabIndex = 1;
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.Visible = false;
             this.elementHost1.Child = null;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1207, 24);
+            this.menuStrip1.TabIndex = 102;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // loadToolStripMenuItem
+            // 
+            this.loadToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadToolStripMenuItem1,
+            this.saveAsToolStripMenuItem});
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.loadToolStripMenuItem.Text = "File";
+            // 
+            // loadToolStripMenuItem1
+            // 
+            this.loadToolStripMenuItem1.Name = "loadToolStripMenuItem1";
+            this.loadToolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
+            this.loadToolStripMenuItem1.Text = "Load from file";
+            this.loadToolStripMenuItem1.Click += new System.EventHandler(this.loadToolStripMenuItem1_Click);
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.saveAsToolStripMenuItem.Text = "Save to file";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // FormAfpmDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1086, 666);
+            this.ClientSize = new System.Drawing.Size(1207, 697);
             this.Controls.Add(this.tabGenerator);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "FormAfpmDesigner";
             this.Text = "AFPM Designer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAfpmDesigner_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numCoilsPerPhaseCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numEnergyStorageVoltageMax)).EndInit();
@@ -4189,8 +4164,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numPhaseWireDiameter)).EndInit();
             this.tlpStatorCoils.ResumeLayout(false);
             this.tlpStatorCoils.PerformLayout();
-            this.tableLayoutPanel4.ResumeLayout(false);
-            this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel16.ResumeLayout(false);
             this.tableLayoutPanel16.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBetweenCoilDistance)).EndInit();
@@ -4215,6 +4188,8 @@
             this.tableLayoutPanel6.PerformLayout();
             this.tlpEnergyStorageConnection.ResumeLayout(false);
             this.tlpEnergyStorageConnection.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             this.tabIterator.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
@@ -4270,7 +4245,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.chartData2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartData1)).EndInit();
             this.tab3D.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -4389,65 +4367,65 @@
         private System.Windows.Forms.Button btnIterate;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.Label label23;
-        public System.Windows.Forms.NumericUpDown numIterateDcVoltageBatteryMinLower;
-        public System.Windows.Forms.NumericUpDown numIterateDcVoltageBatteryMinUpper;
+        private System.Windows.Forms.NumericUpDown numIterateDcVoltageBatteryMinLower;
+        private System.Windows.Forms.NumericUpDown numIterateDcVoltageBatteryMinUpper;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label24;
-        public System.Windows.Forms.NumericUpDown numIterateDcVoltageBatteryMaxLower;
-        public System.Windows.Forms.NumericUpDown numIterateDcVoltageBatteryMaxUpper;
-        public System.Windows.Forms.NumericUpDown numShaftPowerLower;
-        public System.Windows.Forms.NumericUpDown numShaftPowerUpper;
+        private System.Windows.Forms.NumericUpDown numIterateDcVoltageBatteryMaxLower;
+        private System.Windows.Forms.NumericUpDown numIterateDcVoltageBatteryMaxUpper;
+        private System.Windows.Forms.NumericUpDown numShaftPowerLower;
+        private System.Windows.Forms.NumericUpDown numShaftPowerUpper;
         private System.Windows.Forms.Label label39;
-        public System.Windows.Forms.NumericUpDown numWindSpeedMaxLower;
-        public System.Windows.Forms.NumericUpDown numWindSpeedMaxUpper;
+        private System.Windows.Forms.NumericUpDown numWindSpeedMaxLower;
+        private System.Windows.Forms.NumericUpDown numWindSpeedMaxUpper;
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Label label42;
-        public System.Windows.Forms.NumericUpDown numSpeedTipRatioMaxLower;
-        public System.Windows.Forms.NumericUpDown numSpeedTipRatioMaxUpper;
-        public System.Windows.Forms.NumericUpDown numOtherRpmMinUpper;
-        public System.Windows.Forms.NumericUpDown numAirDensityUpper;
-        public System.Windows.Forms.NumericUpDown numOtherRpmMinLower;
+        private System.Windows.Forms.NumericUpDown numSpeedTipRatioMaxLower;
+        private System.Windows.Forms.NumericUpDown numSpeedTipRatioMaxUpper;
+        private System.Windows.Forms.NumericUpDown numOtherRpmMinUpper;
+        private System.Windows.Forms.NumericUpDown numAirDensityUpper;
+        private System.Windows.Forms.NumericUpDown numOtherRpmMinLower;
         private System.Windows.Forms.Label label60;
-        public System.Windows.Forms.NumericUpDown numWindSpeedMinUpper;
-        public System.Windows.Forms.NumericUpDown numWindSpeedMinLower;
-        public System.Windows.Forms.NumericUpDown numSpeedTipRatioMinLower;
+        private System.Windows.Forms.NumericUpDown numWindSpeedMinUpper;
+        private System.Windows.Forms.NumericUpDown numWindSpeedMinLower;
+        private System.Windows.Forms.NumericUpDown numSpeedTipRatioMinLower;
         private System.Windows.Forms.Label label44;
         private System.Windows.Forms.Label label45;
-        public System.Windows.Forms.NumericUpDown numSpeedTipRatioMinUpper;
+        private System.Windows.Forms.NumericUpDown numSpeedTipRatioMinUpper;
         private System.Windows.Forms.Label label56;
-        public System.Windows.Forms.NumericUpDown numMaximumPowerCoefficientLower;
-        public System.Windows.Forms.NumericUpDown numMaximumPowerCoefficientUpper;
+        private System.Windows.Forms.NumericUpDown numMaximumPowerCoefficientLower;
+        private System.Windows.Forms.NumericUpDown numMaximumPowerCoefficientUpper;
         private System.Windows.Forms.Label label58;
-        public System.Windows.Forms.NumericUpDown numAirDensityLower;
-        public System.Windows.Forms.NumericUpDown numOtherRpmMaxUpper;
-        public System.Windows.Forms.NumericUpDown numOtherRpmMaxLower;
+        private System.Windows.Forms.NumericUpDown numAirDensityLower;
+        private System.Windows.Forms.NumericUpDown numOtherRpmMaxUpper;
+        private System.Windows.Forms.NumericUpDown numOtherRpmMaxLower;
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.Label label64;
-        public System.Windows.Forms.NumericUpDown numMechanicalGapLower;
-        public System.Windows.Forms.NumericUpDown numMechanicalGapUpper;
-        public System.Windows.Forms.NumericUpDown numRectifierWireDiameterUpper;
-        public System.Windows.Forms.NumericUpDown numRectifierWireDiameterLower;
-        public System.Windows.Forms.NumericUpDown numRectifierWireLengthUpper;
-        public System.Windows.Forms.NumericUpDown numRectifierWireLengthLower;
-        public System.Windows.Forms.NumericUpDown numPhaseWireDiameterUpper;
-        public System.Windows.Forms.NumericUpDown numPhaseWireDiameterLower;
-        public System.Windows.Forms.NumericUpDown numPhaseWireLengthUpper;
-        public System.Windows.Forms.NumericUpDown numPhaseWireLengthLower;
-        public System.Windows.Forms.NumericUpDown numDiodeVoltageDropUpper;
-        public System.Windows.Forms.NumericUpDown numDiodeVoltageDropLower;
-        public System.Windows.Forms.NumericUpDown numMagnetWidthUpper;
-        public System.Windows.Forms.NumericUpDown numMagnetWidthLower;
-        public System.Windows.Forms.NumericUpDown numMagnetLengthUpper;
-        public System.Windows.Forms.NumericUpDown numMagnetLengthLower;
-        public System.Windows.Forms.NumericUpDown numMagnetThicknessUpper;
-        public System.Windows.Forms.NumericUpDown numMagnetThicknessLower;
-        public System.Windows.Forms.NumericUpDown numCoilFillFactorUpper;
-        public System.Windows.Forms.NumericUpDown numCoilHeatCoefficientUpper;
-        public System.Windows.Forms.NumericUpDown numCoilHeatCoefficientLower;
-        public System.Windows.Forms.NumericUpDown numGeneratorEfficiencyLower;
-        public System.Windows.Forms.NumericUpDown numGeneratorEfficiencyUpper;
+        private System.Windows.Forms.NumericUpDown numMechanicalGapLower;
+        private System.Windows.Forms.NumericUpDown numMechanicalGapUpper;
+        private System.Windows.Forms.NumericUpDown numRectifierWireDiameterUpper;
+        private System.Windows.Forms.NumericUpDown numRectifierWireDiameterLower;
+        private System.Windows.Forms.NumericUpDown numRectifierWireLengthUpper;
+        private System.Windows.Forms.NumericUpDown numRectifierWireLengthLower;
+        private System.Windows.Forms.NumericUpDown numPhaseWireDiameterUpper;
+        private System.Windows.Forms.NumericUpDown numPhaseWireDiameterLower;
+        private System.Windows.Forms.NumericUpDown numPhaseWireLengthUpper;
+        private System.Windows.Forms.NumericUpDown numPhaseWireLengthLower;
+        private System.Windows.Forms.NumericUpDown numDiodeVoltageDropUpper;
+        private System.Windows.Forms.NumericUpDown numDiodeVoltageDropLower;
+        private System.Windows.Forms.NumericUpDown numMagnetWidthUpper;
+        private System.Windows.Forms.NumericUpDown numMagnetWidthLower;
+        private System.Windows.Forms.NumericUpDown numMagnetLengthUpper;
+        private System.Windows.Forms.NumericUpDown numMagnetLengthLower;
+        private System.Windows.Forms.NumericUpDown numMagnetThicknessUpper;
+        private System.Windows.Forms.NumericUpDown numMagnetThicknessLower;
+        private System.Windows.Forms.NumericUpDown numCoilFillFactorUpper;
+        private System.Windows.Forms.NumericUpDown numCoilHeatCoefficientUpper;
+        private System.Windows.Forms.NumericUpDown numCoilHeatCoefficientLower;
+        private System.Windows.Forms.NumericUpDown numGeneratorEfficiencyLower;
+        private System.Windows.Forms.NumericUpDown numGeneratorEfficiencyUpper;
         private System.Windows.Forms.Label label68;
         private System.Windows.Forms.Label label70;
         private System.Windows.Forms.Label label71;
@@ -4459,7 +4437,7 @@
         private System.Windows.Forms.Label label77;
         private System.Windows.Forms.Label label78;
         private System.Windows.Forms.Label label79;
-        public System.Windows.Forms.NumericUpDown numCoilFillFactorLower;
+        private System.Windows.Forms.NumericUpDown numCoilFillFactorLower;
         private System.Windows.Forms.Label lblWindSpeedNom;
         private System.Windows.Forms.ComboBox cmbGeneratorFrontEnd;
         private System.Windows.Forms.NumericUpDown numWindSpeedNom;
@@ -4523,6 +4501,12 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 

@@ -30,44 +30,44 @@ namespace UnitTests
         [TestMethod]
         public void TestBatteryTurbineCase()
         {
-            _test.GeneratorEnergyStorageConnection = 0;
-            _test.GeneratorFrontEnd = 0;
-            _test.DcVoltageMin = 48;
+            _test.GeneratorEnergyStorageConnection.Value = 0;
+            _test.GeneratorFrontEnd.Value = 0;
+            _test.DcInverterVoltageMin.Value = 48;
 
             _test.UpdateCalculations(true);
 
             Assert.AreEqual(20.1674655489148, _test.PhaseVoltageMin, Delta);
             Assert.AreEqual(2.24778510448245, _test.TurbineRotorRadius, Delta);
-            Assert.AreEqual(111, _test.FrontEndRpmMin, Delta);
-            Assert.AreEqual(297, _test.FrontEndRpmMax, Delta);
+            Assert.AreEqual(111, _test.FrontEndRpmMin.Value, Delta);
+            Assert.AreEqual(297, _test.FrontEndRpmMax.Value, Delta);
             Assert.AreEqual(53.9615970092586, _test.PhaseVoltageMax, Delta);
         }
 
         [TestMethod]
         public void TestGridTurbineCase()
         {
-            _test.GeneratorEnergyStorageConnection = 1;
-            _test.GeneratorFrontEnd = 0;
-            _test.DcVoltageMin = 200;
-            _test.DcVoltageMax = 500;
+            _test.GeneratorEnergyStorageConnection.Value = 1;
+            _test.GeneratorFrontEnd.Value = 0;
+            _test.DcInverterVoltageMin.Value = 200;
+            _test.DcInverterVoltageMax.Value = 500;
 
             _test.UpdateCalculations(true);
 
             Assert.AreEqual(82.221205699422, _test.PhaseVoltageMin, Delta);
             Assert.AreEqual(204.695692838581, _test.PhaseVoltageMax, Delta);
 
-            Assert.AreEqual(119, _test.FrontEndRpmMin, Delta);
-            Assert.AreEqual(297, _test.FrontEndRpmMax, Delta);
+            Assert.AreEqual(119, _test.FrontEndRpmMin.Value, Delta);
+            Assert.AreEqual(297, _test.FrontEndRpmMax.Value, Delta);
         }
 
         [TestMethod]
         public void TestBatteryOtherCase()
         {
-            _test.GeneratorEnergyStorageConnection = 0;
-            _test.GeneratorFrontEnd = 1;
-            _test.FrontEndRpmMin = 300;
-            _test.FrontEndRpmMax = 500;
-            _test.DcVoltageMin = 48;
+            _test.GeneratorEnergyStorageConnection.Value = 0;
+            _test.GeneratorFrontEnd.Value = 1;
+            _test.FrontEndRpmMin.Value = 300;
+            _test.FrontEndRpmMax.Value = 500;
+            _test.DcInverterVoltageMin.Value = 48;
 
             _test.UpdateCalculations(true);
 
@@ -81,10 +81,10 @@ namespace UnitTests
         [TestMethod]
         public void TestGridyOtherCase()
         {
-            _test.GeneratorEnergyStorageConnection = 1;
-            _test.GeneratorFrontEnd = 1;
-            _test.DcVoltageMin = 200;
-            _test.DcVoltageMax = 500;
+            _test.GeneratorEnergyStorageConnection.Value = 1;
+            _test.GeneratorFrontEnd.Value = 1;
+            _test.DcInverterVoltageMin.Value = 200;
+            _test.DcInverterVoltageMax.Value = 500;
 
             _test.UpdateCalculations(true);
 

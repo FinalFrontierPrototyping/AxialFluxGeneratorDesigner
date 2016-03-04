@@ -49,5 +49,7 @@ namespace AxialFluxGeneratorDesigner.Calculations
         //{
         //    Debug.WriteLine(nameof(var) + ": " + var);
         //}
+
+        
     }
 }

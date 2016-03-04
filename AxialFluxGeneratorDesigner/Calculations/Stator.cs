@@ -34,13 +34,10 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     This method calculates the corrected (for voltage drop due to power lines and diode rectifier) DC voltage.
         /// </summary>
         /// <param name="phaseVoltage">The phase voltage (V)</param>
-        /// <param name="diodeVoltageDrop">Drop voltage losses in various power cables (V)</param>
-        /// <param name="rectifierVoltageDrop"></param>
         /// <returns></returns>
-        public static double CalculateDcVoltage(double phaseVoltage, double diodeVoltageDrop,
-            double rectifierVoltageDrop)
+        public static double CalculateDcVoltage(double phaseVoltage)
         {
-            return phaseVoltage*(Math.Sqrt(3)*Math.Sqrt(2)) - rectifierVoltageDrop - diodeVoltageDrop;
+            return phaseVoltage*(Math.Sqrt(3)*Math.Sqrt(2));
         }
 
         /// <summary>
@@ -195,13 +192,13 @@ namespace AxialFluxGeneratorDesigner.Calculations
         ///     This method calculates the maximal phase current.
         /// </summary>
         /// <param name="generatorNominalPower"></param>
-        /// <param name="phaseVoltageCutin"></param>
+        /// <param name="phaseVoltageMax"></param>
         /// <param name="generatorEfficiency"></param>
         /// <returns></returns>
-        public static double CalculateMaximumPhaseCurrent(double generatorNominalPower, double phaseVoltageCutin,
+        public static double CalculateMaximumPhaseCurrent(double generatorNominalPower, double phaseVoltageMax,
             double generatorEfficiency)
         {
-            return 1.1*generatorNominalPower/(3*phaseVoltageCutin*generatorEfficiency);
+            return 1.1*generatorNominalPower/(3*phaseVoltageMax*generatorEfficiency);
         }
 
         /// <summary>
@@ -271,6 +268,17 @@ namespace AxialFluxGeneratorDesigner.Calculations
         public static double CalculateStatorOuterRadius(double rotorOuterRadius, double coilLegWidth)
         {
             return rotorOuterRadius + coilLegWidth;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="averageTurnLength"></param>
+        /// <param name="coilTurns"></param>
+        /// <returns></returns>
+        public static double CalculateCoilWireLength(double averageTurnLength, double coilTurns)
+        {
+            return Common.MillimetersToMeters(averageTurnLength* coilTurns);
         }
     }
 }

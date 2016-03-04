@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 
 namespace AxialFluxGeneratorDesigner.Calculations
 {
-    //TODO: Add check method for division by zero.
     /// <summary>
     ///     This class can be used to design a Axial Flux Permanent Magnet Generator.
     /// </summary>

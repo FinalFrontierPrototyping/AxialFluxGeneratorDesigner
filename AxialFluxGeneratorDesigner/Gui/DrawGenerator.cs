@@ -1,9 +1,11 @@
 ﻿namespace AxialFluxGeneratorDesigner.Gui
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DrawGenerator
     {
         //        private readonly ModelVisual3D _device3D = new ModelVisual3D();
-        ////TODO: Add code to check for changes in the parameters before generating a new model.
 
         //_generatorView.Children.Clear();
         //    Debug.WriteLine("start");

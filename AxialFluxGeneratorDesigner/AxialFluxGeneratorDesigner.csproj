@@ -95,24 +95,27 @@
   <ItemGroup>
     <Compile Include="Calculations\DataModel.cs" />
     <Compile Include="Calculations\Common.cs" />
+    <Compile Include="Gui\ControlToImage.cs" />
+    <Compile Include="Gui\FileHandling.cs" />
     <Compile Include="Gui\DrawGenerator.cs" />
     <Compile Include="Gui\Chart.cs" />
-    <Compile Include="FormAfpmDesigner.cs">
+    <Compile Include="Gui\FormAfpmDesigner.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAfpmDesigner.Designer.cs">
+    <Compile Include="Gui\FormAfpmDesigner.Designer.cs">
       <DependentUpon>FormAfpmDesigner.cs</DependentUpon>
     </Compile>
     <Compile Include="Calculations\FrontEnd.cs" />
     <Compile Include="Calculations\Generator.cs" />
     <Compile Include="Gui\Iterator.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Gui\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Calculations\Stator.cs" />
     <Compile Include="Calculations\Rotor.cs" />
     <Compile Include="Calculations\StatorDimensionsStatic.cs" />
     <Compile Include="Calculations\StatorDimensionsDynamic.cs" />
-    <EmbeddedResource Include="FormAfpmDesigner.resx">
+    <Compile Include="Calculations\GeneratorProperty.cs" />
+    <EmbeddedResource Include="Gui\FormAfpmDesigner.resx">
       <DependentUpon>FormAfpmDesigner.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -157,7 +160,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Python\3DGenerator.py" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Gui\ProjectConfig\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

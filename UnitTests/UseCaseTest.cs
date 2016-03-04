@@ -16,8 +16,8 @@ namespace UnitTests
             //_test.GeneratorEnergyStorageConnection = 1;
             //_test.GeneratorFrontEnd = 1;
             
-            //_test.DcVoltageMin = 200;
-            //_test.DcVoltageMax = 500;
+            //_test.DcInverterVoltageMin = 200;
+            //_test.DcInverterVoltageMax = 500;
             //_test.GeneratorPower = 1000;
 
             //_test.FrontEndRpmMax = 500;

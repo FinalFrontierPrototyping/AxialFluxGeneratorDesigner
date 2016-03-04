@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AxialFluxGeneratorDesigner
+namespace AxialFluxGeneratorDesigner.Gui
 {
     internal static class Program
     {
